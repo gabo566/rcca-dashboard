@@ -94,12 +94,12 @@
       width: 264px;
       height: 100vh;
       flex: 0 0 264px;
-      padding: var(--space-6) var(--space-4);
+      padding: 18px 12px;
       background: var(--md-surface-container);
       border-right: 1px solid var(--md-outline-variant);
     }
-    .brand { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; padding: 4px 8px 28px; }
-    .brand-logo { width: 100%; max-width: 220px; padding: 8px; border-radius: 12px; background: #fff; }
+    .brand { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; padding: 0 4px 18px; }
+    .brand-logo { width: 100%; max-width: none; padding: 8px; border-radius: 12px; background: #fff; box-shadow: 0 3px 0 #c72808; }
     .brand-logo img { display: block; width: 100%; height: auto; object-fit: contain; }
     .brand-name { display: flex; align-items: center; gap: 7px; color: var(--md-on-surface); font-size: 18px; font-weight: 700; letter-spacing: .06em; }
     .brand-name::before { content: ""; width: 3px; height: 20px; border-radius: 2px; background: #c72808; }
@@ -159,7 +159,7 @@
     .tonal-button { background: var(--md-primary-container); color: var(--md-on-primary-container); }
     .file-input { display: none; }
 
-    .content { width: min(1440px, 100%); margin: 0 auto; padding: clamp(20px, 3vw, 40px); }
+    .content { width: 100%; margin: 0; padding: clamp(18px, 2.1vw, 30px); }
     .page-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
     h1, h2, h3, p { margin: 0; }
     h1 { font-size: clamp(28px, 4vw, 42px); line-height: 1.1; letter-spacing: -.03em; }
@@ -271,7 +271,7 @@
     .table-cell-select[data-rcca-field="status"][data-rcca-value="LLENADO"], .table-cell-select[data-rcca-field="status"][data-rcca-value="EN PROCESO"] { background: #fff0c2; color: #6f5200; border-color: #e5c86d; font-weight: 700; }
     .table-cell-select[data-rcca-field="status"][data-rcca-value="CERRADO"], .table-cell-select[data-rcca-field="postStatus"][data-rcca-value="PASS"] { background: #d8f3e8; color: #075d45; border-color: #8bcfb5; font-weight: 700; }
     .table-cell-select[data-rcca-field="postStatus"][data-rcca-value="FAIL"] { background: #ffe1dc; color: #8e1b0c; border-color: #e9a397; font-weight: 700; }
-    .evidence-editor { display: grid; gap: 7px; }
+    .evidence-editor, .rc-analysis-editor { display: grid; gap: 7px; }
     .evidence-upload { display: inline-flex; align-items: center; justify-content: center; gap: 6px; width: fit-content; min-height: 32px; padding: 5px 9px; border: 1px solid var(--md-outline); border-radius: 9px; color: var(--md-primary); background: var(--md-primary-container); cursor: pointer; font-size: 12px; font-weight: 700; }
     .evidence-upload:hover, .evidence-upload:focus-within { outline: 2px solid color-mix(in srgb, var(--md-primary) 35%, transparent); outline-offset: 2px; }
     .file-input-inline { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
@@ -295,7 +295,7 @@
 
     .rcca-panel { margin-bottom: 20px; }
     .table-wrap { overflow: auto; border: 1px solid var(--md-outline-variant); border-radius: 16px; }
-    .rcca-table-wrap { max-height: min(72vh, 820px); }
+    .rcca-table-wrap { width: calc(100% + 24px); max-height: min(72vh, 820px); margin-left: -12px; border-radius: 10px; }
     .chart-grid article:nth-child(1) { border-top: 4px solid #c72808; }
     .chart-grid article:nth-child(2) { border-top: 4px solid #006b7c; }
     .chart-grid article:nth-child(3) { border-top: 4px solid #0b806b; }
@@ -361,6 +361,7 @@
       .sidebar-footer { display: none; }
       .topbar { position: static; min-height: 60px; }
       .content { padding: 20px 14px 34px; }
+      .rcca-table-wrap { width: 100%; margin-left: 0; }
       .page-heading { display: block; }
       .page-heading .source-chip { margin-top: 14px; }
       .kpi-grid, .grid-2 { grid-template-columns: 1fr; }
@@ -425,7 +426,7 @@
             <article class="card kpi-card"><div class="label">Registros de falla <span class="material-symbols-outlined">dataset</span></div><div id="kpiTotal" class="value">0</div><div class="hint">Filas con serial válido</div></article>
             <article class="card kpi-card"><div class="label">Seriales únicos <span class="material-symbols-outlined">qr_code_2</span></div><div id="kpiSerials" class="value">0</div><div class="hint">Agrupados por SN</div></article>
             <article class="card kpi-card"><div class="label">Seguimiento abierto <span class="material-symbols-outlined">pending_actions</span></div><div id="kpiOpen" class="value">0</div><div class="hint">Status pendientes registrados en la fuente</div></article>
-            <article class="card kpi-card"><div class="label">RCCA requerido <span class="material-symbols-outlined">priority_high</span></div><div id="kpiRcca" class="value">0</div><div class="hint">3+ tipos distintos por serial</div></article>
+            <article class="card kpi-card"><div class="label">Seguimiento cerrado <span class="material-symbols-outlined">task_alt</span></div><div id="kpiClosed" class="value">0</div><div class="hint">STATUS CERRADO o STATUS POST-RWK PASS</div></article>
           </div>
 
           <section class="card toolbar-card" aria-label="Filtros del dashboard">
@@ -669,7 +670,7 @@
         const groups = groupBySerial(rows);
         const statuses = new Set(['CERRADO', 'PASS']);
         const activeStatuses = new Set(['ABIERTO', 'LLENADO', 'RECHAZADO', 'EN PROCESO', 'FAIL']);
-        return { total: rows.length, serials: groups.length, wos: unique(rows.map(row => row.wo)).length, open: rows.filter(row => activeStatuses.has(upper(row.status)) && !statuses.has(upper(row.status))).length, rcca: groups.filter(group => group.requiresRcca).length };
+        return { total: rows.length, serials: groups.length, wos: unique(rows.map(row => row.wo)).length, open: rows.filter(row => activeStatuses.has(upper(row.status)) && !statuses.has(upper(row.status))).length, closed: rows.filter(row => statuses.has(upper(row.status)) || upper(row.postStatus) === 'PASS').length };
       }
       function countBy(rows, getter) {
         const counts = new Map();
@@ -763,7 +764,7 @@
         $('#kpiTotal').textContent = m.total.toLocaleString('es-MX');
         $('#kpiSerials').textContent = m.serials.toLocaleString('es-MX');
         $('#kpiOpen').textContent = m.open.toLocaleString('es-MX');
-        $('#kpiRcca').textContent = m.rcca.toLocaleString('es-MX');
+        $('#kpiClosed').textContent = m.closed.toLocaleString('es-MX');
         $('#heroRows').textContent = m.total.toLocaleString('es-MX');
         $('#heroWos').textContent = m.wos.toLocaleString('es-MX');
         $('#heroWoButton').disabled = m.wos === 0;
@@ -882,7 +883,7 @@
         doc.setFont('helvetica', 'normal'); doc.setTextColor(83, 98, 102); doc.setFontSize(9);
         doc.text(`Fuente: ${state.sourceName || 'Registros capturados localmente'}  ·  Generado: ${generatedAt}`, 10, 33);
         const cards = [
-          ['Eventos', dataMetrics.total], ['Seriales únicos', dataMetrics.serials], ['Wordorders', dataMetrics.wos], ['RCCA requerido', dataMetrics.rcca]
+          ['Eventos', dataMetrics.total], ['Seriales únicos', dataMetrics.serials], ['Wordorders', dataMetrics.wos], ['Seguimiento cerrado', dataMetrics.closed]
         ];
         cards.forEach(([label, value], index) => {
           const x = 10 + index * 68.8; doc.setFillColor(index === 3 && value ? 255 : 239, index === 3 && value ? 227 : 244, index === 3 && value ? 220 : 245);
@@ -992,6 +993,17 @@
         if (pageButton && !pageButton.disabled) { state.page += pageButton.dataset.page === 'next' ? 1 : -1; render(); }
       });
       document.addEventListener('change', event => {
+        const templateControl = event.target.closest('[data-rcca-template-for][data-row-id]');
+        if (templateControl) {
+          const row = allRows().find(item => item.id === templateControl.dataset.rowId);
+          const field = templateControl.dataset.rccaTemplateFor;
+          if (!row || !field || !templateControl.value) return;
+          row[field] = templateControl.value;
+          saveRccaEdit(row, field, row[field]);
+          $('#rccaTableSaveStatus').textContent = 'Guía de RC aplicada; completa qué falló y por qué.';
+          render();
+          return;
+        }
         const fileInput = event.target.closest('[data-rcca-file-for][data-row-id]');
         if (fileInput) {
           const row = allRows().find(item => item.id === fileInput.dataset.rowId);

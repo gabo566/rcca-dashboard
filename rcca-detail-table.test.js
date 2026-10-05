@@ -37,6 +37,8 @@ test('renders complete text, editable RCCA controls, and matching export columns
   assert.ok(container.innerHTML.includes('data-rcca-field="rootCause"'));
   assert.ok(container.innerHTML.includes('data-rcca-field="containment"'));
   assert.ok(container.innerHTML.includes('data-rcca-field="corrective"'));
+  assert.ok(container.innerHTML.includes('data-rcca-template-for="rcAnalysis"'));
+  assert.ok(container.innerHTML.includes('¿De qué falló y por qué?'));
   assert.ok(container.innerHTML.includes('data-rcca-field="postStatus"'));
   assert.ok(container.innerHTML.includes('data-rcca-file-for="evidence"'));
   assert.ok(container.innerHTML.includes('data-rcca-file-for="instrumental"'));

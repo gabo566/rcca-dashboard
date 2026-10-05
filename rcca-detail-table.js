@@ -26,7 +26,7 @@
       { key: 'evidence', label: 'EVIDENCE', type: 'textarea' },
       { key: 'instrumental', label: 'INSTRUMENTAL EVIDENCE', type: 'textarea' },
       { key: 'rootCause', label: 'ROOT CAUSE CATEGORY', type: 'textarea' },
-      { key: 'rcAnalysis', label: 'RC ANALYSIS', type: 'textarea' },
+      { key: 'rcAnalysis', label: 'RC ANALYSIS', type: 'rcAnalysis' },
       { key: 'containment', label: 'CONTAINMENT ACTION', type: 'textarea' },
       { key: 'corrective', label: 'CORRECTIVE / PREVENTIVE ACTION', type: 'textarea' },
       { key: 'status', label: 'STATUS', type: 'status' },
@@ -40,7 +40,7 @@
 
   const FIELD_OPTIONS = Object.freeze({
     rootCause: ['MALA CONEXIÓN', 'FALLA FUNCIONAL', 'DAÑO FÍSICO', 'RETEST', 'AC CYCLE', 'MATERIAL DAÑADO'],
-    rcAnalysis: ['REVISIÓN DE ENSAMBLE', 'VALIDACIÓN DE PROCESO', 'ANÁLISIS DE FALLA FUNCIONAL', 'REVISIÓN DE CONEXIONES', 'ANÁLISIS DE MATERIAL', 'CONFIRMACIÓN POR RETEST', 'NO SE REPRODUCE EN RETEST', 'PENDIENTE DE EVIDENCIA'],
+    rcAnalysis: ['FALLA FUNCIONAL: indicar qué falló y por qué', 'DAÑO FÍSICO: indicar qué se dañó y por qué', 'MALA CONEXIÓN: indicar qué conexión falló y por qué', 'RETEST: indicar qué falló inicialmente y por qué se confirmó', 'AC CYCLE: indicar qué falló en la prueba y por qué', 'MATERIAL DAÑADO: indicar material, defecto y causa', 'ENSAMBLE / COLOCACIÓN: indicar qué quedó incorrecto y por qué', 'PROCESO: indicar parámetro o método fuera de condición', 'PENDIENTE DE EVIDENCIA'],
     containment: ['REEMPLAZO POR DAÑO FÍSICO', 'REEMPLAZO POR FALLA FUNCIONAL', 'REEMPLAZO POR REQUERIMIENTO DEL CLIENTE', 'REFLASH DE TARJETAS M2, BF3', 'RESEAT DE CONEXIONES / CABLES', 'RESEAT DE TARJETAS', 'RETEST EN ESTACIÓN'],
     corrective: ['NO APLICA', 'REALIZAR UN CORRECTO ENSAMBLE POR PARTE DE MFG', 'VALIDAR EL PROCESO POR PARTE DE PE', 'ASIGNAR A PERSONAL CON LA CAPACITACIÓN REQUERIDA', 'RETROALIMENTACIÓN AL ÁREA CORRESPONDIENTE', 'DOUBLE CHECK INCOMING', 'DOUBLE CHECK EQUIPO DE QA']
   });
@@ -83,9 +83,17 @@
     return `<div class="evidence-editor"><textarea class="table-cell-input table-cell-textarea" rows="3" placeholder="Capturar ${escapeHtml(fieldLabel(column.key).toLowerCase())}" data-rcca-field="${column.key}" data-row-id="${rowId(row)}" aria-label="${escapeHtml(fieldLabel(column.key))} para serial ${escapeHtml(row.serial)}">${escapeHtml(row[column.key])}</textarea><label class="evidence-upload"><span class="material-symbols-outlined" aria-hidden="true">attach_file</span><span>Adjuntar evidencia</span><input class="file-input-inline" type="file" accept="image/*,.pdf,.txt,.csv,.xlsx" data-rcca-file-for="${column.key}" data-row-id="${rowId(row)}" aria-label="Subir evidencia para ${escapeHtml(fieldLabel(column.key))} del serial ${escapeHtml(row.serial)}" /></label>${fileName ? `<small class="evidence-file">${escapeHtml(fileName)}</small>` : ''}</div>`;
   }
 
+  function renderRcAnalysisField(row, column) {
+    const options = optionValues(column, '');
+    const guidance = `<select class="table-cell-input table-cell-select" data-rcca-template-for="${column.key}" data-row-id="${rowId(row)}" aria-label="Guía de RC Analysis para serial ${escapeHtml(row.serial)}"><option value="">Seleccionar guía</option>${options.map(option => `<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`).join('')}</select>`;
+    const textField = `<textarea class="table-cell-input table-cell-textarea" rows="4" placeholder="¿De qué falló y por qué? Describe evidencia y causa confirmada." data-rcca-field="${column.key}" data-row-id="${rowId(row)}" aria-label="${escapeHtml(fieldLabel(column.key))} para serial ${escapeHtml(row.serial)}">${escapeHtml(row[column.key])}</textarea>`;
+    return `<div class="rc-analysis-editor">${guidance}${textField}</div>`;
+  }
+
   function renderEditable(row, column, context) {
     const value = column.key === 'areaOverride' ? context.assignedArea(row) : row[column.key];
     if (column.key === 'evidence' || column.key === 'instrumental') return renderEvidenceField(row, column);
+    if (column.type === 'rcAnalysis') return renderRcAnalysisField(row, column);
     if (column.type === 'area' || column.type === 'status' || column.type === 'postStatus' || FIELD_OPTIONS[column.key]) return renderSelect(row, column, value, context);
     const controlType = column.type === 'input' ? 'input' : 'textarea';
     const control = controlType === 'input'
