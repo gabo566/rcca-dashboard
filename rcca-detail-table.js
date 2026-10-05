@@ -20,7 +20,7 @@
       { key: 'failureInfo', label: 'Fail Information (SFC)' },
       { key: 'defect', label: 'Defect Symptom (Real Defect)', value: row => row.defect || row.reasonDesc },
       { key: 'location', label: 'Defect Location' },
-      { key: 'areaOverride', label: 'OWNER / ÁREA ASIGNADA', type: 'area' }
+      { key: 'areaOverride', label: 'OWNER', type: 'area' }
     ] },
     { label: 'Seguimiento RCCA', columns: [
       { key: 'evidence', label: 'EVIDENCE', type: 'textarea' },
@@ -32,20 +32,7 @@
       { key: 'status', label: 'STATUS', type: 'status' },
       { key: 'postStatus', label: 'STATUS POST-RWK', type: 'input' },
       { key: 'comments', label: 'COMMENTS', type: 'textarea' }
-    ] },
-    { label: 'Fuente y contexto', columns: [
-      { key: 'remark', label: 'REMARK', type: 'longtext' },
-      { key: 'sourceDetails', label: 'DATOS TÉCNICOS FUENTE', type: 'sourceDetails' }
     ] }
-  ]);
-
-  const SOURCE_COLUMNS = Object.freeze([
-    { key: 'actualStation', label: 'ACTUAL_STATION' }, { key: 'testStation', label: 'TEST STATION' },
-    { key: 'repairStation', label: 'REPAIR STATION' }, { key: 'repairer', label: 'REPAIRER' },
-    { key: 'errorCode', label: 'ERROR_CODE' }, { key: 'errorDesc', label: 'ERROR DESC' },
-    { key: 'reasonCode', label: 'REASON_CODE' }, { key: 'reasonDesc', label: 'REASON_DESC2' },
-    { key: 'dutyStation', label: 'DUTY_STATION' }, { key: 'sourceOwner', label: 'OWNER (fuente)' },
-    { key: 'areaReason', label: 'CRITERIO DE ASIGNACIÓN', type: 'reason' }
   ]);
 
   const STATUSES = domain.STATUSES;
@@ -61,14 +48,6 @@
   }
 
   function rowId(row) { return escapeHtml(row.id); }
-
-  function sourceDetails(row, context) {
-    const values = SOURCE_COLUMNS.map(column => {
-      const value = column.type === 'reason' ? context.classificationNote(row) : row[column.key];
-      return value ? `<div><dt>${escapeHtml(column.label)}</dt><dd>${escapeHtml(value)}</dd></div>` : '';
-    }).filter(Boolean).join('');
-    return `<details class="source-details"><summary>Ver datos fuente</summary>${values ? `<dl>${values}</dl>` : '<p>Sin campos técnicos adicionales.</p>'}</details>`;
-  }
 
   function renderSelect(row, column, value, context) {
     const options = column.type === 'area' ? domain.AREAS : STATUSES;
@@ -92,7 +71,6 @@
   function renderCell(row, column, context) {
     if (EDITABLE_FIELDS.has(column.key)) return `<td class="editable-cell">${renderEditable(row, column, context)}</td>`;
     if (column.type === 'serial') return `<td><button class="serial-link" type="button" data-serial="${escapeHtml(row.serial)}" aria-label="Abrir detalle del serial ${escapeHtml(row.serial)}">${escapeHtml(row.serial || '—')}</button></td>`;
-    if (column.type === 'sourceDetails') return `<td class="source-details-cell">${sourceDetails(row, context)}</td>`;
     const value = column.value ? column.value(row) : row[column.key];
     const display = column.type === 'date' ? context.formatDate(value) : value;
     return `<td>${escapeHtml(display || '—')}</td>`;
@@ -113,9 +91,8 @@
   }
 
   function exportColumns(context) {
-    const visibleColumns = FLAT_COLUMNS.filter(column => column.type !== 'sourceDetails');
-    return [...visibleColumns, ...SOURCE_COLUMNS].map(column => ({ label: column.label, value: row => csvValue(row, column, context) }));
+    return FLAT_COLUMNS.map(column => ({ label: column.label, value: row => csvValue(row, column, context) }));
   }
 
-  return { GROUPS, FLAT_COLUMNS, SOURCE_COLUMNS, EDITABLE_FIELDS, STATUSES, fieldLabel, render, exportColumns };
+  return { GROUPS, FLAT_COLUMNS, EDITABLE_FIELDS, STATUSES, fieldLabel, render, exportColumns };
 });
