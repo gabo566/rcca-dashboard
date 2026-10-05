@@ -17,8 +17,12 @@ test('contains every FQ template rubric and report-specific source field', () =>
     'WO', 'WK', 'FAMILIA', 'MODELO', 'SN', 'STATION', 'FAILURE DATE DD-MM-YY', 'FECHA', 'SHIFT',
     'Fail Information (SFC)', 'Defect Symptom (Real Defect)', 'Defect Location', 'OWNER / ÁREA ASIGNADA',
     'EVIDENCE', 'INSTRUMENTAL EVIDENCE', 'ROOT CAUSE CATEGORY', 'RC ANALYSIS', 'CONTAINMENT ACTION',
-    'CORRECTIVE / PREVENTIVE ACTION', 'STATUS', 'STATUS POST-RWK', 'COMMENTS', 'REMARK', 'CRITERIO DE ASIGNACIÓN'
+    'CORRECTIVE / PREVENTIVE ACTION', 'STATUS', 'STATUS POST-RWK', 'COMMENTS', 'REMARK'
   ]) assert.ok(labels.includes(label), `Falta el rubro ${label}`);
+  const exportLabels = table.exportColumns(context).map(column => column.label);
+  for (const label of ['ACTUAL_STATION', 'REPAIR STATION', 'ERROR DESC', 'REASON_DESC2', 'CRITERIO DE ASIGNACIÓN']) {
+    assert.ok(exportLabels.includes(label), `Falta el campo exportable ${label}`);
+  }
   assert.equal(table.GROUPS.slice(0, 3).reduce((total, group) => total + group.columns.length, 0), 22);
 });
 
@@ -34,6 +38,7 @@ test('renders complete text, editable RCCA controls, and matching export columns
   assert.ok(container.innerHTML.includes('data-rcca-field="rootCause"'));
   assert.ok(container.innerHTML.includes('data-rcca-field="containment"'));
   assert.ok(container.innerHTML.includes('data-rcca-field="corrective"'));
+  assert.ok(container.innerHTML.includes('Ver datos fuente'));
   assert.equal((container.innerHTML.match(/<th scope="col">/g) || []).length, table.FLAT_COLUMNS.length);
-  assert.equal(table.exportColumns(context).length, table.FLAT_COLUMNS.length);
+  assert.equal(table.exportColumns(context).length, table.FLAT_COLUMNS.filter(column => column.type !== 'sourceDetails').length + table.SOURCE_COLUMNS.length);
 });

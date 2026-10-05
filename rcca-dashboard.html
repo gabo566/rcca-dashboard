@@ -205,6 +205,10 @@
     .hero-meta div { padding: 14px; border: 1px solid color-mix(in srgb, var(--md-on-primary-container) 20%, transparent); border-radius: 18px; background: color-mix(in srgb, var(--md-primary-container) 72%, white 28%); }
     .hero-meta strong { display: block; font-size: 24px; }
     .hero-meta span { font-size: 12px; }
+    .hero-stat-button { display: grid; gap: 3px; min-width: 120px; padding: 14px; border: 1px solid color-mix(in srgb, var(--md-on-primary-container) 20%, transparent); border-radius: 18px; background: color-mix(in srgb, var(--md-primary-container) 72%, white 28%); color: var(--md-on-surface); text-align: left; cursor: pointer; }
+    .hero-stat-button:hover, .hero-stat-button:focus-visible { background: var(--md-primary-container); outline: 3px solid color-mix(in srgb, var(--md-primary) 28%, transparent); outline-offset: 2px; }
+    .hero-stat-button:disabled { cursor: not-allowed; opacity: .65; }
+    .hero-stat-button strong { font-size: 24px; font-variant-numeric: tabular-nums; }
 
     .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
     .card { background: var(--md-surface-container); border: 1px solid var(--md-outline-variant); border-radius: var(--radius-card); box-shadow: var(--shadow-1); }
@@ -242,7 +246,7 @@
     .bar-value { color: var(--md-on-surface); font-weight: 700; text-align: right; }
     .empty-chart { padding: 28px 10px; color: var(--md-on-surface-variant); text-align: center; }
     .chart-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-bottom: 20px; }
-    .chart-grid > :last-child { grid-column: 1 / -1; }
+    .chart-grid > :last-child { grid-column: auto; }
     .donut-layout { display: grid; grid-template-columns: minmax(120px, 1fr) minmax(130px, 1fr); align-items: center; gap: 18px; }
     .donut { width: min(100%, 240px); aspect-ratio: 1; justify-self: center; border-radius: 50%; position: relative; }
     .donut::after { content: ""; position: absolute; inset: 25%; border-radius: 50%; background: var(--md-surface-container); }
@@ -256,13 +260,19 @@
     .incident-table thead th { position: sticky; top: 0; z-index: 2; }
     .incident-table thead .column-groups th { top: 0; z-index: 3; background: var(--md-primary-container); color: var(--md-on-primary-container); }
     .incident-table thead tr:nth-child(2) th { top: 38px; }
-    .rcca-detail-table th, .rcca-detail-table td { min-width: 155px; }
+    .rcca-detail-table th, .rcca-detail-table td { min-width: 132px; }
     .rcca-detail-table th:first-child, .rcca-detail-table td:first-child { min-width: 155px; }
-    .rcca-detail-table .editable-cell { min-width: 245px; }
-    .table-cell-input { width: 100%; min-width: 220px; min-height: 40px; padding: 8px 10px; border: 1px solid var(--md-outline); border-radius: 10px; background: var(--md-surface); color: var(--md-on-surface); font: inherit; }
-    .table-cell-textarea { min-height: 88px; resize: vertical; white-space: pre-wrap; overflow-wrap: anywhere; }
-    .table-cell-select { min-width: 210px; }
-    .reason-cell { min-width: 240px; }
+    .rcca-detail-table .editable-cell { min-width: 205px; }
+    .table-cell-input { width: 100%; min-width: 180px; min-height: 40px; padding: 8px 10px; border: 1px solid var(--md-outline); border-radius: 10px; background: var(--md-surface); color: var(--md-on-surface); font: inherit; }
+    .table-cell-textarea { min-height: 76px; resize: vertical; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .table-cell-select { min-width: 180px; }
+    .source-details-cell { min-width: 190px !important; }
+    .source-details summary { color: var(--md-primary); cursor: pointer; font-weight: 700; }
+    .source-details dl { display: grid; gap: 7px; margin: 10px 0 0; }
+    .source-details dl div { padding-top: 7px; border-top: 1px solid var(--md-outline-variant); }
+    .source-details dt { color: var(--md-on-surface-variant); font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    .source-details dd { margin: 2px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .source-details p { margin-top: 9px; color: var(--md-on-surface-variant); }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
     .area-chart { display: grid; gap: 12px; }
     .area-chart-legend { display: flex; flex-wrap: wrap; gap: 16px; color: var(--md-on-surface-variant); font-size: 12px; }
@@ -399,7 +409,7 @@
             </div>
             <div class="hero-meta" aria-label="Resumen de fuente">
               <div><strong id="heroRows">0</strong><span>registros</span></div>
-              <div><strong id="heroWos">0</strong><span>wordorders</span></div>
+              <button id="heroWoButton" class="hero-stat-button" type="button" aria-label="Ver work orders registradas" disabled><strong id="heroWos">0</strong><span>WO registradas · ver detalle</span></button>
             </div>
           </div>
 
@@ -423,6 +433,7 @@
           <div class="chart-grid">
             <article class="card panel"><div class="panel-header"><div><h2>Fallas por tipo</h2><p>Causa raíz, síntoma o ERROR DESC del archivo.</p></div><span class="count-chip" id="failureChartCount">0 tipos</span></div><div id="failureChart" class="bar-chart" role="img" aria-label="Barras de fallas por tipo"></div></article>
             <article class="card panel"><div class="panel-header"><div><h2>Eventos y seriales por área</h2><p id="assignmentChartSubtitle">Eventos asignados y seriales únicos por equipo.</p></div><span class="count-chip" id="ownerChartCount">0 áreas</span></div><div id="ownerChart" class="area-chart" role="img" aria-label="Eventos asignados y seriales únicos por área"></div></article>
+            <article class="card panel"><div class="panel-header"><div><h2>Fallas por estación</h2><p>Conteo de eventos según STATION o TEST STATION.</p></div><span class="count-chip" id="stationChartCount">0 estaciones</span></div><div id="stationChart" class="bar-chart" role="img" aria-label="Barras de fallas por estación"></div></article>
             <article class="card panel"><div class="panel-header"><div><h2>Distribución de fallas</h2><p>Participación de cada tipo en el filtro actual.</p></div><span class="count-chip" id="pieChartCount">0 tipos</span></div><div class="donut-layout"><div id="failureDonut" class="donut" role="img" aria-label="Gráfica pastel de fallas"></div><div id="failureLegend" class="donut-legend"></div></div></article>
           </div>
 
@@ -463,6 +474,7 @@
   </div>
 
   <dialog id="serialDialog" aria-labelledby="dialogTitle"><div class="dialog-header"><div><div class="eyebrow">Detalle de serial</div><h2 id="dialogTitle">Serial</h2><p id="dialogSubtitle" class="muted"></p></div><button class="icon-button" id="closeDialog" type="button" aria-label="Cerrar detalle"><span class="material-symbols-outlined">close</span></button></div><div id="dialogBody" class="dialog-body"></div></dialog>
+  <dialog id="workorderDialog" aria-labelledby="workorderTitle"><div class="dialog-header"><div><div class="eyebrow">Resumen del archivo</div><h2 id="workorderTitle">Work orders registradas</h2><p class="muted">Selecciona una WO para filtrar el detalle.</p></div><button class="icon-button" id="closeWorkorderDialog" type="button" aria-label="Cerrar work orders"><span class="material-symbols-outlined">close</span></button></div><div id="workorderBody" class="dialog-body"></div></dialog>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script src="rcca-domain.js"></script>
@@ -636,6 +648,15 @@
           return { serial, items, types, failureCount: items.length, latest: last, requiresRcca: types.length >= 3, owners: unique(items.map(assignedArea)) };
         }).sort((a, b) => b.failureCount - a.failureCount || a.serial.localeCompare(b.serial));
       }
+      function groupByWorkorder(rows) {
+        const groups = new Map();
+        rows.filter(row => text(row.wo)).forEach(row => {
+          const wo = text(row.wo);
+          if (!groups.has(wo)) groups.set(wo, { wo, events: 0, serials: new Set() });
+          const group = groups.get(wo); group.events += 1; if (row.serial) group.serials.add(row.serial);
+        });
+        return [...groups.values()].map(group => ({ ...group, serialCount: group.serials.size })).sort((a, b) => b.events - a.events || a.wo.localeCompare(b.wo));
+      }
       function metrics(rows) {
         const groups = groupBySerial(rows);
         const statuses = new Set(['CERRADO', 'PASS']);
@@ -663,6 +684,10 @@
         const colorSerials = chartPalette[1];
         target.innerHTML = `<div class="area-chart-legend"><span><i class="area-chart-swatch" style="background:${colorEvents}"></i>Eventos</span><span><i class="area-chart-swatch" style="background:${colorSerials}"></i>Seriales únicos</span></div>${summaries.map(item => `<div class="area-chart-row"><div class="area-chart-label">${escapeHtml(item.area)}</div><div class="area-chart-series"><div class="area-chart-line"><span>Eventos</span><div class="area-chart-track"><div class="area-chart-fill" style="width:${item.events ? Math.max(3, Math.round(item.events / maximum * 100)) : 0}%;background:${colorEvents}"></div></div><span class="area-chart-value">${item.events}</span></div><div class="area-chart-line"><span>Seriales</span><div class="area-chart-track"><div class="area-chart-fill" style="width:${item.serials ? Math.max(3, Math.round(item.serials / maximum * 100)) : 0}%;background:${colorSerials}"></div></div><span class="area-chart-value">${item.serials}</span></div></div></div>`).join('')}`;
         target.setAttribute('aria-label', 'Eventos asignados y seriales únicos por área: ' + summaries.map(item => `${item.area}: ${item.events} eventos, ${item.serials} seriales`).join('; '));
+      }
+      function renderStationChart(target, entries) {
+        renderBarChart(target, entries, 'Carga un Excel para ver las estaciones con fallas.');
+        target.setAttribute('aria-label', 'Fallas por estación: ' + entries.map(([station, count]) => `${station}: ${count}`).join('; '));
       }
       function pieEntries(entries, limit = 6) {
         if (entries.length <= limit) return entries;
@@ -733,13 +758,17 @@
         $('#kpiRcca').textContent = m.rcca.toLocaleString('es-MX');
         $('#heroRows').textContent = m.total.toLocaleString('es-MX');
         $('#heroWos').textContent = m.wos.toLocaleString('es-MX');
+        $('#heroWoButton').disabled = m.wos === 0;
         const failureCounts = countBy(rows, row => row.failureType);
         const areaCounts = RCCADomain.summarizeAreas(rows, assignedArea);
+        const stationCounts = countBy(rows, row => row.station || row.testStation || row.actualStation || 'Sin estación');
         renderBarChart($('#failureChart'), failureCounts, 'Carga un Excel para ver las fallas.');
         renderAreaChart($('#ownerChart'), areaCounts);
+        renderStationChart($('#stationChart'), stationCounts);
         renderDonut(failureCounts);
         $('#failureChartCount').textContent = `${failureCounts.length} tipos`;
-        $('#ownerChartCount').textContent = `${rows.length} eventos`;
+        $('#ownerChartCount').textContent = `${areaCounts.filter(item => item.events).length} áreas`;
+        $('#stationChartCount').textContent = `${stationCounts.length} estaciones`;
         $('#pieChartCount').textContent = `${failureCounts.length} tipos`;
         $('#priorityTable').innerHTML = priorityRows(groupBySerial(rows));
         $('#historyTable').innerHTML = historyRows(groupBySerial(rows));
@@ -757,6 +786,13 @@
         const latest = group.latest;
         $('#dialogBody').innerHTML = `<section class="dialog-section"><div class="panel-header"><div><h2>${group.requiresRcca ? 'RCCA requerido' : 'Seguimiento del serial'}</h2><p>${group.requiresRcca ? 'Se detectaron 3 o más tipos de falla distintos.' : 'Aún no se alcanza el umbral de 3 tipos distintos.'}</p></div>${statusChip(latest.status)}</div><div class="rubric-grid"><article class="rubric"><h3>RC análisis</h3><p>${escapeHtml(displayValue(latest.rcAnalysis, 'No incluido en el archivo fuente'))}</p></article><article class="rubric"><h3>Acción de contención</h3><p>${escapeHtml(displayValue(latest.containment, 'No incluido en el archivo fuente'))}</p></article><article class="rubric"><h3>Correctiva / preventiva</h3><p>${escapeHtml(displayValue(latest.corrective, 'No incluido en el archivo fuente'))}</p></article></div></section><section class="dialog-section"><div class="panel-header"><div><h2>Fallas registradas</h2><p>${escapeHtml(group.types.join(' · ') || 'Sin tipo clasificado')}</p></div><span class="count-chip">${group.failureCount} eventos</span></div><div class="timeline">${group.items.map(item => `<article class="timeline-item"><div class="timeline-head"><strong>${escapeHtml(item.failureType)}</strong>${statusChip(item.status)}<span class="muted">${escapeHtml(item.assignment || item.owner || 'Sin asignación')} · ${escapeHtml(item.station || 'Sin estación')} · WK ${escapeHtml(item.week || '—')}</span></div><p>${escapeHtml(displayValue(item.reasonDesc || item.failureInfo || item.defect, 'Sin descripción de falla'))}</p>${item.remark ? `<p class="muted">Remark: ${escapeHtml(item.remark)}</p>` : ''}</article>`).join('')}</div></section>`;
         $('#serialDialog').showModal();
+      }
+      function openWorkorders() {
+        const groups = groupByWorkorder(state.visibleRows);
+        $('#workorderBody').innerHTML = groups.length
+          ? `<table><caption class="sr-only">Work orders encontradas en el filtro actual</caption><thead><tr><th>WO</th><th>Eventos</th><th>Seriales</th><th>Acción</th></tr></thead><tbody>${groups.map(group => `<tr><td>${escapeHtml(group.wo)}</td><td>${group.events}</td><td>${group.serialCount}</td><td><button class="text-button" type="button" data-wo-filter="${escapeHtml(group.wo)}">Filtrar</button></td></tr>`).join('')}</tbody></table>`
+          : '<div class="empty-state"><span class="material-symbols-outlined">info</span><p>El archivo actual no contiene una columna WO / Work Order.</p></div>';
+        $('#workorderDialog').showModal();
       }
       function toast(message) { const el = $('#toast'); el.textContent = message; el.dataset.visible = 'true'; clearTimeout(toast.timer); toast.timer = setTimeout(() => { el.dataset.visible = 'false'; }, 4200); }
       function setView(view) { state.currentView = view; $$('.view').forEach(section => { section.dataset.active = section.id === `view-${view}` ? 'true' : 'false'; }); $$('[data-view-target]').forEach(button => { if (button.closest('.nav')) button.setAttribute('aria-current', button.dataset.viewTarget === view ? 'page' : 'false'); }); window.scrollTo({ top: 0, behavior: 'smooth' }); }
@@ -830,6 +866,7 @@
         const dataMetrics = metrics(rows);
         const failureCounts = countBy(rows, row => row.failureType);
         const areaCounts = RCCADomain.summarizeAreas(rows, assignedArea);
+        const stationCounts = countBy(rows, row => row.station || row.testStation || row.actualStation || 'Sin estación');
         const logo = logoDataUrl();
         const generatedAt = new Date().toLocaleString('es-MX');
         addPdfHeader(doc, logo);
@@ -858,10 +895,12 @@
         const chartItems = [
           makeChartCanvas(failureCounts, 'Fallas por tipo', 'bar'),
           makeAreaChartCanvas(areaCounts, 'Eventos y seriales únicos por área'),
+          makeChartCanvas(stationCounts, 'Fallas por estación', 'bar'),
           makeChartCanvas(failureCounts, 'Distribución de fallas', 'pie')
         ];
        chartItems.forEach((canvas, index) => {
-          doc.addImage(canvas.toDataURL('image/png'), 'PNG', 10, 35 + index * 55, 277, 52, undefined, 'FAST');
+          const column = index % 2; const row = Math.floor(index / 2);
+          doc.addImage(canvas.toDataURL('image/png'), 'PNG', 10 + column * 139, 35 + row * 62, 136, 54, undefined, 'FAST');
        });
        addPdfFooter(doc);
 
@@ -872,7 +911,9 @@
           addPdfHeader(doc, logo);
           doc.setTextColor(23, 36, 39); doc.setFont('helvetica', 'bold'); doc.setFontSize(13);
           doc.text(`Detalle RCCA · ${group.label}`, 10, 25);
-          const groupColumns = allColumns.filter(column => group.columns.some(definition => definition.label === column.label));
+          const groupLabels = group.columns.map(definition => definition.label);
+          const sourceLabels = RCCADetailTable.SOURCE_COLUMNS.map(column => column.label);
+          const groupColumns = allColumns.filter(column => groupLabels.includes(column.label) || (groupIndex === RCCADetailTable.GROUPS.length - 1 && sourceLabels.includes(column.label)));
           const labels = groupColumns.map(column => column.label);
           const body = rows.map(row => groupColumns.map(column => column.value(row) || '—'));
           doc.autoTable({
@@ -938,6 +979,8 @@
       document.addEventListener('click', event => {
         const nav = event.target.closest('[data-view-target]'); if (nav) setView(nav.dataset.viewTarget);
         const serial = event.target.closest('[data-serial]'); if (serial) openSerial(serial.dataset.serial);
+        const woFilter = event.target.closest('[data-wo-filter]');
+        if (woFilter) { $('#searchInput').value = woFilter.dataset.woFilter; $('#workorderDialog').close(); state.page = 1; render(); }
         const pageButton = event.target.closest('[data-page]');
         if (pageButton && !pageButton.disabled) { state.page += pageButton.dataset.page === 'next' ? 1 : -1; render(); }
       });
@@ -964,6 +1007,9 @@
       });
       $('#closeDialog').addEventListener('click', () => $('#serialDialog').close());
       $('#serialDialog').addEventListener('click', event => { if (event.target === $('#serialDialog')) $('#serialDialog').close(); });
+      $('#heroWoButton').addEventListener('click', openWorkorders);
+      $('#closeWorkorderDialog').addEventListener('click', () => $('#workorderDialog').close());
+      $('#workorderDialog').addEventListener('click', event => { if (event.target === $('#workorderDialog')) $('#workorderDialog').close(); });
       $('#themeToggle').addEventListener('click', () => { const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = next; localStorage.setItem('rcca-theme', next); $('#themeToggle .material-symbols-outlined').textContent = next === 'dark' ? 'light_mode' : 'dark_mode'; });
 
       const savedTheme = localStorage.getItem('rcca-theme'); if (savedTheme) { document.documentElement.dataset.theme = savedTheme; $('#themeToggle .material-symbols-outlined').textContent = savedTheme === 'dark' ? 'light_mode' : 'dark_mode'; }
