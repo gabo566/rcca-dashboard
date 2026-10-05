@@ -144,15 +144,16 @@
     .icon-button, .text-button, .filled-button, .tonal-button {
       border: 0;
       border-radius: 22px;
-      min-height: 40px;
-      padding: 0 16px;
+      min-height: 32px;
+      padding: 0 11px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
       font-weight: 600;
+      font-size: 12px;
     }
-    .icon-button { width: 40px; padding: 0; background: transparent; color: var(--md-on-surface-variant); }
+    .icon-button { width: 32px; padding: 0; background: transparent; color: var(--md-on-surface-variant); }
     .icon-button:hover { background: var(--md-surface-container-high); }
     .text-button { background: transparent; color: var(--md-primary); }
     .text-button:hover { background: var(--md-secondary-container); }
@@ -208,10 +209,10 @@
     .hero-meta div { padding: 14px; border: 1px solid color-mix(in srgb, var(--md-on-primary-container) 20%, transparent); border-radius: 18px; background: color-mix(in srgb, var(--md-primary-container) 72%, white 28%); }
     .hero-meta strong { display: block; font-size: 24px; }
     .hero-meta span { font-size: 12px; }
-    .hero-stat-button { display: grid; gap: 3px; min-width: 120px; padding: 14px; border: 1px solid color-mix(in srgb, var(--md-on-primary-container) 20%, transparent); border-radius: 18px; background: color-mix(in srgb, var(--md-primary-container) 72%, white 28%); color: var(--md-on-surface); text-align: left; cursor: pointer; }
+    .hero-stat-button { display: grid; gap: 3px; min-width: 108px; padding: 10px; border: 1px solid color-mix(in srgb, var(--md-on-primary-container) 20%, transparent); border-radius: 14px; background: color-mix(in srgb, var(--md-primary-container) 72%, white 28%); color: var(--md-on-surface); text-align: left; cursor: pointer; }
     .hero-stat-button:hover, .hero-stat-button:focus-visible { background: var(--md-primary-container); outline: 3px solid color-mix(in srgb, var(--md-primary) 28%, transparent); outline-offset: 2px; }
     .hero-stat-button:disabled { cursor: not-allowed; opacity: .65; }
-    .hero-stat-button strong { font-size: 24px; font-variant-numeric: tabular-nums; }
+    .hero-stat-button strong { font-size: 20px; font-variant-numeric: tabular-nums; }
 
     .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px; }
     .card { background: var(--md-surface-container); border: 1px solid var(--md-outline-variant); border-radius: var(--radius-card); box-shadow: var(--shadow-1); }
