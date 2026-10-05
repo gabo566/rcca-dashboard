@@ -9,8 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
   <style>
     :root {
       color-scheme: light;
@@ -446,7 +444,7 @@
               <div class="field"><label for="statusFilter">Status</label><select id="statusFilter"><option value="">Todos</option></select></div>
               <div class="field"><label for="ownerFilter">Área responsable / equipo</label><select id="ownerFilter"><option value="">Todos</option></select></div>
               <div class="field"><label for="weekFilter">WK</label><select id="weekFilter"><option value="">Todas</option></select></div>
-              <div class="toolbar-actions"><button id="clearFilters" class="text-button" type="button">Limpiar</button><button id="exportCsv" class="tonal-button" type="button"><span class="material-symbols-outlined">download</span>CSV</button><button id="exportPdf" class="filled-button" type="button"><span class="material-symbols-outlined">picture_as_pdf</span>Reporte PDF</button></div>
+              <div class="toolbar-actions"><button id="clearFilters" class="text-button" type="button">Limpiar</button><button id="exportCsv" class="tonal-button" type="button"><span class="material-symbols-outlined">download</span>CSV</button><button id="exportExcel" class="filled-button" type="button"><span class="material-symbols-outlined">table_view</span>Exportar Excel</button></div>
             </div>
           </section>
 
@@ -824,146 +822,83 @@
         const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = 'rcca-seguimiento.csv'; link.click(); URL.revokeObjectURL(url); toast('CSV exportado con los filtros actuales.');
       }
 
-      function makeChartCanvas(entries, title, kind) {
-        const canvas = document.createElement('canvas');
-        canvas.width = 1800; canvas.height = 380;
-        const context = canvas.getContext('2d');
-        context.fillStyle = '#ffffff'; context.fillRect(0, 0, canvas.width, canvas.height);
-        context.fillStyle = '#172427'; context.font = '600 36px Arial'; context.fillText(title, 28, 48);
-        if (!entries.length) { context.fillStyle = '#59686b'; context.font = '28px Arial'; context.fillText('Sin datos para los filtros actuales', 28, 112); return canvas; }
-        if (kind === 'pie') {
-          const data = pieEntries(entries, 5); const total = data.reduce((sum, item) => sum + item[1], 0) || 1;
-          const cx = 210, cy = 220, radius = 145; let angle = -Math.PI / 2;
-          data.forEach(([label, value], index) => {
-            const next = angle + value / total * Math.PI * 2;
-            context.beginPath(); context.moveTo(cx, cy); context.arc(cx, cy, radius, angle, next); context.closePath(); context.fillStyle = chartPalette[index % chartPalette.length]; context.fill(); angle = next;
-          });
-          context.beginPath(); context.arc(cx, cy, 74, 0, Math.PI * 2); context.fillStyle = '#ffffff'; context.fill();
-          context.fillStyle = '#172427'; context.font = '700 32px Arial'; context.textAlign = 'center'; context.fillText(String(total), cx, cy + 10); context.textAlign = 'left';
-          data.forEach(([label, value], index) => {
-            const y = 104 + index * 54; context.fillStyle = chartPalette[index % chartPalette.length]; context.fillRect(430, y - 20, 24, 24);
-            context.fillStyle = '#344347'; context.font = '27px Arial'; context.fillText(`${String(label).slice(0, 55)}  ·  ${value} (${Math.round(value / total * 100)}%)`, 474, y);
-          });
-        } else {
-          const shown = entries.slice(0, 6); const max = Math.max(...shown.map(item => item[1]), 1);
-          shown.forEach(([label, value], index) => {
-            const y = 82 + index * 48; context.fillStyle = '#344347'; context.font = '26px Arial'; context.fillText(String(label).slice(0, 48), 30, y + 27);
-            context.fillStyle = '#edf1f2'; context.fillRect(650, y, 1010, 30); context.fillStyle = chartPalette[index % chartPalette.length]; context.fillRect(650, y, Math.max(5, 1010 * value / max), 30);
-            context.fillStyle = '#172427'; context.font = '700 26px Arial'; context.fillText(String(value), 1690, y + 27);
-          });
-        }
-        return canvas;
+      function excelStyle(fill, color = '172427', bold = false, align = 'left', numFmt = '') {
+        const style = { font: { name: 'Arial', sz: 10, bold, color: { rgb: color } }, alignment: { vertical: 'center', horizontal: align, wrapText: true }, border: { bottom: { style: 'thin', color: { rgb: 'c8d5d8' } } } };
+        if (fill) style.fill = { patternType: 'solid', fgColor: { rgb: fill } };
+        if (numFmt) style.numFmt = numFmt;
+        return style;
       }
-     function logoDataUrl() {
-       const image = $('.brand-logo img');
-       if (!image?.complete || !image.naturalWidth) return '';
-        try { const canvas = document.createElement('canvas'); canvas.width = image.naturalWidth; canvas.height = image.naturalHeight; canvas.getContext('2d').drawImage(image, 0, 0); return canvas.toDataURL('image/png'); } catch { return ''; }
-     }
-     function addPdfHeader(doc, logo) {
-        if (logo) doc.addImage(logo, 'PNG', 10, 4, 42, 12.6, undefined, 'FAST');
-        doc.setTextColor(74, 87, 90); doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.text('RCCA / YIELD NVD', 56, 11);
-        doc.setDrawColor(199, 40, 8); doc.setLineWidth(.5); doc.line(10, 18, 287, 18);
+      function setExcelCell(sheet, row, column, value, style) {
+        const address = XLSX.utils.encode_cell({ r: row, c: column });
+        sheet[address] = { v: value == null ? '' : value, t: typeof value === 'number' ? 'n' : 's', s: style };
       }
-      function addPdfFooter(doc) {
-        const page = doc.internal.getCurrentPageInfo().pageNumber;
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(90, 104, 108);
-        doc.text(`Página ${page}`, 287, 205, { align: 'right' });
+      function excelBar(value, maximum) { return value ? '█'.repeat(Math.max(1, Math.round((value / Math.max(maximum, 1)) * 24))) : ''; }
+      function makeExcelSheet(rowCount, columnCount) {
+        return { '!ref': XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: rowCount - 1, c: columnCount - 1 } }) };
       }
-      async function exportPdf() {
-        if (!state.visibleRows.length) { toast('No hay registros filtrados para incluir en el PDF.'); return; }
-        const JsPdf = window.jspdf?.jsPDF;
-        if (!JsPdf) { toast('No se pudo cargar el generador PDF. Verifica la conexión y recarga la página.'); return; }
-        const doc = new JsPdf({ orientation: 'landscape', unit: 'mm', format: 'a4', compress: true });
-        if (typeof doc.autoTable !== 'function') { toast('No se pudo cargar el formato de tablas PDF. Verifica la conexión y recarga.'); return; }
+      function exportExcel() {
+        if (!state.visibleRows.length) { toast('No hay registros filtrados para exportar a Excel.'); return; }
+        if (typeof XLSX === 'undefined') { toast('No se cargó el generador Excel. Verifica la conexión y recarga.'); return; }
         const rows = state.visibleRows;
+        const exportContext = { assignedArea, classificationNote, formatDate };
+        const columns = RCCADetailTable.exportColumns(exportContext);
         const dataMetrics = metrics(rows);
         const failureCounts = countBy(rows, row => row.failureType);
-        const areaCounts = RCCADomain.summarizeAreas(rows, assignedArea);
         const stationCounts = countBy(rows, row => row.station || row.testStation || row.actualStation || 'Sin estación');
-        const logo = logoDataUrl();
-        const generatedAt = new Date().toLocaleString('es-MX');
-        addPdfHeader(doc, logo);
-        doc.setTextColor(23, 36, 39); doc.setFont('helvetica', 'bold'); doc.setFontSize(19); doc.text('Reporte de fallas y seguimiento RCCA', 10, 27);
-        doc.setFont('helvetica', 'normal'); doc.setTextColor(83, 98, 102); doc.setFontSize(9);
-        doc.text(`Fuente: ${state.sourceName || 'Registros capturados localmente'}  ·  Generado: ${generatedAt}`, 10, 33);
-        const cards = [
-          ['Eventos', dataMetrics.total], ['Seriales únicos', dataMetrics.serials], ['Wordorders', dataMetrics.wos], ['Seguimiento cerrado', dataMetrics.closed]
-        ];
-        cards.forEach(([label, value], index) => {
-          const x = 10 + index * 68.8; doc.setFillColor(index === 3 && value ? 255 : 239, index === 3 && value ? 227 : 244, index === 3 && value ? 220 : 245);
-          doc.roundedRect(x, 38, 64, 17, 2, 2, 'F'); doc.setTextColor(75, 91, 95); doc.setFontSize(8); doc.text(String(label), x + 4, 44);
-          doc.setTextColor(index === 3 && value ? 174 : 0, index === 3 && value ? 50 : 95, index === 3 && value ? 25 : 115); doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.text(String(value), x + 4, 52);
-        });
+        const areaCounts = RCCADomain.summarizeAreas(rows, assignedArea).filter(item => item.events || item.serials);
+        const totalFailures = Math.max(1, rows.length);
+        const theme = { navy: '003B49', teal: '005F73', orange: 'C72808', pale: 'EAF3F4', light: 'F5F8F9', line: 'C8D5D8', ink: '172427', muted: '59686B' };
+        const styles = {
+          title: excelStyle(theme.navy, 'FFFFFF', true, 'left'), subtitle: excelStyle('', theme.muted, false, 'left'),
+          group: excelStyle(theme.teal, 'FFFFFF', true, 'center'), header: excelStyle('D7EEF2', theme.navy, true, 'center'),
+          body: excelStyle('FFFFFF', theme.ink, false, 'left'), alt: excelStyle(theme.light, theme.ink, false, 'left'),
+          cardLabel: excelStyle(theme.pale, theme.navy, true, 'center'), cardValue: excelStyle('FFFFFF', theme.navy, true, 'center', '#,##0'),
+          bar: excelStyle('EAF3F4', theme.teal, true, 'left'), percent: excelStyle('FFFFFF', theme.ink, false, 'right', '0%')
+        };
+        const summary = makeExcelSheet(60, 18); summary['!merges'] = [];
+        const merge = (sheet, r1, c1, r2, c2) => sheet['!merges'].push({ s: { r: r1, c: c1 }, e: { r: r2, c: c2 } });
+        setExcelCell(summary, 0, 0, 'INGRASYS · RCCA / YIELD NVD', styles.title); merge(summary, 0, 0, 0, 17);
+        setExcelCell(summary, 1, 0, `Fuente: ${state.sourceName || 'Registros capturados localmente'} · Generado: ${new Date().toLocaleString('es-MX')}`, styles.subtitle); merge(summary, 1, 0, 1, 17);
         const filters = getFilters();
-        const filterText = [`Búsqueda: ${filters.search || 'todas'}`, `Status: ${filters.status || 'todos'}`, `Asignación: ${filters.owner || 'todas'}`, `WK: ${filters.week || 'todas'}`].join('  ·  ');
-        doc.setTextColor(75, 91, 95); doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
-        doc.text(`Filtros aplicados: ${filterText}`, 10, 62, { maxWidth: 276 });
-
-        doc.addPage();
-        addPdfHeader(doc, logo);
-        doc.setTextColor(23, 36, 39); doc.setFont('helvetica', 'bold'); doc.setFontSize(15);
-        doc.text('Gráficas del seguimiento', 10, 26);
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(75, 91, 95);
-        doc.text('Eventos y seriales únicos por área; un serial puede estar en varias áreas si sus fallas difieren.', 10, 30);
-        const chartItems = [
-          makeChartCanvas(failureCounts, 'Fallas por tipo', 'bar'),
-          makeAreaChartCanvas(areaCounts, 'Eventos y seriales únicos por área'),
-          makeChartCanvas(stationCounts, 'Fallas por estación', 'bar'),
-          makeChartCanvas(failureCounts, 'Distribución de fallas', 'pie')
+        setExcelCell(summary, 2, 0, `Filtros: búsqueda ${filters.search || 'todas'} · status ${filters.status || 'todos'} · área ${filters.owner || 'todas'} · WK ${filters.week || 'todas'}`, styles.subtitle); merge(summary, 2, 0, 2, 17);
+        [['Eventos', dataMetrics.total], ['Seriales únicos', dataMetrics.serials], ['Wordorders', dataMetrics.wos], ['Seguimiento cerrado', dataMetrics.closed]].forEach(([label, value], index) => {
+          const start = index * 4; setExcelCell(summary, 4, start, label, styles.cardLabel); setExcelCell(summary, 5, start, value, styles.cardValue); merge(summary, 4, start, 4, start + 3); merge(summary, 5, start, 5, start + 3);
+        });
+        const sections = [
+          { title: 'Fallas por tipo', start: 0, headers: ['Tipo de falla', 'Eventos', 'Barra', '%'], values: failureCounts.map(([label, value]) => [label, value, excelBar(value, failureCounts[0]?.[1]), value / totalFailures]) },
+          { title: 'Fallas por estación', start: 5, headers: ['Estación', 'Eventos', 'Barra', '%'], values: stationCounts.map(([label, value]) => [label, value, excelBar(value, stationCounts[0]?.[1]), value / totalFailures]) },
+          { title: 'Eventos y seriales por área', start: 10, headers: ['Área', 'Eventos', 'Seriales', 'Barra'], values: areaCounts.map(item => [item.area, item.events, item.serials, excelBar(item.events, Math.max(...areaCounts.map(area => area.events), 1))]) },
+          { title: 'Distribución de fallas', start: 15, headers: ['Tipo de falla', 'Eventos', '%'], values: failureCounts.map(([label, value]) => [label, value, value / totalFailures]) }
         ];
-       chartItems.forEach((canvas, index) => {
-          const column = index % 2; const row = Math.floor(index / 2);
-          doc.addImage(canvas.toDataURL('image/png'), 'PNG', 10 + column * 139, 35 + row * 62, 136, 54, undefined, 'FAST');
-       });
-       addPdfFooter(doc);
-
-        const exportContext = { assignedArea, classificationNote, formatDate };
-        const allColumns = RCCADetailTable.exportColumns(exportContext);
-        RCCADetailTable.GROUPS.forEach((group, groupIndex) => {
-          doc.addPage();
-          addPdfHeader(doc, logo);
-          doc.setTextColor(23, 36, 39); doc.setFont('helvetica', 'bold'); doc.setFontSize(13);
-          doc.text(`Detalle RCCA · ${group.label}`, 10, 25);
-          const groupLabels = group.columns.map(definition => definition.label);
-          const groupColumns = allColumns.filter(column => groupLabels.includes(column.label));
-          const labels = groupColumns.map(column => column.label);
-          const body = rows.map(row => groupColumns.map(column => column.value(row) || '—'));
-          doc.autoTable({
-            startY: 30,
-            margin: { top: 23, right: 9, bottom: 13, left: 9 },
-            head: [labels], body,
-            styles: { font: 'helvetica', fontSize: groupIndex === 2 ? 6.2 : 6.7, cellPadding: 1.4, overflow: 'linebreak', valign: 'top', textColor: [34, 47, 50] },
-            headStyles: { fillColor: groupIndex === 2 ? [101, 88, 165] : [0, 95, 115], textColor: [255, 255, 255], fontStyle: 'bold' },
-            alternateRowStyles: { fillColor: groupIndex === 2 ? [246, 244, 255] : [242, 247, 248] },
-            didDrawPage: () => { addPdfHeader(doc, logo); addPdfFooter(doc); }
-          });
+        sections.forEach(section => {
+          const titleRow = 7; const headerRow = 8; const dataRow = 9;
+          setExcelCell(summary, titleRow, section.start, section.title, styles.group); merge(summary, titleRow, section.start, titleRow, section.start + section.headers.length - 1);
+          section.headers.forEach((header, offset) => setExcelCell(summary, headerRow, section.start + offset, header, styles.header));
+          section.values.forEach((values, rowIndex) => values.forEach((value, offset) => {
+            const isPercent = section.headers[offset] === '%';
+            const style = isPercent ? styles.percent : offset === section.headers.indexOf('Barra') ? styles.bar : rowIndex % 2 ? styles.alt : styles.body;
+            setExcelCell(summary, dataRow + rowIndex, section.start + offset, value, style);
+          }));
         });
-        const baseName = (state.sourceName || 'rcca-seguimiento').replace(/\.[^.]+$/, '').replace(/[^\w-]+/g, '-').replace(/^-|-$/g, '').slice(0, 48);
-        const dateTag = new Date().toISOString().slice(0, 19).replace(/[T:]/g, '-');
-        doc.save(`${baseName}-RCCA-${dateTag}.pdf`);
-        toast(`PDF generado → ${rows.length} eventos incluidos.`);
-      }
+        summary['!cols'] = [{ wch: 28 }, { wch: 10 }, { wch: 24 }, { wch: 10 }, { wch: 3 }, { wch: 25 }, { wch: 10 }, { wch: 24 }, { wch: 10 }, { wch: 3 }, { wch: 20 }, { wch: 10 }, { wch: 10 }, { wch: 24 }, { wch: 3 }, { wch: 27 }, { wch: 10 }, { wch: 10 }];
+        summary['!rows'] = [{ hpt: 27 }, { hpt: 20 }, { hpt: 20 }, {}, { hpt: 20 }, { hpt: 24 }, {}, { hpt: 22 }, { hpt: 22 }];
 
-      function makeAreaChartCanvas(summaries, title) {
-        const canvas = document.createElement('canvas');
-        canvas.width = 1800; canvas.height = 390;
-        const context = canvas.getContext('2d');
-        context.fillStyle = '#ffffff'; context.fillRect(0, 0, canvas.width, canvas.height);
-        context.fillStyle = '#172427'; context.font = '600 36px Arial'; context.fillText(title, 28, 48);
-        const maximum = Math.max(1, ...summaries.flatMap(item => [item.events, item.serials]));
-        summaries.forEach((item, index) => {
-          const y = 58 + index * 45;
-          context.fillStyle = '#344347'; context.font = 'bold 23px Arial'; context.fillText(item.area, 30, y + 30);
-          const bars = [{ label: 'Eventos', value: item.events, color: chartPalette[0] }, { label: 'Seriales', value: item.serials, color: chartPalette[1] }];
-          bars.forEach((bar, barIndex) => {
-            const barY = y + barIndex * 19;
-            context.fillStyle = '#637174'; context.font = '15px Arial'; context.fillText(bar.label, 190, barY + 14);
-            context.fillStyle = '#edf1f2'; context.fillRect(285, barY, 1320, 15);
-            context.fillStyle = bar.color; if (bar.value) context.fillRect(285, barY, Math.max(4, 1320 * bar.value / maximum), 15);
-            context.fillStyle = '#172427'; context.font = 'bold 16px Arial'; context.fillText(String(bar.value), 1620, barY + 14);
-          });
-        });
-        return canvas;
+        const detail = makeExcelSheet(rows.length + 6, columns.length); detail['!merges'] = [];
+        setExcelCell(detail, 0, 0, 'INGRASYS · FQ-3264-INT-NVD · FORMATO DE REGISTRO RCCA', styles.title); merge(detail, 0, 0, 0, columns.length - 1);
+        setExcelCell(detail, 1, 0, `Fuente: ${state.sourceName || 'Registros capturados localmente'} · ${rows.length} evento(s) filtrado(s)`, styles.subtitle); merge(detail, 1, 0, 1, columns.length - 1);
+        let cursor = 0;
+        const groupColors = [theme.teal, '007C91', '5C5A7D', theme.orange];
+        RCCADetailTable.GROUPS.forEach((group, index) => { const end = cursor + group.columns.length - 1; setExcelCell(detail, 3, cursor, group.label, excelStyle(groupColors[index], 'FFFFFF', true, 'center')); merge(detail, 3, cursor, 3, end); cursor = end + 1; });
+        columns.forEach((column, index) => setExcelCell(detail, 4, index, column.label, styles.header));
+        rows.forEach((row, rowIndex) => columns.forEach((column, columnIndex) => setExcelCell(detail, rowIndex + 5, columnIndex, column.value(row) || '', rowIndex % 2 ? styles.alt : styles.body)));
+        detail['!cols'] = [14, 9, 14, 18, 18, 14, 20, 18, 9, 30, 34, 20, 17, 24, 26, 25, 38, 32, 40, 14, 18, 42, 42].map(wch => ({ wch }));
+        detail['!rows'] = [{ hpt: 28 }, { hpt: 20 }, {}, { hpt: 22 }, { hpt: 34 }, ...rows.map(() => ({ hpt: 54 }))];
+        detail['!autofilter'] = { ref: `A5:${XLSX.utils.encode_col(columns.length - 1)}${rows.length + 5}` };
+        detail['!freeze'] = { xSplit: 0, ySplit: 5, topLeftCell: 'A6', activePane: 'bottomRight', state: 'frozen' };
+        const workbook = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(workbook, summary, 'Resumen'); XLSX.utils.book_append_sheet(workbook, detail, 'RCCA Registro');
+        const baseName = (state.sourceName || 'rcca-seguimiento').replace(/\.[^.]+$/, '').replace(/[^\w-]+/g, '-').replace(/^-|-$/g, '').slice(0, 48) || 'rcca-seguimiento';
+        XLSX.writeFile(workbook, `${baseName}-RCCA.xlsx`, { compression: true });
+        toast(`Excel generado → ${rows.length} eventos y distribución FQ-3264 incluidos.`);
       }
 
       $('#fileInput').addEventListener('change', async event => {
@@ -986,7 +921,7 @@
       ['#searchInput', '#statusFilter', '#ownerFilter', '#weekFilter'].forEach(selector => $(selector).addEventListener('input', () => { state.page = 1; render(); }));
       $('#clearFilters').addEventListener('click', () => { $('#searchInput').value = ''; $('#statusFilter').value = ''; $('#ownerFilter').value = ''; $('#weekFilter').value = ''; state.page = 1; render(); });
       $('#exportCsv').addEventListener('click', exportCsv);
-      $('#exportPdf').addEventListener('click', exportPdf);
+      $('#exportExcel').addEventListener('click', exportExcel);
       $('#rccaForm').addEventListener('submit', handleFormSubmit);
       document.addEventListener('click', event => {
         const nav = event.target.closest('[data-view-target]'); if (nav) setView(nav.dataset.viewTarget);
