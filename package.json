@@ -1,0 +1,17 @@
+{
+  "name": "ffdigi-fa-bat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "ffdg-m3-upgrade (claude).js",
+  "scripts": {
+    "dev": "node rcca-server.js",
+    "test": "node --test rcca-server.test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "xlsx": "0.18.5"
+  }
+}
