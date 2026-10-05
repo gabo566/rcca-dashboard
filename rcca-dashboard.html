@@ -213,12 +213,12 @@
     .hero-stat-button:disabled { cursor: not-allowed; opacity: .65; }
     .hero-stat-button strong { font-size: 24px; font-variant-numeric: tabular-nums; }
 
-    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px; }
     .card { background: var(--md-surface-container); border: 1px solid var(--md-outline-variant); border-radius: var(--radius-card); box-shadow: var(--shadow-1); }
-    .kpi-card { min-height: 126px; padding: 20px; }
-    .kpi-card .label { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--md-on-surface-variant); font-size: 13px; }
-    .kpi-card .value { margin-top: 14px; font-size: 32px; line-height: 1; font-weight: 700; letter-spacing: -.03em; }
-    .kpi-card .hint { margin-top: 8px; color: var(--md-on-surface-variant); font-size: 12px; }
+    .kpi-card { min-height: 92px; padding: 12px 14px; }
+    .kpi-card .label { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: var(--md-on-surface-variant); font-size: 11px; }
+    .kpi-card .value { margin-top: 7px; font-size: 24px; line-height: 1; font-weight: 700; letter-spacing: -.03em; }
+    .kpi-card .hint { margin-top: 5px; color: var(--md-on-surface-variant); font-size: 10px; line-height: 1.25; }
 
     .toolbar-card { padding: 16px; margin-bottom: 20px; }
     .toolbar { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; }
@@ -245,17 +245,22 @@
     .panel-header p { margin-top: 4px; color: var(--md-on-surface-variant); font-size: 12px; }
     .bar-chart { display: grid; gap: 8px; }
     .bar-row { display: grid; grid-template-columns: minmax(100px, 1.2fr) 2fr 40px; gap: 12px; align-items: center; }
-    .bar-label { color: var(--md-on-surface-variant); font-size: 14px; overflow-wrap: anywhere; }
+    .bar-label { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; color: var(--md-on-surface-variant); font-size: 11px; line-height: 1.2; overflow-wrap: anywhere; }
     .bar-track { height: 9px; overflow: hidden; border-radius: 99px; background: var(--md-surface-container-high); }
     .bar-fill { height: 100%; min-width: 3px; border-radius: inherit; transition: width .25s ease; }
     .bar-value { color: var(--md-on-surface); font-weight: 700; text-align: right; }
     .empty-chart { padding: 28px 10px; color: var(--md-on-surface-variant); text-align: center; }
     .chart-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-bottom: 24px; }
     .chart-grid > :last-child { grid-column: auto; }
-    .donut-layout { display: grid; grid-template-columns: minmax(80px, 1fr); align-items: center; gap: 10px; }
+    .chart-grid > .panel { height: 300px; min-height: 0; padding: 14px; overflow: hidden; }
+    .chart-grid .panel-header { margin-bottom: 10px; }
+    .chart-grid .panel-header h2 { font-size: 16px; }
+    .chart-grid .panel-header p { font-size: 11px; line-height: 1.25; }
+    .chart-grid .bar-chart, .chart-grid .area-chart { width: 100%; max-width: 360px; max-height: 174px; margin: 0 auto; overflow: auto; }
+    .donut-layout { display: grid; grid-template-columns: minmax(80px, 1fr); align-items: center; justify-items: center; gap: 8px; max-height: 184px; overflow: auto; }
     .donut { width: min(100%, 130px); aspect-ratio: 1; justify-self: center; border-radius: 50%; position: relative; }
     .donut::after { content: ""; position: absolute; inset: 25%; border-radius: 50%; background: var(--md-surface-container); }
-    .donut-legend { display: grid; gap: 8px; }
+    .donut-legend { display: grid; gap: 5px; width: 100%; font-size: 11px; }
     .legend-row { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: 14px; }
     .legend-swatch { width: 10px; height: 10px; border-radius: 3px; }
     .legend-label { color: var(--md-on-surface-variant); overflow-wrap: anywhere; }
@@ -281,7 +286,7 @@
     .file-input-inline { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
     .evidence-file { color: var(--md-on-surface-variant); overflow-wrap: anywhere; }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-    .area-chart { display: grid; gap: 8px; }
+    .area-chart { display: grid; gap: 6px; }
     .area-chart-legend { display: flex; flex-wrap: wrap; gap: 16px; color: var(--md-on-surface-variant); font-size: 12px; }
     .area-chart-legend span { display: inline-flex; align-items: center; gap: 7px; }
     .area-chart-swatch { width: 10px; height: 10px; border-radius: 3px; }
@@ -451,7 +456,6 @@
             <article class="card panel"><div class="panel-header"><div><h2><span class="chart-title-icon material-symbols-outlined" aria-hidden="true">donut_large</span>Distribución de fallas</h2><p>Participación de cada tipo en el filtro actual.</p></div><span class="count-chip" id="pieChartCount">0 tipos</span></div><div class="donut-layout"><div id="failureDonut" class="donut" role="img" aria-label="Gráfica pastel de fallas"></div><div id="failureLegend" class="donut-legend"></div></div></article>
           </div>
 
-          <section class="card panel rcca-panel"><div class="panel-header"><div><h2>Seriales con prioridad RCCA</h2><p>Se resaltan seriales con tres o más tipos de falla distintos.</p></div><button class="text-button" type="button" data-view-target="rcca">Ver captura RCCA <span class="material-symbols-outlined">arrow_forward</span></button></div><div id="priorityTable" class="table-wrap"></div></section>
           <section class="card panel"><div class="panel-header"><div><h2>Detalle de fallas</h2><p>Rubros del formato FQ-3264-INT-NVD. Los datos fuente se conservan; completa aquí los campos RCCA vacíos.</p></div><span class="count-chip" id="incidentCount">0 eventos</span></div><div id="rccaTableSaveStatus" class="table-save-status" role="status" aria-live="polite"></div><div id="incidentTable" class="table-wrap rcca-table-wrap" role="region" aria-label="Detalle completo de fallas; desplázate horizontalmente para revisar todos los rubros" tabindex="0"></div><div id="incidentFooter" class="table-footer"></div></section>
         </section>
 
@@ -724,11 +728,6 @@
         legend.innerHTML = data.map(([label, value], index) => `<div class="legend-row"><span class="legend-swatch" style="background:${chartPalette[index % chartPalette.length]}"></span><span class="legend-label" title="${escapeHtml(label)}">${escapeHtml(label)}</span><strong>${Math.round(value / total * 100)}%</strong></div>`).join('');
       }
       function statusChip(status) { const normalized = upper(status) || 'SIN STATUS'; return `<span class="status-chip" data-status="${escapeHtml(normalized)}">${escapeHtml(normalized)}</span>`; }
-      function priorityRows(groups, limit = 8) {
-        const candidates = groups.filter(group => group.requiresRcca).slice(0, limit);
-        if (!candidates.length) return `<div class="empty-state"><span class="material-symbols-outlined">task_alt</span><p>No hay seriales con 3 tipos de falla distintos en el filtro actual.</p></div>`;
-        return `<table><thead><tr><th>Serial</th><th>Fallas</th><th>Tipos detectados</th><th>Área responsable</th><th>Status</th><th>Acción</th></tr></thead><tbody>${candidates.map(group => `<tr><td><button class="serial-link" type="button" data-serial="${escapeHtml(group.serial)}">${escapeHtml(group.serial)}</button></td><td><span class="risk"><span class="material-symbols-outlined">priority_high</span>${group.failureCount}</span></td><td>${escapeHtml(group.types.slice(0, 3).join(' · '))}</td><td>${escapeHtml(group.owners.join(', ') || 'Sin asignación')}</td><td>${statusChip(group.latest.status)}</td><td><button class="text-button" type="button" data-serial="${escapeHtml(group.serial)}">Abrir</button></td></tr>`).join('')}</tbody></table>`;
-      }
       function historyRows(groups) {
         if (!groups.length) return `<div class="empty-state"><span class="material-symbols-outlined">search_off</span><p>No hay seriales para mostrar.</p></div>`;
         return `<table><thead><tr><th>Serial</th><th>Registros</th><th>Tipos distintos</th><th>Áreas responsables</th><th>Último status</th><th>RCCA</th></tr></thead><tbody>${groups.map(group => `<tr><td><button class="serial-link" type="button" data-serial="${escapeHtml(group.serial)}">${escapeHtml(group.serial)}</button></td><td>${group.failureCount}</td><td>${group.types.length}</td><td>${escapeHtml(group.owners.join(', ') || 'Sin asignación')}</td><td>${statusChip(group.latest.status)}</td><td>${group.requiresRcca ? '<span class="risk"><span class="material-symbols-outlined">priority_high</span>Requerido</span>' : '<span class="muted">No aplica</span>'}</td></tr>`).join('')}</tbody></table>`;
@@ -784,7 +783,6 @@
         $('#ownerChartCount').textContent = `${areaCounts.filter(item => item.events).length} áreas`;
         $('#stationChartCount').textContent = `${stationCounts.length} estaciones`;
         $('#pieChartCount').textContent = `${failureCounts.length} tipos`;
-        $('#priorityTable').innerHTML = priorityRows(groupBySerial(rows));
         $('#historyTable').innerHTML = historyRows(groupBySerial(rows));
         $('#historyCount').textContent = `${m.serials} seriales`;
         renderIncidentTable(rows);
