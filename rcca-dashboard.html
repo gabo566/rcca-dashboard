@@ -253,12 +253,12 @@
     .empty-chart { padding: 28px 10px; color: var(--md-on-surface-variant); text-align: center; }
     .chart-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-bottom: 24px; }
     .chart-grid > :last-child { grid-column: auto; }
-    .chart-grid > .panel { height: 300px; min-height: 0; padding: 14px; overflow: hidden; }
+    .chart-grid > .panel { height: 330px; min-height: 0; padding: 14px; overflow: hidden; }
     .chart-grid .panel-header { margin-bottom: 10px; }
     .chart-grid .panel-header h2 { font-size: 16px; }
     .chart-grid .panel-header p { font-size: 11px; line-height: 1.25; }
-    .chart-grid .bar-chart, .chart-grid .area-chart { width: 100%; max-width: 360px; max-height: 174px; margin: 0 auto; overflow: auto; }
-    .donut-layout { display: grid; grid-template-columns: minmax(80px, 1fr); align-items: center; justify-items: center; gap: 8px; max-height: 184px; overflow: auto; }
+    .chart-grid .bar-chart, .chart-grid .area-chart { width: 100%; max-width: 360px; max-height: 204px; margin: 0 auto; overflow: auto; }
+    .donut-layout { display: grid; grid-template-columns: minmax(80px, 1fr); align-items: center; justify-items: center; gap: 8px; max-height: 214px; overflow: auto; }
     .donut { width: min(100%, 130px); aspect-ratio: 1; justify-self: center; border-radius: 50%; position: relative; }
     .donut::after { content: ""; position: absolute; inset: 25%; border-radius: 50%; background: var(--md-surface-container); }
     .donut-legend { display: grid; gap: 5px; width: 100%; font-size: 11px; }
@@ -305,7 +305,7 @@
 
     .rcca-panel { margin-bottom: 20px; }
     .table-wrap { overflow: auto; border: 1px solid var(--md-outline-variant); border-radius: 16px; }
-    .rcca-table-wrap { width: calc(100% + 40px); max-height: min(72vh, 820px); margin-left: -20px; border-radius: 0 0 10px 10px; }
+    .rcca-table-wrap { width: calc(100% + 40px); max-height: none; margin-left: -20px; border-radius: 0 0 10px 10px; }
     .chart-grid article:nth-child(1) { border-top: 4px solid #c72808; }
     .chart-grid article:nth-child(2) { border-top: 4px solid #006b7c; }
     .chart-grid article:nth-child(3) { border-top: 4px solid #0b806b; }
