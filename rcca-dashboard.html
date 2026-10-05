@@ -250,21 +250,32 @@
     .legend-row { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: 14px; }
     .legend-swatch { width: 10px; height: 10px; border-radius: 3px; }
     .legend-label { color: var(--md-on-surface-variant); overflow-wrap: anywhere; }
-    .incident-table { min-width: 1800px; table-layout: fixed; }
-    .incident-table td { overflow-wrap: anywhere; }
-    .incident-table th:nth-child(1), .incident-table td:nth-child(1) { width: 7%; }
-    .incident-table th:nth-child(2), .incident-table td:nth-child(2) { width: 5%; }
-    .incident-table th:nth-child(3), .incident-table td:nth-child(3) { width: 7%; }
-    .incident-table th:nth-child(4), .incident-table td:nth-child(4) { width: 10%; }
-    .incident-table th:nth-child(5), .incident-table td:nth-child(5) { width: 10%; }
-    .incident-table th:nth-child(6), .incident-table td:nth-child(6) { width: 6%; }
-    .incident-table th:nth-child(7), .incident-table td:nth-child(7) { width: 7%; }
-    .incident-table th:nth-child(8), .incident-table td:nth-child(8) { width: 12%; }
-    .incident-table th:nth-child(9), .incident-table td:nth-child(9) { width: 8%; }
-    .incident-table th:nth-child(10), .incident-table td:nth-child(10) { width: 14%; }
-    .incident-table th:nth-child(11), .incident-table td:nth-child(11) { width: 7%; }
-    .incident-table th:nth-child(12), .incident-table td:nth-child(12) { width: 7%; }
-    .incident-description { display: block; max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+    .incident-table { width: max-content; min-width: 100%; table-layout: auto; }
+    .incident-table th, .incident-table td { min-width: 125px; max-width: 300px; white-space: normal; overflow-wrap: anywhere; vertical-align: top; }
+    .incident-table th:first-child, .incident-table td:first-child { min-width: 150px; position: sticky; left: 0; z-index: 1; background: var(--md-surface); }
+    .incident-table thead th { position: sticky; top: 0; z-index: 2; }
+    .incident-table thead .column-groups th { top: 0; z-index: 3; background: var(--md-primary-container); color: var(--md-on-primary-container); }
+    .incident-table thead tr:nth-child(2) th { top: 38px; }
+    .rcca-detail-table th, .rcca-detail-table td { min-width: 155px; }
+    .rcca-detail-table th:first-child, .rcca-detail-table td:first-child { min-width: 155px; }
+    .rcca-detail-table .editable-cell { min-width: 245px; }
+    .table-cell-input { width: 100%; min-width: 220px; min-height: 40px; padding: 8px 10px; border: 1px solid var(--md-outline); border-radius: 10px; background: var(--md-surface); color: var(--md-on-surface); font: inherit; }
+    .table-cell-textarea { min-height: 88px; resize: vertical; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .table-cell-select { min-width: 210px; }
+    .reason-cell { min-width: 240px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    .area-chart { display: grid; gap: 12px; }
+    .area-chart-legend { display: flex; flex-wrap: wrap; gap: 16px; color: var(--md-on-surface-variant); font-size: 12px; }
+    .area-chart-legend span { display: inline-flex; align-items: center; gap: 7px; }
+    .area-chart-swatch { width: 10px; height: 10px; border-radius: 3px; }
+    .area-chart-row { display: grid; grid-template-columns: minmax(110px, .8fr) minmax(0, 2.5fr); gap: 12px; align-items: center; }
+    .area-chart-label { color: var(--md-on-surface); font-size: 13px; font-weight: 700; }
+    .area-chart-series { display: grid; gap: 7px; }
+    .area-chart-line { display: grid; grid-template-columns: 72px minmax(80px, 1fr) 28px; gap: 8px; align-items: center; color: var(--md-on-surface-variant); font-size: 11px; }
+    .area-chart-track { height: 12px; overflow: hidden; border-radius: 99px; background: var(--md-surface-container-high); }
+    .area-chart-fill { height: 100%; min-width: 0; border-radius: inherit; }
+    .area-chart-value { text-align: right; color: var(--md-on-surface); font-weight: 700; }
+    .table-save-status { min-height: 20px; color: var(--md-on-surface-variant); font-size: 12px; }
     .table-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 4px 0; color: var(--md-on-surface-variant); font-size: 12px; }
     .pagination { display: flex; align-items: center; gap: 6px; }
     .pagination .icon-button { border: 1px solid var(--md-outline-variant); }
@@ -367,7 +378,7 @@
         <span class="topbar-title">QA · Seguimiento de fallas y acciones</span>
         <div class="topbar-actions">
           <button class="icon-button" id="themeToggle" type="button" aria-label="Cambiar tema"><span class="material-symbols-outlined">dark_mode</span></button>
-          <span id="aiStatusChip" class="count-chip" title="El motor se configura en el servicio local">IA pendiente</span>
+          <span id="aiStatusChip" class="count-chip" title="Clasificación local basada en REMARK y descripción de falla">Reglas locales</span>
           <label class="filled-button" for="fileInput"><span class="material-symbols-outlined">upload</span>Importar Excel</label>
           <input id="fileInput" class="file-input" type="file" accept=".xlsx,.xls,.csv" multiple />
         </div>
@@ -411,12 +422,12 @@
 
           <div class="chart-grid">
             <article class="card panel"><div class="panel-header"><div><h2>Fallas por tipo</h2><p>Causa raíz, síntoma o ERROR DESC del archivo.</p></div><span class="count-chip" id="failureChartCount">0 tipos</span></div><div id="failureChart" class="bar-chart" role="img" aria-label="Barras de fallas por tipo"></div></article>
-            <article class="card panel"><div class="panel-header"><div><h2>Seriales por área responsable</h2><p id="assignmentChartSubtitle">Conteo de seriales únicos por área asignada.</p></div><span class="count-chip" id="ownerChartCount">0 grupos</span></div><div id="ownerChart" class="bar-chart" role="img" aria-label="Barras de seriales por área responsable"></div></article>
+            <article class="card panel"><div class="panel-header"><div><h2>Eventos y seriales por área</h2><p id="assignmentChartSubtitle">Eventos asignados y seriales únicos por equipo.</p></div><span class="count-chip" id="ownerChartCount">0 áreas</span></div><div id="ownerChart" class="area-chart" role="img" aria-label="Eventos asignados y seriales únicos por área"></div></article>
             <article class="card panel"><div class="panel-header"><div><h2>Distribución de fallas</h2><p>Participación de cada tipo en el filtro actual.</p></div><span class="count-chip" id="pieChartCount">0 tipos</span></div><div class="donut-layout"><div id="failureDonut" class="donut" role="img" aria-label="Gráfica pastel de fallas"></div><div id="failureLegend" class="donut-legend"></div></div></article>
           </div>
 
           <section class="card panel rcca-panel"><div class="panel-header"><div><h2>Seriales con prioridad RCCA</h2><p>Se resaltan seriales con tres o más tipos de falla distintos.</p></div><button class="text-button" type="button" data-view-target="rcca">Ver captura RCCA <span class="material-symbols-outlined">arrow_forward</span></button></div><div id="priorityTable" class="table-wrap"></div></section>
-          <section class="card panel"><div class="panel-header"><div><h2>Detalle de fallas</h2><p>Eventos del Excel y registros capturados localmente. Usa los filtros de arriba para acotar.</p></div><span class="count-chip" id="incidentCount">0 eventos</span></div><div id="incidentTable" class="table-wrap"></div><div id="incidentFooter" class="table-footer"></div></section>
+          <section class="card panel"><div class="panel-header"><div><h2>Detalle de fallas</h2><p>Rubros del formato FQ-3264-INT-NVD. Los datos fuente se conservan; completa aquí los campos RCCA vacíos.</p></div><span class="count-chip" id="incidentCount">0 eventos</span></div><div id="rccaTableSaveStatus" class="table-save-status" role="status" aria-live="polite"></div><div id="incidentTable" class="table-wrap rcca-table-wrap" role="region" aria-label="Detalle completo de fallas; desplázate horizontalmente para revisar todos los rubros" tabindex="0"></div><div id="incidentFooter" class="table-footer"></div></section>
         </section>
 
         <section id="view-rcca" class="view" aria-labelledby="rccaTitle">
@@ -426,7 +437,7 @@
               <div class="form-grid">
                 <div class="field"><label for="formWo">WO</label><input id="formWo" name="wo" placeholder="000007031425-1" /></div>
                 <div class="field"><label for="formSerial">Serial *</label><input id="formSerial" name="serial" required placeholder="1933526000053" /></div>
-                <div class="field"><label for="formOwner">Equipo / owner *</label><input id="formOwner" name="owner" required list="ownerSuggestions" placeholder="FA, MFG, PROCESOS..." /></div>
+                <div class="field"><label for="formOwner">Área responsable *</label><input id="formOwner" name="owner" required list="ownerSuggestions" placeholder="FA, REWORK, MFG..." /></div>
                 <div class="field"><label for="formStation">Estación</label><input id="formStation" name="station" placeholder="FCT_14" /></div>
                 <div class="field full"><label for="formFailure">Tipo de falla / causa raíz *</label><input id="formFailure" name="failureType" required placeholder="Ej. Daño físico, falla funcional, mala manipulación" /><div class="helper">Se usa para decidir si el serial acumula 3 tipos distintos.</div></div>
                 <div class="field full"><label for="formInfo">Descripción de falla</label><textarea id="formInfo" name="failureInfo" placeholder="Describe el síntoma observable y la evidencia disponible."></textarea></div>
@@ -437,14 +448,14 @@
               </div>
               <div class="form-actions"><button class="text-button" type="reset">Limpiar</button><button class="filled-button" type="submit"><span class="material-symbols-outlined">save</span>Guardar registro</button></div>
             </form>
-            <datalist id="ownerSuggestions"><option value="FA"></option><option value="MFG"></option><option value="PROCESOS"></option><option value="CALIDAD"></option><option value="PRUEBAS"></option><option value="ME"></option><option value="PE"></option></datalist>
+            <datalist id="ownerSuggestions"><option value="FA"></option><option value="REWORK"></option><option value="MFG"></option><option value="PRODUCTO"></option><option value="PRUEBAS"></option><option value="PROCESOS"></option></datalist>
           </section>
           <section class="card panel"><div class="panel-header"><div><h2>Historial por serial</h2><p>Selecciona un serial para revisar sus fallas y rubros RCCA.</p></div><span class="count-chip" id="historyCount">0 seriales</span></div><div id="historyTable" class="table-wrap"></div></section>
         </section>
 
         <section id="view-import" class="view" aria-labelledby="importTitle">
           <div class="page-heading"><div><div class="eyebrow">Fuente de datos</div><h1 id="importTitle">Fuente Excel</h1><p class="muted">Carga el formato original. La lectura ocurre localmente en tu navegador.</p></div></div>
-          <section class="card panel"><div class="panel-header"><div><h2>Importar Excel de fallas</h2><p>Selecciona uno o varios archivos RCCA o reportes con `SERIAL_NUMBER`, `ERROR DESC`, estaciones y `REMARK`.</p></div><span class="source-chip" id="importStatus">Esperando archivo</span></div><label class="filled-button" for="fileInput"><span class="material-symbols-outlined">upload_file</span>Cargar Excel de fallas</label><button id="retryAiButton" class="tonal-button hidden" type="button">Reintentar clasificación IA</button><div class="helper" id="importHelper">Los archivos seleccionados se combinan y sustituyen la carga anterior. Las filas duplicadas se conservan. Sin proveedor IA configurado, los datos cargan y el área queda pendiente.</div></section>
+          <section class="card panel"><div class="panel-header"><div><h2>Importar Excel de fallas</h2><p>Selecciona uno o varios archivos RCCA o reportes con `SERIAL_NUMBER`, `ERROR DESC`, estaciones y `REMARK`.</p></div><span class="source-chip" id="importStatus">Esperando archivo</span></div><label class="filled-button" for="fileInput"><span class="material-symbols-outlined">upload_file</span>Cargar Excel de fallas</label><div class="helper" id="importHelper">La asignación de área se realiza localmente con reglas visibles basadas en remark y descripción; los casos sin evidencia quedan por revisar.</div></section>
           <section class="card panel"><div class="panel-header"><div><h2>Qué calcula la página</h2><p>La lógica usa los registros válidos de la fuente seleccionada.</p></div></div><div class="timeline"><div class="timeline-item"><strong>1 · Normalización</strong><p>Detecta encabezados aunque tengan saltos de línea, acentos o variaciones de nombre.</p></div><div class="timeline-item"><strong>2 · Seguimiento</strong><p>Agrupa por serial, cuenta fallas distintas y identifica si requiere RCCA.</p></div><div class="timeline-item"><strong>3 · Acciones</strong><p>Concentra RC análisis, contención y acción correctiva/preventiva en el detalle del serial.</p></div></div></section>
         </section>
       </div>
@@ -454,15 +465,18 @@
   <dialog id="serialDialog" aria-labelledby="dialogTitle"><div class="dialog-header"><div><div class="eyebrow">Detalle de serial</div><h2 id="dialogTitle">Serial</h2><p id="dialogSubtitle" class="muted"></p></div><button class="icon-button" id="closeDialog" type="button" aria-label="Cerrar detalle"><span class="material-symbols-outlined">close</span></button></div><div id="dialogBody" class="dialog-body"></div></dialog>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
+  <script src="rcca-domain.js"></script>
+  <script src="rcca-detail-table.js"></script>
   <script>
     (() => {
       'use strict';
 
       const STORAGE_KEY = 'rcca-dashboard-local-records-v2';
-      const state = { sourceRows: [], sourceNames: [], localRows: loadLocalRows(), visibleRows: [], sourceName: '', currentView: 'dashboard', page: 1, pageSize: 15, batchId: 0, aiBackendAvailable: false, aiConfigured: false };
+      const RCCA_NOTES_KEY = 'rcca-dashboard-rcca-notes-v1';
+      const state = { sourceRows: [], sourceNames: [], localRows: loadLocalRows(), visibleRows: [], sourceName: '', currentView: 'dashboard', page: 1, pageSize: 15, batchId: 0 };
       const chartPalette = ['#c72808', '#006b7c', '#0b806b', '#e79b00', '#6558a5', '#2878b5', '#c44879', '#658b2c'];
       const fieldAliases = {
-        wo: ['wo', 'wordorder', 'workorder'], week: ['wk', 'week', 'semana'], family: ['familia'], model: ['modelo'], serial: ['sn', 'serial', 'serialnumber', 'serialno'], station: ['station', 'estacion'], actualStation: ['actualstation'], testStation: ['teststation'], repairStation: ['repairstation'], repairer: ['repairer'], failureDate: ['failuredateddmm yy', 'failuredate', 'fecha'], testTime: ['testtime'], repairTime: ['repairtime'], shift: ['shift', 'turno'], failureInfo: ['failinformationsfc', 'failureinformation', 'failinformation'], defect: ['defectsymptomrealdefect', 'defectsymptom', 'defect', 'sintomadefalla'], errorCode: ['errorcode'], errorDesc: ['errordesc', 'errordescription'], reasonCode: ['reasoncode'], reasonDesc: ['reasondesc2', 'reasondesc', 'reasondescription'], location: ['defectlocation', 'location', 'ubicacion'], dutyStation: ['dutystation'], remark: ['remark', 'remarks'], owner: ['owner', 'responsable', 'equipo'], evidence: ['evidence'], instrumental: ['instrumentalevidence'], rootCause: ['rootcausecategory', 'rootcause', 'causaraiz'], rcAnalysis: ['rcanalysis', 'analisisrc'], containment: ['containmentacion', 'containmentaction', 'acciondecontencion'], corrective: ['correctivepreventiveaction', 'correctiveaction', 'preventiveaction', 'accioncorrectivaypreventiva'], status: ['status', 'estado'], postStatus: ['statuspostrwk', 'statuspost', 'poststatus'], comments: ['comments', 'comentarios']
+        wo: ['wo', 'wordorder', 'workorder'], week: ['wk', 'week', 'semana'], family: ['familia'], model: ['modelo'], serial: ['sn', 'serial', 'serialnumber', 'serialno'], station: ['station', 'estacion'], actualStation: ['actualstation'], testStation: ['teststation'], repairStation: ['repairstation'], repairer: ['repairer'], failureDate: ['failuredateddmm yy', 'failuredate'], registeredDate: ['fecha'], testTime: ['testtime'], repairTime: ['repairtime'], shift: ['shift', 'turno'], failureInfo: ['failinformationsfc', 'failureinformation', 'failinformation'], defect: ['defectsymptomrealdefect', 'defectsymptom', 'defect', 'sintomadefalla'], errorCode: ['errorcode'], errorDesc: ['errordesc', 'errordescription'], reasonCode: ['reasoncode'], reasonDesc: ['reasondesc2', 'reasondesc', 'reasondescription'], location: ['defectlocation', 'location', 'ubicacion'], dutyStation: ['dutystation'], remark: ['remark', 'remarks'], owner: ['owner', 'responsable', 'equipo'], evidence: ['evidence'], instrumental: ['instrumentalevidence'], rootCause: ['rootcausecategory', 'rootcause', 'causaraiz'], rcAnalysis: ['rcanalysis', 'analisisrc'], containment: ['containmentacion', 'containmentaction', 'acciondecontencion'], corrective: ['correctivepreventiveaction', 'correctiveaction', 'preventiveaction', 'accioncorrectivaypreventiva'], status: ['status', 'estado'], postStatus: ['statuspostrwk', 'statuspost', 'poststatus'], comments: ['comments', 'comentarios']
       };
 
       const $ = (selector, root = document) => root.querySelector(selector);
@@ -480,14 +494,33 @@
       const displayValue = (value, fallback = 'Pendiente de captura') => cleanValue(value) || fallback;
       const escapeHtml = (value) => text(value).replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
       const csvCell = (value) => `"${text(value).replace(/"/g, '""')}"`;
-      const assignedArea = (row) => row.aiArea || (row.origin === 'source' ? (row.aiStatus === 'error' ? 'POR REVISAR' : 'PENDIENTE IA') : upper(row.owner || row.assignment) || 'SIN ASIGNACIÓN');
+      const assignedArea = (row) => row.areaOverride || row.autoArea || RCCADomain.normalizeArea(row.owner || row.assignment) || 'POR REVISAR';
       const areaChip = (row) => `<span class="area-chip" data-area="${escapeHtml(assignedArea(row))}">${escapeHtml(assignedArea(row))}</span>`;
-      const classificationNote = (row) => row.aiReason || (row.origin === 'source' ? (row.aiStatus === 'error' ? 'Clasificación pendiente de reintento.' : state.aiBackendAvailable ? 'Configura el proveedor IA en el servidor Node.' : 'La clasificación IA requiere un servidor Node; GitHub Pages solo aloja la página estática.') : 'Asignación capturada manualmente.');
+      const classificationNote = (row) => row.areaOverride && row.areaOverrideOrigin === 'manual'
+        ? 'Área modificada manualmente.'
+        : row.areaOverride && row.sourceOwner
+          ? 'Área original conservada desde OWNER del Excel.'
+          : row.areaReason || (row.origin === 'source' ? 'Sin evidencia suficiente; requiere revisión.' : 'Asignación capturada manualmente.');
 
       function loadLocalRows() {
         try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
       }
       function saveLocalRows() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state.localRows)); }
+      function loadRccaEdits() { try { return JSON.parse(localStorage.getItem(RCCA_NOTES_KEY) || '{}'); } catch { return {}; } }
+      function saveRccaEdit(row, field, value) {
+        const edits = loadRccaEdits();
+        edits[row.id] = { ...(edits[row.id] || {}), [field]: value };
+        localStorage.setItem(RCCA_NOTES_KEY, JSON.stringify(edits));
+      }
+      function restoreRccaEdits(row) {
+        const edits = loadRccaEdits()[row.id];
+        if (!edits) return row;
+        for (const field of RCCADetailTable.EDITABLE_FIELDS) {
+          if (Object.prototype.hasOwnProperty.call(edits, field)) row[field] = edits[field];
+        }
+        if (row.areaOverride) row.areaOverrideOrigin = 'manual';
+        return row;
+      }
       function allRows() { return [...state.sourceRows, ...state.localRows]; }
 
       function findColumn(headers, aliases) {
@@ -505,8 +538,8 @@
           return hasSerial && hasFault && hasContext;
         });
       }
-      function normalizeRow(raw, headers, rowIndex, sourceName, batchId) {
-        const row = { id: `source-${batchId}-${rowIndex}`, origin: 'source', sourceName, aiStatus: 'pending' };
+      function normalizeRow(raw, headers, rowIndex, sourceName, fileIndex) {
+        const row = { id: RCCADomain.stableEventId(sourceName, fileIndex, rowIndex), origin: 'source', sourceName };
         for (const [key, aliases] of Object.entries(fieldAliases)) {
           const column = findColumn(headers, aliases);
           row[key] = column >= 0 ? cleanValue(raw[column]) : '';
@@ -514,22 +547,31 @@
         row.serial = text(row.serial);
         row.wo = text(row.wo);
         row.station = text(row.testStation || row.station || row.actualStation);
-        row.assignment = upper(row.owner || row.repairStation || row.testStation || row.station || row.actualStation || row.dutyStation);
         row.failureDate = row.failureDate || row.testTime;
+        row.registeredDate = row.registeredDate || row.repairTime;
         row.failureType = chooseFailureType(row);
         row.status = upper(row.status);
-        row.owner = upper(row.owner);
-        row.week = text(row.week) || weekFromDate(row.failureDate || row.repairTime);
-        row.failureInfo = row.failureInfo || row.errorDesc || row.reasonDesc || row.remark;
-        return row;
+        row.sourceOwner = upper(row.owner);
+        const classification = RCCADomain.classifyEvent(row);
+        row.autoArea = classification.area;
+        row.areaReason = classification.reason;
+        row.areaOverride = RCCADomain.normalizeArea(row.sourceOwner);
+        row.areaOverrideOrigin = row.areaOverride ? 'source' : '';
+        row.assignment = row.areaOverride || row.autoArea;
+        row.week = text(row.week);
+        row.failureInfo = row.failureInfo || row.errorDesc;
+        row.defect = row.defect || row.reasonDesc;
+        return restoreRccaEdits(row);
       }
       function chooseFailureType(row) {
         const root = cleanValue(row.rootCause);
         if (root && !/^N\/?A$/i.test(root)) return root;
-        const defect = cleanValue(row.defect);
-        if (defect && !/^N\/?A$/i.test(defect)) return defect;
         const error = cleanValue(row.errorDesc);
         if (error && !/^N\/?A$/i.test(error)) return error;
+        const defect = cleanValue(row.defect);
+        if (defect && !/^N\/?A$/i.test(defect)) return defect;
+        const information = cleanValue(row.failureInfo);
+        if (information && !/^N\/?A$/i.test(information)) return information;
         const reason = cleanValue(row.reasonDesc);
         if (reason && !/^N\/?A$/i.test(reason)) return reason;
         const location = cleanValue(row.location);
@@ -544,7 +586,7 @@
         const yearStart = new Date(Date.UTC(start.getUTCFullYear(), 0, 1));
         return String(Math.ceil((((start - yearStart) / 86400000) + 1) / 7));
       }
-      function parseWorkbook(file, fileIndex, batchId) {
+      function parseWorkbook(file, fileIndex) {
         return file.arrayBuffer().then(buffer => {
           if (typeof XLSX === 'undefined') throw new Error('No se cargó el lector XLSX. Revisa la conexión y recarga la página.');
           const workbook = XLSX.read(buffer, { type: 'array', cellDates: true });
@@ -557,86 +599,30 @@
           const matrix = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1, defval: null, raw: true });
           const headerIndex = findHeaderRow(matrix);
           const headers = matrix[headerIndex].map(value => text(value));
-          const rows = matrix.slice(headerIndex + 1).map((raw, index) => normalizeRow(raw, headers, index + headerIndex + 2, file.name, `${batchId}-${fileIndex}`)).filter(row => row.serial);
+          const rows = matrix.slice(headerIndex + 1).map((raw, index) => normalizeRow(raw, headers, index + headerIndex + 2, file.name, fileIndex)).filter(row => row.serial);
           if (!rows.length) throw new Error('La hoja fue encontrada, pero no contiene filas con serial válido.');
           return { rows, sheetName, headers };
         });
       }
 
-      async function refreshAiStatus() {
-        try {
-          const response = await fetch('/api/status');
-          if (!response.ok) throw new Error('Servicio local no disponible');
-          const status = await response.json();
-          state.aiBackendAvailable = true;
-          state.aiConfigured = Boolean(status.configured);
-          $('#aiStatusChip').textContent = state.aiConfigured ? 'IA lista' : 'IA pendiente · configura proveedor';
-          $('#aiStatusChip').title = state.aiConfigured ? 'Proveedor IA configurado en el servidor local.' : 'Configura el proveedor IA en el servidor local para habilitar la clasificación.';
-        } catch {
-          state.aiBackendAvailable = false;
-          state.aiConfigured = false;
-          $('#aiStatusChip').textContent = 'IA sin servidor';
-          $('#aiStatusChip').title = 'La página puede importar y analizar Excel localmente; la clasificación IA requiere un servidor Node.';
-        }
-        return state.aiConfigured;
-      }
-
-      async function classifySourceRows(rows = state.sourceRows) {
-        const batchId = state.batchId;
-        $('#retryAiButton').classList.add('hidden');
-        await refreshAiStatus();
-        if (batchId !== state.batchId || !rows.length) return;
-        if (!state.aiConfigured) {
-          rows.forEach(row => { row.aiArea = ''; row.aiReason = ''; row.aiStatus = 'pending'; });
-          $('#importHelper').textContent = state.aiBackendAvailable
-            ? 'Excel cargado. Configura un proveedor IA en el servidor Node para asignar áreas automáticamente.'
-            : 'Excel cargado y procesado en este navegador. GitHub Pages no ejecuta Node: la clasificación IA requiere el servidor local.';
-          render();
-          return;
-        }
-
-        rows.forEach(row => { row.aiStatus = 'processing'; });
-        $('#importHelper').textContent = 'Clasificando ' + rows.length + ' eventos con IA…';
+      function classifySourceRows(rows = state.sourceRows) {
+        rows.forEach(row => {
+          const result = RCCADomain.classifyEvent(row);
+          row.autoArea = result.area;
+          row.areaReason = result.reason;
+          if (!row.areaOverride && row.sourceOwner) row.areaOverride = RCCADomain.normalizeArea(row.sourceOwner);
+          row.assignment = assignedArea(row);
+        });
+        const reviewCount = rows.filter(row => assignedArea(row) === 'POR REVISAR').length;
+        $('#importHelper').textContent = `Importación lista en este navegador. ${rows.length - reviewCount} evento(s) con área asignada y ${reviewCount} por revisar. Edita OWNER/área si necesitas corregir una regla.`;
         render();
-        const batchSize = 20;
-        const accepted = ['FA', 'REWORK', 'CALIDAD', 'PROCESOS', 'MANUFACTURA', 'PRUEBAS', 'POR REVISAR'];
-        try {
-          for (let start = 0; start < rows.length; start += batchSize) {
-            const chunk = rows.slice(start, start + batchSize);
-            const response = await fetch('/api/classify', {
-              method: 'POST', headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ records: chunk.map(row => ({ id: row.id, errorDesc: row.errorDesc, reasonDesc: row.reasonDesc, remark: row.remark })) })
-            });
-            const result = await response.json().catch(() => ({}));
-            if (!response.ok) throw new Error(result.error || 'Error del clasificador (' + response.status + ').');
-            if (batchId !== state.batchId) return;
-            const mapped = new Map((result.classifications || []).map(item => [item.id, item]));
-            chunk.forEach(row => {
-              const item = mapped.get(row.id);
-              const area = upper(item?.area);
-              row.aiArea = accepted.includes(area) ? area : 'POR REVISAR';
-              row.aiReason = text(item?.reason) || 'El clasificador no entregó explicación.';
-              const needsReview = item?.needsReview === true || item?.needsReview === 'true';
-              row.aiStatus = row.aiArea === 'POR REVISAR' || needsReview ? 'review' : 'done';
-              if (needsReview) row.aiArea = 'POR REVISAR';
-            });
-            render();
-          }
-          $('#importHelper').textContent = 'Clasificación terminada: ' + rows.filter(row => row.aiStatus === 'review').length + ' evento(s) por revisar.';
-        } catch (error) {
-          if (batchId !== state.batchId) return;
-          rows.filter(row => row.aiStatus !== 'done' && row.aiStatus !== 'review').forEach(row => { row.aiArea = 'POR REVISAR'; row.aiStatus = 'error'; row.aiReason = 'No se completó la clasificación. Reintenta cuando el servicio esté disponible.'; });
-          $('#retryAiButton').classList.remove('hidden');
-          $('#importHelper').textContent = error.message || 'Falló la clasificación; conserva los datos y reintenta.';
-          render();
-        }
       }
 
       function getFilters() { return { search: text($('#searchInput').value).toLowerCase(), status: upper($('#statusFilter').value), owner: upper($('#ownerFilter').value), week: text($('#weekFilter').value) }; }
       function filteredRows() {
         const filters = getFilters();
         return allRows().filter(row => {
-          const haystack = [row.wo, row.serial, row.station, row.testStation, row.repairStation, row.failureInfo, row.defect, row.failureType, row.rootCause, row.owner, row.assignment, row.errorCode, row.reasonCode, row.reasonDesc, row.remark, row.aiArea, row.aiReason].join(' ').toLowerCase();
+          const haystack = Object.values(row).map(text).join(' ').toLowerCase();
           return (!filters.search || haystack.includes(filters.search)) && (!filters.status || upper(row.status) === filters.status) && (!filters.owner || upper(assignedArea(row)) === filters.owner) && (!filters.week || text(row.week) === filters.week);
         });
       }
@@ -661,16 +647,22 @@
         rows.forEach(row => { const key = text(getter(row)) || 'Sin clasificar'; counts.set(key, (counts.get(key) || 0) + 1); });
         return [...counts.entries()].sort((a, b) => b[1] - a[1]);
       }
-      function serialCountByAssignment(rows) {
-        const map = new Map();
-        rows.forEach(row => { const owner = upper(assignedArea(row)) || 'SIN ASIGNACIÓN'; if (!map.has(owner)) map.set(owner, new Set()); map.get(owner).add(row.serial); });
-        return [...map.entries()].map(([key, set]) => [key, set.size]).sort((a, b) => b[1] - a[1]);
-      }
       function renderBarChart(target, entries, emptyText) {
         if (!entries.length) { target.innerHTML = `<div class="empty-chart">${escapeHtml(emptyText)}</div>`; return; }
         const visible = entries.slice(0, 8);
         const max = Math.max(...visible.map(([, value]) => value), 1);
         target.innerHTML = visible.map(([label, value], index) => `<div class="bar-row"><div class="bar-label" title="${escapeHtml(label)}">${escapeHtml(label)}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.max(3, Math.round((value / max) * 100))}%;background:${chartPalette[index % chartPalette.length]}"></div></div><div class="bar-value">${value}</div></div>`).join('');
+      }
+      function renderAreaChart(target, summaries) {
+        if (!summaries.some(item => item.events || item.serials)) {
+          target.innerHTML = '<div class="empty-chart">Carga un Excel para contar eventos y seriales por área.</div>';
+          return;
+        }
+        const maximum = Math.max(1, ...summaries.flatMap(item => [item.events, item.serials]));
+        const colorEvents = chartPalette[0];
+        const colorSerials = chartPalette[1];
+        target.innerHTML = `<div class="area-chart-legend"><span><i class="area-chart-swatch" style="background:${colorEvents}"></i>Eventos</span><span><i class="area-chart-swatch" style="background:${colorSerials}"></i>Seriales únicos</span></div>${summaries.map(item => `<div class="area-chart-row"><div class="area-chart-label">${escapeHtml(item.area)}</div><div class="area-chart-series"><div class="area-chart-line"><span>Eventos</span><div class="area-chart-track"><div class="area-chart-fill" style="width:${item.events ? Math.max(3, Math.round(item.events / maximum * 100)) : 0}%;background:${colorEvents}"></div></div><span class="area-chart-value">${item.events}</span></div><div class="area-chart-line"><span>Seriales</span><div class="area-chart-track"><div class="area-chart-fill" style="width:${item.serials ? Math.max(3, Math.round(item.serials / maximum * 100)) : 0}%;background:${colorSerials}"></div></div><span class="area-chart-value">${item.serials}</span></div></div></div>`).join('')}`;
+        target.setAttribute('aria-label', 'Eventos asignados y seriales únicos por área: ' + summaries.map(item => `${item.area}: ${item.events} eventos, ${item.serials} seriales`).join('; '));
       }
       function pieEntries(entries, limit = 6) {
         if (entries.length <= limit) return entries;
@@ -715,8 +707,7 @@
         chip.innerHTML = '<span class="material-symbols-outlined">description</span>' + (state.sourceName ? escapeHtml(state.sourceName) : 'Sin archivo cargado');
         $('#importStatus').textContent = state.sourceName ? state.sourceRows.length + ' eventos · ' + state.sourceNames.length + ' archivo(s)' : 'Esperando archivo';
         $('#importStatus').title = state.sourceNames.join(', ');
-        const pending = state.sourceRows.some(row => row.aiStatus === 'pending' || row.aiStatus === 'processing');
-        $('#assignmentChartSubtitle').textContent = pending ? 'Área responsable inferida por IA; pendiente de proveedor.' : 'Seriales únicos por área responsable del evento.';
+        $('#assignmentChartSubtitle').textContent = 'Eventos = filas de falla; seriales = números únicos dentro de cada área.';
       }
       function renderIncidentTable(rows) {
         const pageCount = Math.max(1, Math.ceil(rows.length / state.pageSize));
@@ -729,28 +720,7 @@
           $('#incidentFooter').innerHTML = '';
           return;
         }
-        $('#incidentTable').innerHTML = `<table class="incident-table"><thead><tr><th>Serial</th><th>WO</th><th>Fecha</th><th>Tipo de falla</th><th>Reason / descripción</th><th>Test station</th><th>Repair station</th><th>Remark</th><th>Owner / reparador</th><th>Status</th></tr></thead><tbody>${visible.map(row => {
-          const description = row.reasonDesc || row.failureInfo || row.defect || row.errorDesc || '—';
-          return `<tr><td><button class="serial-link" type="button" data-serial="${escapeHtml(row.serial)}">${escapeHtml(row.serial)}</button></td><td>${escapeHtml(row.wo || '—')}</td><td>${escapeHtml(formatDate(row.failureDate || row.testTime || row.repairTime) || '—')}</td><td>${escapeHtml(row.failureType || 'Sin clasificar')}</td><td><div class="incident-description" title="${escapeHtml(description)}">${escapeHtml(description)}</div></td><td>${escapeHtml(row.testStation || row.station || row.actualStation || '—')}</td><td>${escapeHtml(row.repairStation || '—')}</td><td><div class="incident-description" title="${escapeHtml(row.remark || '')}">${escapeHtml(row.remark || '—')}</div></td><td>${escapeHtml(row.owner || row.repairer || '—')}</td><td>${statusChip(row.status)}</td></tr>`;
-        }).join('')}</tbody></table>`;
-        const table = $('#incidentTable table');
-        const header = table.tHead.rows[0];
-        const areaHeader = document.createElement('th');
-        areaHeader.textContent = 'Área IA';
-        header.insertBefore(areaHeader, header.cells[8]);
-        const reasonHeader = document.createElement('th');
-        reasonHeader.textContent = 'Criterio de asignación';
-        header.insertBefore(reasonHeader, header.cells[9]);
-        visible.forEach((row, index) => {
-          const cells = table.tBodies[0].rows[index].cells;
-          const areaCell = document.createElement('td');
-          areaCell.innerHTML = areaChip(row);
-          cells[8].before(areaCell);
-          const reasonCell = document.createElement('td');
-          reasonCell.textContent = classificationNote(row);
-          reasonCell.title = classificationNote(row);
-          cells[9].before(reasonCell);
-        });
+        RCCADetailTable.render($('#incidentTable'), visible, { assignedArea, classificationNote, formatDate });
         $('#incidentFooter').innerHTML = `<span>Mostrando ${start + 1}–${Math.min(start + state.pageSize, rows.length)} de ${rows.length}</span><div class="pagination"><button class="icon-button" type="button" data-page="prev" aria-label="Página anterior" ${state.page <= 1 ? 'disabled' : ''}><span class="material-symbols-outlined">chevron_left</span></button><span>Página ${state.page} de ${pageCount}</span><button class="icon-button" type="button" data-page="next" aria-label="Página siguiente" ${state.page >= pageCount ? 'disabled' : ''}><span class="material-symbols-outlined">chevron_right</span></button></div>`;
       }
       function render() {
@@ -764,12 +734,12 @@
         $('#heroRows').textContent = m.total.toLocaleString('es-MX');
         $('#heroWos').textContent = m.wos.toLocaleString('es-MX');
         const failureCounts = countBy(rows, row => row.failureType);
-        const ownerCounts = serialCountByAssignment(rows);
+        const areaCounts = RCCADomain.summarizeAreas(rows, assignedArea);
         renderBarChart($('#failureChart'), failureCounts, 'Carga un Excel para ver las fallas.');
-        renderBarChart($('#ownerChart'), ownerCounts, 'Carga un Excel para ver equipos o estaciones.');
+        renderAreaChart($('#ownerChart'), areaCounts);
         renderDonut(failureCounts);
         $('#failureChartCount').textContent = `${failureCounts.length} tipos`;
-        $('#ownerChartCount').textContent = `${ownerCounts.length} grupos`;
+        $('#ownerChartCount').textContent = `${rows.length} eventos`;
         $('#pieChartCount').textContent = `${failureCounts.length} tipos`;
         $('#priorityTable').innerHTML = priorityRows(groupBySerial(rows));
         $('#historyTable').innerHTML = historyRows(groupBySerial(rows));
@@ -799,9 +769,8 @@
       }
       function exportCsv() {
         if (!state.visibleRows.length) { toast('No hay registros filtrados para exportar.'); return; }
-        const columns = ['wo', 'week', 'serial', 'failureDate', 'station', 'repairStation', 'failureType', 'errorCode', 'failureInfo', 'reasonCode', 'reasonDesc', 'remark', 'owner', 'repairer', 'assignedArea', 'classificationNote', 'sourceName', 'status', 'rcAnalysis', 'containment', 'corrective'];
-        const labels = ['WO', 'WK', 'SN', 'Fecha', 'Test station / estación', 'Repair station', 'Tipo de falla', 'Error code', 'Descripción', 'Reason code', 'Reason description', 'Remark', 'Owner', 'Repairer', 'Área responsable IA', 'Criterio de asignación', 'Archivo fuente', 'Status', 'RC Analysis', 'Contención', 'Correctiva / preventiva'];
-        const csv = [labels, ...state.visibleRows.map(row => columns.map(column => column === 'failureDate' ? formatDate(row[column]) : column === 'assignedArea' ? assignedArea(row) : column === 'classificationNote' ? classificationNote(row) : row[column]))].map(row => row.map(csvCell).join(',')).join('\r\n');
+        const columns = RCCADetailTable.exportColumns({ assignedArea, classificationNote, formatDate });
+        const csv = [[...columns.map(column => column.label)], ...state.visibleRows.map(row => columns.map(column => column.value(row)))].map(row => row.map(csvCell).join(',')).join('\r\n');
         const blob = new Blob([`\ufeff${csv}`], { type: 'text/csv;charset=utf-8' });
         const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = 'rcca-seguimiento.csv'; link.click(); URL.revokeObjectURL(url); toast('CSV exportado con los filtros actuales.');
       }
@@ -860,7 +829,7 @@
         const rows = state.visibleRows;
         const dataMetrics = metrics(rows);
         const failureCounts = countBy(rows, row => row.failureType);
-        const assignmentCounts = serialCountByAssignment(rows);
+        const areaCounts = RCCADomain.summarizeAreas(rows, assignedArea);
         const logo = logoDataUrl();
         const generatedAt = new Date().toLocaleString('es-MX');
         addPdfHeader(doc, logo);
@@ -885,10 +854,10 @@
         doc.setTextColor(23, 36, 39); doc.setFont('helvetica', 'bold'); doc.setFontSize(15);
         doc.text('Gráficas del seguimiento', 10, 26);
         doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(75, 91, 95);
-        doc.text('Seriales únicos por área; un serial puede aparecer en más de un grupo si tuvo eventos distintos.', 10, 30);
+        doc.text('Eventos y seriales únicos por área; un serial puede estar en varias áreas si sus fallas difieren.', 10, 30);
         const chartItems = [
           makeChartCanvas(failureCounts, 'Fallas por tipo', 'bar'),
-          makeChartCanvas(assignmentCounts, 'Seriales por área responsable', 'bar'),
+          makeAreaChartCanvas(areaCounts, 'Eventos y seriales únicos por área'),
           makeChartCanvas(failureCounts, 'Distribución de fallas', 'pie')
         ];
        chartItems.forEach((canvas, index) => {
@@ -896,53 +865,59 @@
        });
        addPdfFooter(doc);
 
-        doc.addPage();
-       const eventBody = rows.map(row => [
-         row.serial, row.wo || '—', formatDate(row.failureDate || row.testTime || row.repairTime) || '—', row.failureType || 'Sin clasificar',
-         row.reasonDesc || row.failureInfo || row.defect || row.errorDesc || '—', `Prueba: ${row.testStation || row.station || row.actualStation || '—'}\nReparación: ${row.repairStation || '—'}`,
-          row.remark || '—', assignedArea(row), classificationNote(row), row.owner || row.repairer || '—', row.status || 'No incluido'
-       ]);
-       doc.autoTable({
-         startY: 23,
-         margin: { top: 23, right: 10, bottom: 13, left: 10 },
-          head: [['Serial', 'WO', 'Fecha', 'Tipo de falla', 'Reason / descripción', 'Estaciones (prueba / reparación)', 'Remark', 'Área IA', 'Criterio de asignación', 'Owner / reparador', 'Status']],
-         body: eventBody,
-          styles: { font: 'helvetica', fontSize: 6.5, cellPadding: 1.5, overflow: 'linebreak', valign: 'top', textColor: [34, 47, 50] },
-         headStyles: { fillColor: [0, 95, 115], textColor: [255, 255, 255], fontStyle: 'bold' },
-         alternateRowStyles: { fillColor: [242, 247, 248] },
-          columnStyles: { 0: { cellWidth: 18 }, 1: { cellWidth: 16 }, 2: { cellWidth: 21 }, 3: { cellWidth: 30 }, 4: { cellWidth: 34 }, 5: { cellWidth: 29 }, 6: { cellWidth: 37 }, 7: { cellWidth: 19 }, 8: { cellWidth: 39 }, 9: { cellWidth: 16 }, 10: { cellWidth: 15 } },
-         willDrawPage: () => addPdfHeader(doc, logo),
-         didDrawPage: () => addPdfFooter(doc)
-       });
-
-        const rccaRows = rows.filter(row => row.rcAnalysis || row.containment || row.corrective);
-        if (rccaRows.length) {
+        const exportContext = { assignedArea, classificationNote, formatDate };
+        const allColumns = RCCADetailTable.exportColumns(exportContext);
+        RCCADetailTable.GROUPS.forEach((group, groupIndex) => {
           doc.addPage();
+          addPdfHeader(doc, logo);
+          doc.setTextColor(23, 36, 39); doc.setFont('helvetica', 'bold'); doc.setFontSize(13);
+          doc.text(`Detalle RCCA · ${group.label}`, 10, 25);
+          const groupColumns = allColumns.filter(column => group.columns.some(definition => definition.label === column.label));
+          const labels = groupColumns.map(column => column.label);
+          const body = rows.map(row => groupColumns.map(column => column.value(row) || '—'));
           doc.autoTable({
-            startY: 23,
-            margin: { top: 23, right: 10, bottom: 13, left: 10 },
-            head: [['Serial', 'Tipo de falla', 'RC análisis', 'Acción de contención', 'Acción correctiva / preventiva']],
-            body: rccaRows.map(row => [row.serial, row.failureType || '—', row.rcAnalysis || '—', row.containment || '—', row.corrective || '—']),
-            styles: { font: 'helvetica', fontSize: 7, cellPadding: 2, overflow: 'linebreak', valign: 'top', textColor: [34, 47, 50] },
-            headStyles: { fillColor: [101, 88, 165], textColor: [255, 255, 255], fontStyle: 'bold' },
-            alternateRowStyles: { fillColor: [246, 244, 255] },
-            columnStyles: { 0: { cellWidth: 25 }, 1: { cellWidth: 38 }, 2: { cellWidth: 58 }, 3: { cellWidth: 58 }, 4: { cellWidth: 58 } },
-            willDrawPage: () => addPdfHeader(doc, logo),
-            didDrawPage: () => addPdfFooter(doc)
+            startY: 30,
+            margin: { top: 23, right: 9, bottom: 13, left: 9 },
+            head: [labels], body,
+            styles: { font: 'helvetica', fontSize: groupIndex === 2 ? 6.2 : 6.7, cellPadding: 1.4, overflow: 'linebreak', valign: 'top', textColor: [34, 47, 50] },
+            headStyles: { fillColor: groupIndex === 2 ? [101, 88, 165] : [0, 95, 115], textColor: [255, 255, 255], fontStyle: 'bold' },
+            alternateRowStyles: { fillColor: groupIndex === 2 ? [246, 244, 255] : [242, 247, 248] },
+            didDrawPage: () => { addPdfHeader(doc, logo); addPdfFooter(doc); }
           });
-        }
+        });
         const baseName = (state.sourceName || 'rcca-seguimiento').replace(/\.[^.]+$/, '').replace(/[^\w-]+/g, '-').replace(/^-|-$/g, '').slice(0, 48);
         const dateTag = new Date().toISOString().slice(0, 19).replace(/[T:]/g, '-');
         doc.save(`${baseName}-RCCA-${dateTag}.pdf`);
         toast(`PDF generado → ${rows.length} eventos incluidos.`);
       }
 
+      function makeAreaChartCanvas(summaries, title) {
+        const canvas = document.createElement('canvas');
+        canvas.width = 1800; canvas.height = 390;
+        const context = canvas.getContext('2d');
+        context.fillStyle = '#ffffff'; context.fillRect(0, 0, canvas.width, canvas.height);
+        context.fillStyle = '#172427'; context.font = '600 36px Arial'; context.fillText(title, 28, 48);
+        const maximum = Math.max(1, ...summaries.flatMap(item => [item.events, item.serials]));
+        summaries.forEach((item, index) => {
+          const y = 58 + index * 45;
+          context.fillStyle = '#344347'; context.font = 'bold 23px Arial'; context.fillText(item.area, 30, y + 30);
+          const bars = [{ label: 'Eventos', value: item.events, color: chartPalette[0] }, { label: 'Seriales', value: item.serials, color: chartPalette[1] }];
+          bars.forEach((bar, barIndex) => {
+            const barY = y + barIndex * 19;
+            context.fillStyle = '#637174'; context.font = '15px Arial'; context.fillText(bar.label, 190, barY + 14);
+            context.fillStyle = '#edf1f2'; context.fillRect(285, barY, 1320, 15);
+            context.fillStyle = bar.color; if (bar.value) context.fillRect(285, barY, Math.max(4, 1320 * bar.value / maximum), 15);
+            context.fillStyle = '#172427'; context.font = 'bold 16px Arial'; context.fillText(String(bar.value), 1620, barY + 14);
+          });
+        });
+        return canvas;
+      }
+
       $('#fileInput').addEventListener('change', async event => {
         const files = [...(event.target.files || [])]; if (!files.length) return;
         const currentBatch = ++state.batchId;
-        const batchKey = Date.now() + '-' + currentBatch;
         try {
-          const results = await Promise.all(files.map((file, index) => parseWorkbook(file, index, batchKey)));
+          const results = await Promise.all(files.map((file, index) => parseWorkbook(file, index)));
           if (currentBatch !== state.batchId) return;
           state.sourceRows = results.flatMap(result => result.rows);
           state.sourceNames = files.map(file => file.name);
@@ -950,12 +925,11 @@
           state.page = 1;
           $('#searchInput').value = ''; $('#statusFilter').value = ''; $('#ownerFilter').value = ''; $('#weekFilter').value = '';
           updateFilterOptions(allRows()); render(); setView('dashboard');
-          await classifySourceRows(state.sourceRows);
+          classifySourceRows(state.sourceRows);
           toast('Lote cargado → ' + state.sourceRows.length + ' eventos de ' + files.length + ' archivo(s).');
         } catch (error) { toast(error.message || 'No se pudo leer el archivo.'); }
         finally { event.target.value = ''; }
       });
-      $('#retryAiButton').addEventListener('click', () => classifySourceRows(state.sourceRows));
       ['#searchInput', '#statusFilter', '#ownerFilter', '#weekFilter'].forEach(selector => $(selector).addEventListener('input', () => { state.page = 1; render(); }));
       $('#clearFilters').addEventListener('click', () => { $('#searchInput').value = ''; $('#statusFilter').value = ''; $('#ownerFilter').value = ''; $('#weekFilter').value = ''; state.page = 1; render(); });
       $('#exportCsv').addEventListener('click', exportCsv);
@@ -967,12 +941,33 @@
         const pageButton = event.target.closest('[data-page]');
         if (pageButton && !pageButton.disabled) { state.page += pageButton.dataset.page === 'next' ? 1 : -1; render(); }
       });
+      document.addEventListener('change', event => {
+        const control = event.target.closest('[data-rcca-field][data-row-id]');
+        if (!control) return;
+        const row = allRows().find(item => item.id === control.dataset.rowId);
+        if (!row) return;
+        const field = control.dataset.rccaField;
+        const value = text(control.value);
+        if (field === 'areaOverride') {
+          row.areaOverride = value === 'AUTO' ? '' : RCCADomain.normalizeArea(value) || 'POR REVISAR';
+          row.areaOverrideOrigin = row.areaOverride ? 'manual' : '';
+          row.assignment = assignedArea(row);
+          saveRccaEdit(row, field, row.areaOverride);
+        } else {
+          row[field] = field === 'status' ? upper(value) : value;
+          if (field === 'rootCause') row.failureType = chooseFailureType(row);
+          saveRccaEdit(row, field, row[field]);
+        }
+        $('#rccaTableSaveStatus').textContent = 'Captura guardada en este navegador.';
+        updateFilterOptions(allRows());
+        render();
+      });
       $('#closeDialog').addEventListener('click', () => $('#serialDialog').close());
       $('#serialDialog').addEventListener('click', event => { if (event.target === $('#serialDialog')) $('#serialDialog').close(); });
       $('#themeToggle').addEventListener('click', () => { const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = next; localStorage.setItem('rcca-theme', next); $('#themeToggle .material-symbols-outlined').textContent = next === 'dark' ? 'light_mode' : 'dark_mode'; });
 
       const savedTheme = localStorage.getItem('rcca-theme'); if (savedTheme) { document.documentElement.dataset.theme = savedTheme; $('#themeToggle .material-symbols-outlined').textContent = savedTheme === 'dark' ? 'light_mode' : 'dark_mode'; }
-      refreshAiStatus();
+      $('#aiStatusChip').textContent = 'Reglas locales';
       updateFilterOptions(allRows()); render();
     })();
   </script>

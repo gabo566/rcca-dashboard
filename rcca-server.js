@@ -13,6 +13,8 @@ const STATIC_FILES = new Map([
   ['/', { file: 'rcca-dashboard.html', type: 'text/html; charset=utf-8' }],
   ['/index.html', { file: 'index.html', type: 'text/html; charset=utf-8' }],
   ['/rcca-dashboard.html', { file: 'rcca-dashboard.html', type: 'text/html; charset=utf-8' }],
+  ['/rcca-domain.js', { file: 'rcca-domain.js', type: 'text/javascript; charset=utf-8' }],
+  ['/rcca-detail-table.js', { file: 'rcca-detail-table.js', type: 'text/javascript; charset=utf-8' }],
   ['/ingrasys-emblem.png', { file: 'ingrasys-emblem.png', type: 'image/png' }]
 ]);
 

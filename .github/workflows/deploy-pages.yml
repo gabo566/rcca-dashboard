@@ -28,7 +28,7 @@ jobs:
       - name: Prepare static site
         run: |
           mkdir _site
-          cp index.html rcca-dashboard.html ingrasys-emblem.png _site/
+          cp index.html rcca-dashboard.html rcca-domain.js rcca-detail-table.js ingrasys-emblem.png _site/
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
