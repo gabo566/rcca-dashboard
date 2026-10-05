@@ -30,14 +30,25 @@
       { key: 'containment', label: 'CONTAINMENT ACTION', type: 'textarea' },
       { key: 'corrective', label: 'CORRECTIVE / PREVENTIVE ACTION', type: 'textarea' },
       { key: 'status', label: 'STATUS', type: 'status' },
-      { key: 'postStatus', label: 'STATUS POST-RWK', type: 'input' },
+      { key: 'postStatus', label: 'STATUS POST-RWK', type: 'postStatus' },
       { key: 'comments', label: 'COMMENTS', type: 'textarea' }
+    ] },
+    { label: 'Fuente', columns: [
+      { key: 'remark', label: 'REMARK', type: 'longtext' }
     ] }
   ]);
 
+  const FIELD_OPTIONS = Object.freeze({
+    rootCause: ['MALA CONEXIÓN', 'FALLA FUNCIONAL', 'DAÑO FÍSICO', 'RETEST', 'AC CYCLE', 'MATERIAL DAÑADO'],
+    rcAnalysis: ['REVISIÓN DE ENSAMBLE', 'VALIDACIÓN DE PROCESO', 'ANÁLISIS DE FALLA FUNCIONAL', 'REVISIÓN DE CONEXIONES', 'ANÁLISIS DE MATERIAL', 'CONFIRMACIÓN POR RETEST', 'NO SE REPRODUCE EN RETEST', 'PENDIENTE DE EVIDENCIA'],
+    containment: ['REEMPLAZO POR DAÑO FÍSICO', 'REEMPLAZO POR FALLA FUNCIONAL', 'REEMPLAZO POR REQUERIMIENTO DEL CLIENTE', 'REFLASH DE TARJETAS M2, BF3', 'RESEAT DE CONEXIONES / CABLES', 'RESEAT DE TARJETAS', 'RETEST EN ESTACIÓN'],
+    corrective: ['NO APLICA', 'REALIZAR UN CORRECTO ENSAMBLE POR PARTE DE MFG', 'VALIDAR EL PROCESO POR PARTE DE PE', 'ASIGNAR A PERSONAL CON LA CAPACITACIÓN REQUERIDA', 'RETROALIMENTACIÓN AL ÁREA CORRESPONDIENTE', 'DOUBLE CHECK INCOMING', 'DOUBLE CHECK EQUIPO DE QA']
+  });
+  const POST_RWK_OPTIONS = Object.freeze(['PASS', 'FAIL']);
+
   const STATUSES = domain.STATUSES;
   const FLAT_COLUMNS = GROUPS.flatMap(group => group.columns.map(column => ({ ...column, group: group.label })));
-  const EDITABLE_FIELDS = new Set(['areaOverride', 'evidence', 'instrumental', 'rootCause', 'rcAnalysis', 'containment', 'corrective', 'status', 'postStatus', 'comments']);
+  const EDITABLE_FIELDS = new Set(['areaOverride', 'evidence', 'evidenceFileName', 'instrumental', 'instrumentalFileName', 'rootCause', 'rcAnalysis', 'containment', 'corrective', 'status', 'postStatus', 'comments']);
 
   function escapeHtml(value) {
     return String(value == null ? '' : value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
@@ -49,18 +60,33 @@
 
   function rowId(row) { return escapeHtml(row.id); }
 
+  function optionValues(column, currentValue) {
+    const base = column.type === 'area' ? domain.AREAS
+      : column.type === 'status' ? STATUSES
+        : column.type === 'postStatus' ? POST_RWK_OPTIONS
+          : FIELD_OPTIONS[column.key] || [];
+    return currentValue && !base.includes(currentValue) ? [currentValue, ...base] : base;
+  }
+
   function renderSelect(row, column, value, context) {
-    const options = column.type === 'area' ? domain.AREAS : STATUSES;
+    const options = optionValues(column, value);
     const placeholder = column.type === 'area'
       ? `<option value="AUTO" ${row.areaOverride ? '' : 'selected'}>Automática (${escapeHtml(row.autoArea || 'POR REVISAR')})</option>`
       : '<option value="">— Sin capturar —</option>';
     const renderedOptions = options.map(option => `<option value="${escapeHtml(option)}" ${String(value || '') === option ? 'selected' : ''}>${escapeHtml(option)}</option>`).join('');
-    return `<select class="table-cell-input table-cell-select" data-rcca-field="${column.key}" data-row-id="${rowId(row)}" aria-label="${escapeHtml(fieldLabel(column.key))} para serial ${escapeHtml(row.serial)}">${placeholder}${renderedOptions}</select>`;
+    return `<select class="table-cell-input table-cell-select" data-rcca-field="${column.key}" data-rcca-value="${escapeHtml(value || '')}" data-row-id="${rowId(row)}" aria-label="${escapeHtml(fieldLabel(column.key))} para serial ${escapeHtml(row.serial)}">${placeholder}${renderedOptions}</select>`;
+  }
+
+  function renderEvidenceField(row, column) {
+    const fileField = `${column.key}FileName`;
+    const fileName = row[fileField] || '';
+    return `<div class="evidence-editor"><textarea class="table-cell-input table-cell-textarea" rows="3" placeholder="Capturar ${escapeHtml(fieldLabel(column.key).toLowerCase())}" data-rcca-field="${column.key}" data-row-id="${rowId(row)}" aria-label="${escapeHtml(fieldLabel(column.key))} para serial ${escapeHtml(row.serial)}">${escapeHtml(row[column.key])}</textarea><label class="evidence-upload"><span class="material-symbols-outlined" aria-hidden="true">attach_file</span><span>Adjuntar evidencia</span><input class="file-input-inline" type="file" accept="image/*,.pdf,.txt,.csv,.xlsx" data-rcca-file-for="${column.key}" data-row-id="${rowId(row)}" aria-label="Subir evidencia para ${escapeHtml(fieldLabel(column.key))} del serial ${escapeHtml(row.serial)}" /></label>${fileName ? `<small class="evidence-file">${escapeHtml(fileName)}</small>` : ''}</div>`;
   }
 
   function renderEditable(row, column, context) {
     const value = column.key === 'areaOverride' ? context.assignedArea(row) : row[column.key];
-    if (column.type === 'area' || column.type === 'status') return renderSelect(row, column, value, context);
+    if (column.key === 'evidence' || column.key === 'instrumental') return renderEvidenceField(row, column);
+    if (column.type === 'area' || column.type === 'status' || column.type === 'postStatus' || FIELD_OPTIONS[column.key]) return renderSelect(row, column, value, context);
     const controlType = column.type === 'input' ? 'input' : 'textarea';
     const control = controlType === 'input'
       ? `<input class="table-cell-input" type="text" value="${escapeHtml(value)}" placeholder="Agregar dato" data-rcca-field="${column.key}" data-row-id="${rowId(row)}" aria-label="${escapeHtml(fieldLabel(column.key))} para serial ${escapeHtml(row.serial)}" />`

@@ -237,6 +237,7 @@
     .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-bottom: 20px; }
     .panel { min-width: 0; padding: 20px; }
     .panel-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+    .chart-title-icon { margin-right: 6px; color: var(--md-primary); font-size: 20px; vertical-align: -3px; }
     .panel-header p { margin-top: 4px; color: var(--md-on-surface-variant); font-size: 12px; }
     .bar-chart { display: grid; gap: 13px; }
     .bar-row { display: grid; grid-template-columns: minmax(100px, 1.2fr) 2fr 40px; gap: 12px; align-items: center; }
@@ -245,7 +246,7 @@
     .bar-fill { height: 100%; min-width: 3px; border-radius: inherit; transition: width .25s ease; }
     .bar-value { color: var(--md-on-surface); font-weight: 700; text-align: right; }
     .empty-chart { padding: 28px 10px; color: var(--md-on-surface-variant); text-align: center; }
-    .chart-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-bottom: 20px; }
+    .chart-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-bottom: 20px; }
     .chart-grid > :last-child { grid-column: auto; }
     .donut-layout { display: grid; grid-template-columns: minmax(120px, 1fr) minmax(130px, 1fr); align-items: center; gap: 18px; }
     .donut { width: min(100%, 240px); aspect-ratio: 1; justify-self: center; border-radius: 50%; position: relative; }
@@ -255,17 +256,26 @@
     .legend-swatch { width: 10px; height: 10px; border-radius: 3px; }
     .legend-label { color: var(--md-on-surface-variant); overflow-wrap: anywhere; }
     .incident-table { width: max-content; min-width: 100%; table-layout: auto; }
-    .incident-table th, .incident-table td { min-width: 125px; max-width: 300px; white-space: normal; overflow-wrap: anywhere; vertical-align: top; }
+    .incident-table th, .incident-table td { min-width: 115px; max-width: 300px; white-space: normal; overflow-wrap: anywhere; vertical-align: top; }
     .incident-table th:first-child, .incident-table td:first-child { min-width: 150px; position: sticky; left: 0; z-index: 1; background: var(--md-surface); }
     .incident-table thead th { position: sticky; top: 0; z-index: 2; }
     .incident-table thead .column-groups th { top: 0; z-index: 3; background: var(--md-primary-container); color: var(--md-on-primary-container); }
     .incident-table thead tr:nth-child(2) th { top: 38px; }
-    .rcca-detail-table th, .rcca-detail-table td { min-width: 132px; }
+    .rcca-detail-table th, .rcca-detail-table td { min-width: 118px; font-size: 12px; }
     .rcca-detail-table th:first-child, .rcca-detail-table td:first-child { min-width: 155px; }
-    .rcca-detail-table .editable-cell { min-width: 205px; }
-    .table-cell-input { width: 100%; min-width: 180px; min-height: 40px; padding: 8px 10px; border: 1px solid var(--md-outline); border-radius: 10px; background: var(--md-surface); color: var(--md-on-surface); font: inherit; }
-    .table-cell-textarea { min-height: 76px; resize: vertical; white-space: pre-wrap; overflow-wrap: anywhere; }
-    .table-cell-select { min-width: 180px; }
+    .rcca-detail-table .editable-cell { min-width: 190px; }
+    .table-cell-input { width: 100%; min-width: 165px; min-height: 38px; padding: 7px 9px; border: 1px solid var(--md-outline); border-radius: 10px; background: var(--md-surface); color: var(--md-on-surface); font: inherit; }
+    .table-cell-textarea { min-height: 72px; resize: vertical; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .table-cell-select { min-width: 165px; }
+    .table-cell-select[data-rcca-field="status"][data-rcca-value="ABIERTO"], .table-cell-select[data-rcca-field="status"][data-rcca-value="RECHAZADO"] { background: #ffe1dc; color: #8e1b0c; border-color: #e9a397; font-weight: 700; }
+    .table-cell-select[data-rcca-field="status"][data-rcca-value="LLENADO"], .table-cell-select[data-rcca-field="status"][data-rcca-value="EN PROCESO"] { background: #fff0c2; color: #6f5200; border-color: #e5c86d; font-weight: 700; }
+    .table-cell-select[data-rcca-field="status"][data-rcca-value="CERRADO"], .table-cell-select[data-rcca-field="postStatus"][data-rcca-value="PASS"] { background: #d8f3e8; color: #075d45; border-color: #8bcfb5; font-weight: 700; }
+    .table-cell-select[data-rcca-field="postStatus"][data-rcca-value="FAIL"] { background: #ffe1dc; color: #8e1b0c; border-color: #e9a397; font-weight: 700; }
+    .evidence-editor { display: grid; gap: 7px; }
+    .evidence-upload { display: inline-flex; align-items: center; justify-content: center; gap: 6px; width: fit-content; min-height: 32px; padding: 5px 9px; border: 1px solid var(--md-outline); border-radius: 9px; color: var(--md-primary); background: var(--md-primary-container); cursor: pointer; font-size: 12px; font-weight: 700; }
+    .evidence-upload:hover, .evidence-upload:focus-within { outline: 2px solid color-mix(in srgb, var(--md-primary) 35%, transparent); outline-offset: 2px; }
+    .file-input-inline { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+    .evidence-file { color: var(--md-on-surface-variant); overflow-wrap: anywhere; }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
     .area-chart { display: grid; gap: 12px; }
     .area-chart-legend { display: flex; flex-wrap: wrap; gap: 16px; color: var(--md-on-surface-variant); font-size: 12px; }
@@ -284,7 +294,12 @@
     .pagination .icon-button { border: 1px solid var(--md-outline-variant); }
 
     .rcca-panel { margin-bottom: 20px; }
-    .table-wrap { overflow-x: auto; border: 1px solid var(--md-outline-variant); border-radius: 16px; }
+    .table-wrap { overflow: auto; border: 1px solid var(--md-outline-variant); border-radius: 16px; }
+    .rcca-table-wrap { max-height: min(72vh, 820px); }
+    .chart-grid article:nth-child(1) { border-top: 4px solid #c72808; }
+    .chart-grid article:nth-child(2) { border-top: 4px solid #006b7c; }
+    .chart-grid article:nth-child(3) { border-top: 4px solid #0b806b; }
+    .chart-grid article:nth-child(4) { border-top: 4px solid #e79b00; }
     table { width: 100%; border-collapse: collapse; min-width: 760px; }
     th, td { padding: 13px 14px; border-bottom: 1px solid var(--md-outline-variant); text-align: left; vertical-align: middle; }
     th { background: var(--md-surface-container-high); color: var(--md-on-surface-variant); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; }
@@ -424,10 +439,10 @@
           </section>
 
           <div class="chart-grid">
-            <article class="card panel"><div class="panel-header"><div><h2>Fallas por tipo</h2><p>Causa raíz, síntoma o ERROR DESC del archivo.</p></div><span class="count-chip" id="failureChartCount">0 tipos</span></div><div id="failureChart" class="bar-chart" role="img" aria-label="Barras de fallas por tipo"></div></article>
-            <article class="card panel"><div class="panel-header"><div><h2>Eventos y seriales por área</h2><p id="assignmentChartSubtitle">Eventos asignados y seriales únicos por equipo.</p></div><span class="count-chip" id="ownerChartCount">0 áreas</span></div><div id="ownerChart" class="area-chart" role="img" aria-label="Eventos asignados y seriales únicos por área"></div></article>
-            <article class="card panel"><div class="panel-header"><div><h2>Fallas por estación</h2><p>Conteo de eventos según STATION o TEST STATION.</p></div><span class="count-chip" id="stationChartCount">0 estaciones</span></div><div id="stationChart" class="bar-chart" role="img" aria-label="Barras de fallas por estación"></div></article>
-            <article class="card panel"><div class="panel-header"><div><h2>Distribución de fallas</h2><p>Participación de cada tipo en el filtro actual.</p></div><span class="count-chip" id="pieChartCount">0 tipos</span></div><div class="donut-layout"><div id="failureDonut" class="donut" role="img" aria-label="Gráfica pastel de fallas"></div><div id="failureLegend" class="donut-legend"></div></div></article>
+            <article class="card panel"><div class="panel-header"><div><h2><span class="chart-title-icon material-symbols-outlined" aria-hidden="true">error</span>Fallas por tipo</h2><p>Causa raíz, síntoma o ERROR DESC del archivo.</p></div><span class="count-chip" id="failureChartCount">0 tipos</span></div><div id="failureChart" class="bar-chart" role="img" aria-label="Barras de fallas por tipo"></div></article>
+            <article class="card panel"><div class="panel-header"><div><h2><span class="chart-title-icon material-symbols-outlined" aria-hidden="true">groups</span>Eventos y seriales por área</h2><p id="assignmentChartSubtitle">Eventos asignados y seriales únicos por equipo.</p></div><span class="count-chip" id="ownerChartCount">0 áreas</span></div><div id="ownerChart" class="area-chart" role="img" aria-label="Eventos asignados y seriales únicos por área"></div></article>
+            <article class="card panel"><div class="panel-header"><div><h2><span class="chart-title-icon material-symbols-outlined" aria-hidden="true">precision_manufacturing</span>Fallas por estación</h2><p>Conteo de eventos según STATION o TEST STATION.</p></div><span class="count-chip" id="stationChartCount">0 estaciones</span></div><div id="stationChart" class="bar-chart" role="img" aria-label="Barras de fallas por estación"></div></article>
+            <article class="card panel"><div class="panel-header"><div><h2><span class="chart-title-icon material-symbols-outlined" aria-hidden="true">donut_large</span>Distribución de fallas</h2><p>Participación de cada tipo en el filtro actual.</p></div><span class="count-chip" id="pieChartCount">0 tipos</span></div><div class="donut-layout"><div id="failureDonut" class="donut" role="img" aria-label="Gráfica pastel de fallas"></div><div id="failureLegend" class="donut-legend"></div></div></article>
           </div>
 
           <section class="card panel rcca-panel"><div class="panel-header"><div><h2>Seriales con prioridad RCCA</h2><p>Se resaltan seriales con tres o más tipos de falla distintos.</p></div><button class="text-button" type="button" data-view-target="rcca">Ver captura RCCA <span class="material-symbols-outlined">arrow_forward</span></button></div><div id="priorityTable" class="table-wrap"></div></section>
@@ -977,6 +992,18 @@
         if (pageButton && !pageButton.disabled) { state.page += pageButton.dataset.page === 'next' ? 1 : -1; render(); }
       });
       document.addEventListener('change', event => {
+        const fileInput = event.target.closest('[data-rcca-file-for][data-row-id]');
+        if (fileInput) {
+          const row = allRows().find(item => item.id === fileInput.dataset.rowId);
+          const file = fileInput.files?.[0];
+          if (!row || !file) return;
+          const field = `${fileInput.dataset.rccaFileFor}FileName`;
+          row[field] = file.name;
+          saveRccaEdit(row, field, file.name);
+          $('#rccaTableSaveStatus').textContent = `Evidencia seleccionada: ${file.name}`;
+          render();
+          return;
+        }
         const control = event.target.closest('[data-rcca-field][data-row-id]');
         if (!control) return;
         const row = allRows().find(item => item.id === control.dataset.rowId);
