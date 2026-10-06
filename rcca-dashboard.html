@@ -609,6 +609,23 @@
       .hero h2 { font-size: 21px; }
       .hero-meta > div, .hero-stat-button { min-height: 60px; padding: 9px; }
     }
+    .chart-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    #view-dashboard > .page-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+    }
+    #view-dashboard .page-heading > div { grid-column: 2; text-align: center; }
+    #view-dashboard #pageTitle { color: #76b900; }
+    #view-dashboard #sourceChip { grid-column: 3; justify-self: end; }
+    @media (max-width: 1100px) {
+      .chart-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 760px) {
+      #view-dashboard > .page-heading { display: flex; flex-direction: column; align-items: center; text-align: center; }
+      #view-dashboard #sourceChip { align-self: center; }
+      .chart-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
