@@ -675,10 +675,16 @@
     .filled-button { background: #76b900; color: #173400; box-shadow: 0 2px 6px rgba(54, 91, 0, .18); }
     .filled-button:hover { background: #68a500; color: #122900; filter: none; box-shadow: 0 5px 12px rgba(54, 91, 0, .2); }
     .brand-logo { width: 220px; }
-    .topbar { min-height: 42px; padding-top: 4px; padding-bottom: 4px; }
-    .topbar .icon-button { width: 32px; min-height: 32px; }
-    .topbar .filled-button { min-height: 32px; padding-right: 12px; padding-left: 12px; }
-    .topbar .count-chip { min-height: 28px; padding-right: 9px; padding-left: 9px; font-size: 11px; }
+    .icon-button, .text-button, .filled-button, .tonal-button { min-height: 32px; padding-right: 11px; padding-left: 11px; gap: 5px; font-size: 12px; }
+    .icon-button { width: 32px; padding: 0; }
+    .nav button { min-height: 34px; gap: 7px; padding-right: 10px; padding-left: 10px; font-size: 12px; }
+    .topbar { min-height: 36px; padding-top: 3px; padding-bottom: 3px; }
+    .topbar .icon-button { width: 26px; min-height: 26px; }
+    .topbar .filled-button { min-height: 28px; padding-right: 10px; padding-left: 10px; font-size: 11px; }
+    .topbar .count-chip { min-height: 24px; padding-right: 8px; padding-left: 8px; font-size: 10px; }
+    .hero-import-button { min-height: 32px; padding-right: 12px; padding-left: 12px; font-size: 12px; }
+    .hero-stat-button { min-height: 48px; padding: 8px 10px; }
+    .hero-meta strong, .hero-stat-button strong { font-size: 19px; }
     @media (max-width: 1100px) { .brand-logo { width: 190px; } }
     @media (max-width: 760px) { .brand-logo { width: 160px; } }
     @media (max-width: 480px) { .brand-logo { width: 140px; } }
