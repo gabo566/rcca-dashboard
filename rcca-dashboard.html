@@ -588,21 +588,21 @@
     .hero-meta span { font-size: 11px; }
     .kpi-grid { gap: 10px; margin-bottom: 14px; }
     .chart-grid { gap: 12px; margin-bottom: 14px; }
-    .chart-grid > .panel { min-height: 180px; padding: 14px; }
+    .chart-grid > .panel { min-height: 220px; padding: 16px; }
     .chart-grid .panel-header { margin-bottom: 9px; }
     .chart-grid .panel-header h2 { font-size: 15px; }
     .chart-grid .panel-header p { margin-top: 3px; font-size: 11px; }
-    .chart-grid .bar-chart, .chart-grid .area-chart { max-height: 112px; gap: 6px; }
+    .chart-grid .bar-chart, .chart-grid .area-chart { max-height: 140px; gap: 7px; }
     .bar-row { gap: 7px; }
     .bar-track { height: 7px; }
-    .donut-layout { max-height: 112px; gap: 12px; }
-    .donut { width: min(100%, 112px); }
+    .donut-layout { max-height: 140px; gap: 12px; }
+    .donut { width: min(100%, 132px); }
     .donut-legend { gap: 5px; }
     .legend-row { font-size: 11px; }
-    .empty-chart { min-height: 92px; padding: 12px; font-size: 12px; }
+    .empty-chart { min-height: 116px; padding: 14px; font-size: 12px; }
     @media (max-width: 760px) {
       .hero { gap: 14px; padding: 18px; }
-      .chart-grid > .panel { min-height: 180px; }
+      .chart-grid > .panel { min-height: 210px; }
     }
     @media (max-width: 480px) {
       .hero { padding: 16px; }
@@ -616,7 +616,13 @@
       align-items: center;
     }
     #view-dashboard .page-heading > div { grid-column: 2; text-align: center; }
-    #view-dashboard #pageTitle { color: #76b900; }
+    #view-dashboard #pageTitle {
+      display: inline-block;
+      padding: .08em .3em;
+      border-radius: 10px;
+      background: #76b900;
+      color: #173400;
+    }
     #view-dashboard #sourceChip { grid-column: 3; justify-self: end; }
     @media (max-width: 1100px) {
       .chart-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
