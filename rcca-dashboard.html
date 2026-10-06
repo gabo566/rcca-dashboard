@@ -208,7 +208,7 @@
     .hero-meta strong { display: block; font-size: 24px; }
     .hero-meta span { font-size: 12px; }
     .hero-stat-button { display: grid; gap: 3px; min-width: 108px; padding: 10px; border: 1px solid color-mix(in srgb, var(--md-on-primary-container) 20%, transparent); border-radius: 14px; background: color-mix(in srgb, var(--md-primary-container) 72%, white 28%); color: var(--md-on-surface); text-align: left; cursor: pointer; }
-    .hero-stat-button:hover, .hero-stat-button:focus-visible { background: var(--md-primary-container); outline: 3px solid color-mix(in srgb, var(--md-primary) 28%, transparent); outline-offset: 2px; }
+    .hero-stat-button:hover, .hero-stat-button:focus-visible { background: rgba(255, 255, 255, .55); outline: 3px solid rgba(23, 52, 0, .4); outline-offset: 2px; }
     .hero-stat-button:disabled { cursor: not-allowed; opacity: .65; }
     .hero-stat-button strong { font-size: 20px; font-variant-numeric: tabular-nums; }
 
@@ -440,34 +440,34 @@
       gap: 32px;
       overflow: hidden;
       padding: clamp(26px, 4vw, 42px);
-      border: 1px solid rgba(255, 255, 255, .12);
+      border: 1px solid rgba(23, 52, 0, .18);
       border-radius: 22px;
-      background: linear-gradient(118deg, #073b4c 0%, #075b6c 58%, #087a82 100%);
-      color: #f5fbfc;
-      box-shadow: 0 12px 28px rgba(5, 49, 63, .15);
+      background: #76b900;
+      color: #173400;
+      box-shadow: 0 10px 24px rgba(54, 91, 0, .2);
     }
-    .hero::after { position: absolute; right: 27%; bottom: -150px; width: 360px; height: 360px; border: 1px solid rgba(255,255,255,.1); border-radius: 50%; content: ""; pointer-events: none; }
+    .hero::after { position: absolute; right: 27%; bottom: -150px; width: 360px; height: 360px; border: 1px solid rgba(23, 52, 0, .14); border-radius: 50%; content: ""; pointer-events: none; }
     .hero > * { position: relative; z-index: 1; }
-    .hero .eyebrow { color: #9ae3e6; }
-    .hero h2 { max-width: 620px; margin: 0 0 12px; color: #fff; font-size: clamp(24px, 2.6vw, 34px); }
-    .hero p { max-width: 660px; color: rgba(245, 251, 252, .78); }
+    .hero .eyebrow { color: #294d00; }
+    .hero h2 { max-width: 620px; margin: 0 0 12px; color: #173400; font-size: clamp(24px, 2.6vw, 34px); }
+    .hero p { max-width: 660px; color: #294d00; }
     .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 22px; }
-    .hero-import-button { min-height: 42px; padding: 0 16px; border-radius: 12px; background: #f5fbfc; color: #073b4c; box-shadow: none; }
-    .hero-import-button:hover { background: #dff5f5; }
-    .hero-note { display: inline-flex; align-items: center; gap: 6px; color: rgba(245, 251, 252, .78); font-size: 12px; }
+    .hero-import-button { min-height: 42px; padding: 0 16px; border-radius: 12px; background: #173400; color: #f3ffd6; box-shadow: 0 2px 6px rgba(23, 52, 0, .2); }
+    .hero-import-button:hover { background: #234c00; color: #fff; }
+    .hero-note { display: inline-flex; align-items: center; gap: 6px; color: #294d00; font-size: 12px; }
     .hero-note .material-symbols-outlined { font-size: 17px; }
     .hero-meta { gap: 12px; }
     .hero-meta > div, .hero-stat-button {
       min-height: 88px;
       padding: 16px;
-      border: 1px solid rgba(255, 255, 255, .2);
+      border: 1px solid rgba(23, 52, 0, .18);
       border-radius: 16px;
-      background: rgba(255, 255, 255, .1);
-      color: #fff;
+      background: rgba(255, 255, 255, .34);
+      color: #173400;
       backdrop-filter: blur(8px);
     }
-    .hero-meta strong, .hero-stat-button strong { color: #fff; font-size: 28px; }
-    .hero-meta span { color: rgba(245, 251, 252, .76); font-size: 12px; }
+    .hero-meta strong, .hero-stat-button strong { color: #173400; font-size: 28px; }
+    .hero-meta span { color: #294d00; font-size: 12px; }
     .hero-stat-button { width: 100%; }
     .hero-stat-button:hover, .hero-stat-button:focus-visible { background: rgba(255, 255, 255, .18); outline-color: #9ae3e6; }
     .kpi-grid { gap: 14px; margin: 0 0 20px; }
@@ -674,15 +674,6 @@
     }
     .filled-button { background: #76b900; color: #173400; box-shadow: 0 2px 6px rgba(54, 91, 0, .18); }
     .filled-button:hover { background: #68a500; color: #122900; filter: none; box-shadow: 0 5px 12px rgba(54, 91, 0, .2); }
-    .hero { background: #76b900; border-color: rgba(23, 52, 0, .18); color: #173400; box-shadow: 0 10px 24px rgba(54, 91, 0, .2); }
-    .hero::after { border-color: rgba(23, 52, 0, .14); }
-    .hero .eyebrow { color: #294d00; }
-    .hero h2, .hero-meta strong, .hero-stat-button strong { color: #173400; }
-    .hero p, .hero-note, .hero-meta span { color: #294d00; }
-    .hero-meta > div, .hero-stat-button { border-color: rgba(23, 52, 0, .18); background: rgba(255, 255, 255, .34); color: #173400; }
-    .hero-stat-button:hover, .hero-stat-button:focus-visible { background: rgba(255, 255, 255, .55); outline-color: rgba(23, 52, 0, .4); }
-    .hero-import-button { background: #173400; color: #f3ffd6; box-shadow: 0 2px 6px rgba(23, 52, 0, .2); }
-    .hero-import-button:hover { background: #234c00; color: #fff; }
   </style>
 </head>
 <body>
