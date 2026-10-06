@@ -618,10 +618,10 @@
     #view-dashboard .page-heading > div { grid-column: 2; text-align: center; }
     #view-dashboard #pageTitle {
       display: inline-block;
-      padding: .08em .3em;
-      border-radius: 10px;
-      background: #76b900;
-      color: #173400;
+      padding: 0;
+      border-radius: 0;
+      background: transparent;
+      color: var(--md-on-surface);
     }
     #view-dashboard #sourceChip { grid-column: 3; justify-self: end; }
     @media (max-width: 1100px) {
@@ -642,6 +642,36 @@
     .topbar .icon-button:hover { background: rgba(23, 52, 0, .1); }
     .topbar .filled-button { background: #173400; color: #f3ffd6; box-shadow: 0 2px 5px rgba(23, 52, 0, .2); }
     .topbar .filled-button:hover { background: #234c00; filter: none; }
+    .content { padding: 22px clamp(18px, 3vw, 48px) 32px; }
+    .page-heading { gap: 12px; margin-bottom: 14px; }
+    .hero { gap: 14px; padding: clamp(14px, 1.6vw, 20px); margin-bottom: 10px; }
+    .hero h2 { margin-bottom: 6px; font-size: clamp(21px, 1.8vw, 24px); }
+    .hero p { line-height: 1.35; }
+    .hero-actions { margin-top: 9px; }
+    .hero-meta > div, .hero-stat-button { min-height: 56px; padding: 8px 10px; }
+    .hero-meta strong, .hero-stat-button strong { font-size: 20px; }
+    .kpi-grid { gap: 9px; margin-bottom: 12px; }
+    .kpi-card { min-height: 106px; padding: 14px 15px 12px; }
+    .kpi-card .value { margin-top: 9px; font-size: 27px; }
+    .toolbar-card { padding: 14px; margin-bottom: 14px; }
+    .chart-grid { gap: 10px; margin-bottom: 12px; }
+    .chart-grid > .panel { min-height: 190px; padding: 14px; }
+    .chart-grid .panel-header { margin-bottom: 7px; }
+    .chart-grid .bar-chart, .chart-grid .area-chart { max-height: 126px; }
+    .donut-layout { max-height: 126px; }
+    .donut { width: min(100%, 120px); }
+    .panel { padding: 18px; }
+    .panel-header { margin-bottom: 12px; }
+    @media (max-width: 760px) {
+      .content { padding: 20px 16px 28px; }
+      .hero { padding: 16px; }
+      .chart-grid > .panel { min-height: 190px; }
+    }
+    @media (max-width: 480px) {
+      .content { padding: 18px 14px 24px; }
+      .kpi-card { min-height: 102px; padding: 12px 11px; }
+      .panel, .chart-grid > .panel { padding: 14px; }
+    }
   </style>
 </head>
 <body>
