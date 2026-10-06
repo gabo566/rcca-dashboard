@@ -473,9 +473,18 @@
     .kpi-grid { gap: 14px; margin: 0 0 20px; }
     .card { border-color: var(--md-outline-variant); box-shadow: var(--shadow-1); }
     .kpi-card { position: relative; min-height: 122px; padding: 18px 18px 16px; overflow: hidden; }
-    .kpi-card::before { position: absolute; top: 0; bottom: 0; left: 0; width: 3px; background: var(--md-primary); content: ""; }
-    .kpi-card:nth-child(3)::before { background: #c27a00; }
-    .kpi-card:nth-child(4)::before { background: #16805b; }
+    .kpi-total { --kpi-accent: #2673c9; }
+    .kpi-serials { --kpi-accent: #7550c4; }
+    .kpi-open { --kpi-accent: #a66300; }
+    .kpi-closed { --kpi-accent: #16744e; }
+    .kpi-card { background: color-mix(in srgb, var(--kpi-accent) 7%, var(--md-surface)); border-color: color-mix(in srgb, var(--kpi-accent) 24%, var(--md-outline-variant)); }
+    .kpi-card::before { position: absolute; top: 0; bottom: 0; left: 0; width: 4px; background: var(--kpi-accent); content: ""; }
+    .kpi-card .value, .kpi-card .label .material-symbols-outlined { color: var(--kpi-accent); }
+    [data-theme="dark"] .kpi-total { --kpi-accent: #83baff; }
+    [data-theme="dark"] .kpi-serials { --kpi-accent: #c0a3ff; }
+    [data-theme="dark"] .kpi-open { --kpi-accent: #ffc66e; }
+    [data-theme="dark"] .kpi-closed { --kpi-accent: #83d5a9; }
+    [data-theme="dark"] .kpi-card { background: color-mix(in srgb, var(--kpi-accent) 12%, var(--md-surface)); border-color: color-mix(in srgb, var(--kpi-accent) 32%, var(--md-outline-variant)); }
     .kpi-card .label { font-size: 12px; font-weight: 600; }
     .kpi-card .label .material-symbols-outlined { color: var(--md-primary); font-size: 19px; }
     .kpi-card .value { margin-top: 12px; font-size: 30px; }
@@ -615,10 +624,10 @@
           </div>
 
           <div class="kpi-grid" aria-label="Indicadores principales">
-            <article class="card kpi-card"><div class="label">Registros de falla <span class="material-symbols-outlined">dataset</span></div><div id="kpiTotal" class="value">0</div><div class="hint">Filas con serial válido</div></article>
-            <article class="card kpi-card"><div class="label">Seriales únicos <span class="material-symbols-outlined">qr_code_2</span></div><div id="kpiSerials" class="value">0</div><div class="hint">Agrupados por SN</div></article>
-            <article class="card kpi-card"><div class="label">Seguimiento abierto <span class="material-symbols-outlined">pending_actions</span></div><div id="kpiOpen" class="value">0</div><div class="hint">Status pendientes registrados en la fuente</div></article>
-            <article class="card kpi-card"><div class="label">Seguimiento cerrado <span class="material-symbols-outlined">task_alt</span></div><div id="kpiClosed" class="value">0</div><div class="hint">STATUS CERRADO o STATUS POST-RWK PASS</div></article>
+            <article class="card kpi-card kpi-total"><div class="label">Registros de falla <span class="material-symbols-outlined">dataset</span></div><div id="kpiTotal" class="value">0</div><div class="hint">Filas con serial válido</div></article>
+            <article class="card kpi-card kpi-serials"><div class="label">Seriales únicos <span class="material-symbols-outlined">qr_code_2</span></div><div id="kpiSerials" class="value">0</div><div class="hint">Agrupados por SN</div></article>
+            <article class="card kpi-card kpi-open"><div class="label">Seguimiento abierto <span class="material-symbols-outlined">pending_actions</span></div><div id="kpiOpen" class="value">0</div><div class="hint">Status pendientes registrados en la fuente</div></article>
+            <article class="card kpi-card kpi-closed"><div class="label">Seguimiento cerrado <span class="material-symbols-outlined">task_alt</span></div><div id="kpiClosed" class="value">0</div><div class="hint">STATUS CERRADO o STATUS POST-RWK PASS</div></article>
           </div>
 
           <section class="card toolbar-card" aria-label="Filtros del dashboard">
