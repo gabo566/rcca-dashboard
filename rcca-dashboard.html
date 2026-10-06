@@ -575,6 +575,40 @@
       .chart-grid > .panel { padding: 16px; }
       .donut-layout { gap: 12px; }
     }
+
+    /* Compact dashboard charts and follow-up rule */
+    .hero { gap: 18px; padding: clamp(18px, 2vw, 22px); margin-bottom: 14px; }
+    .hero h2 { margin-bottom: 8px; font-size: clamp(22px, 2vw, 26px); }
+    .hero p { font-size: 14px; line-height: 1.4; }
+    .hero-actions { gap: 10px; margin-top: 12px; }
+    .hero-import-button { min-height: 36px; }
+    .hero-meta { gap: 8px; }
+    .hero-meta > div, .hero-stat-button { min-height: 64px; padding: 10px 12px; }
+    .hero-meta strong, .hero-stat-button strong { font-size: 22px; }
+    .hero-meta span { font-size: 11px; }
+    .kpi-grid { gap: 10px; margin-bottom: 14px; }
+    .chart-grid { gap: 12px; margin-bottom: 14px; }
+    .chart-grid > .panel { min-height: 180px; padding: 14px; }
+    .chart-grid .panel-header { margin-bottom: 9px; }
+    .chart-grid .panel-header h2 { font-size: 15px; }
+    .chart-grid .panel-header p { margin-top: 3px; font-size: 11px; }
+    .chart-grid .bar-chart, .chart-grid .area-chart { max-height: 112px; gap: 6px; }
+    .bar-row { gap: 7px; }
+    .bar-track { height: 7px; }
+    .donut-layout { max-height: 112px; gap: 12px; }
+    .donut { width: min(100%, 112px); }
+    .donut-legend { gap: 5px; }
+    .legend-row { font-size: 11px; }
+    .empty-chart { min-height: 92px; padding: 12px; font-size: 12px; }
+    @media (max-width: 760px) {
+      .hero { gap: 14px; padding: 18px; }
+      .chart-grid > .panel { min-height: 180px; }
+    }
+    @media (max-width: 480px) {
+      .hero { padding: 16px; }
+      .hero h2 { font-size: 21px; }
+      .hero-meta > div, .hero-stat-button { min-height: 60px; padding: 9px; }
+    }
   </style>
 </head>
 <body>
