@@ -33,7 +33,7 @@ test('status and classification contract with and without configured provider', 
   const landing = await fetch(appUrl + '/index.html');
   assert.equal(landing.status, 200);
   assert.match(await landing.text(), /rcca-dashboard\.html/);
-  for (const asset of ['/rcca-domain.js', '/rcca-detail-table.js']) {
+  for (const asset of ['/rcca-domain.js', '/rcca-detail-table.js', '/rcca-manager.js']) {
     const response = await fetch(appUrl + asset);
     assert.equal(response.status, 200);
     assert.match(response.headers.get('content-type'), /javascript/);

@@ -68,7 +68,7 @@
     }
 
     * { box-sizing: border-box; }
-    html { min-width: 320px; scroll-behavior: smooth; }
+    html { min-width: 320px; scroll-behavior: smooth; overflow-x: clip; }
     body {
       margin: 0;
       background: var(--md-background);
@@ -233,6 +233,7 @@
       background: var(--md-surface);
       color: var(--md-on-surface);
     }
+    .toolbar input[type="month"] { min-width: 0; width: 100%; max-width: 100%; }
     .field textarea { min-height: 92px; padding-top: 10px; resize: vertical; }
     .toolbar-actions { display: flex; gap: 8px; align-items: center; }
 
@@ -248,6 +249,7 @@
     .bar-track { height: 9px; overflow: hidden; border-radius: 99px; background: var(--md-surface-container-high); }
     .bar-fill { height: 100%; min-width: 3px; border-radius: inherit; transition: width .25s ease; }
     .bar-value { color: var(--md-on-surface); font-weight: 700; text-align: right; }
+    .bar-cumulative { color: var(--md-on-surface-variant); font-size: 10px; font-variant-numeric: tabular-nums; text-align: right; }
     .empty-chart { padding: 28px 10px; color: var(--md-on-surface-variant); text-align: center; }
     .chart-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-bottom: 24px; }
     .chart-grid > :last-child { grid-column: auto; }
@@ -296,6 +298,40 @@
     .area-chart-track { height: 7px; overflow: hidden; border-radius: 99px; background: var(--md-surface-container-high); }
     .area-chart-fill { height: 100%; min-width: 0; border-radius: inherit; }
     .area-chart-value { text-align: right; color: var(--md-on-surface); font-weight: 700; }
+    .manager-panel { margin-bottom: 18px; }
+    .filter-hint:empty { display: none; }
+    .filter-hint { margin-top: 8px; color: var(--md-error); font-size: 12px; }
+    .manager-table { min-width: 1120px; }
+    .manager-table th, .manager-table td { padding: 9px 10px; font-size: 12px; }
+    .manager-table .serial-link { white-space: nowrap; }
+    .manager-input, .manager-select { width: 100%; min-width: 115px; min-height: 34px; padding: 5px 8px; border: 1px solid var(--md-outline); border-radius: 9px; color: var(--md-on-surface); background: var(--md-surface); font: inherit; }
+    .manager-input[type="number"] { width: 120px; min-width: 110px; }
+    .manager-input[type="date"] { min-width: 135px; }
+    .manager-select { min-width: 145px; }
+    .manager-rate { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .manager-rate[data-risk="high"] { color: var(--md-error); }
+    .manager-muted { color: var(--md-on-surface-variant); font-size: 11px; }
+    .manager-row-overdue td { background: color-mix(in srgb, var(--md-error-container) 34%, var(--md-surface)); }
+    .manager-row-closed td { opacity: .78; }
+    .manager-panel-header { align-items: center; }
+    .closed-toggle { display: inline-flex; align-items: center; gap: 7px; color: var(--md-on-surface-variant); font-size: 12px; white-space: nowrap; }
+    .action-metrics { display: flex; flex-wrap: wrap; gap: 8px; margin: -8px 0 12px; }
+    .action-metrics span { display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px; border-radius: 999px; background: var(--md-surface-container-high); color: var(--md-on-surface-variant); font-size: 12px; }
+    .action-metrics strong { color: var(--md-on-surface); font-variant-numeric: tabular-nums; }
+    .action-metrics .overdue-pill { background: var(--md-error-container); color: var(--md-error); }
+    .action-metrics .overdue-pill strong { color: var(--md-error); }
+    .trend-chart { display: grid; gap: 10px; }
+    .trend-legend { display: flex; flex-wrap: wrap; gap: 14px; color: var(--md-on-surface-variant); font-size: 12px; }
+    .trend-legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .trend-swatch { width: 10px; height: 10px; border-radius: 3px; }
+    .trend-row { display: grid; grid-template-columns: 82px minmax(0, 1fr) 105px; gap: 12px; align-items: center; }
+    .trend-month { color: var(--md-on-surface-variant); font-size: 12px; }
+    .trend-bars { display: grid; gap: 4px; }
+    .trend-bar-track { height: 8px; overflow: hidden; border-radius: 999px; background: var(--md-surface-container-high); }
+    .trend-bar-fill { height: 100%; border-radius: inherit; }
+    .trend-values { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; color: var(--md-on-surface); font-size: 11px; font-variant-numeric: tabular-nums; }
+    .trend-values span:last-child { text-align: right; }
+    .manager-alert { color: var(--md-error); font-weight: 700; }
     .table-save-status { min-height: 20px; color: var(--md-on-surface-variant); font-size: 12px; }
     .table-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 4px 0; color: var(--md-on-surface-variant); font-size: 12px; }
     .pagination { display: flex; align-items: center; gap: 6px; }
@@ -358,6 +394,7 @@
       .kpi-grid { grid-template-columns: repeat(2, 1fr); }
       .hero { grid-template-columns: 1fr; }
       .chart-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .manager-panel-header { align-items: flex-start; }
     }
     @media (max-width: 760px) {
       .app-shell { display: block; }
@@ -375,6 +412,11 @@
       .page-heading .source-chip { margin-top: 14px; }
       .kpi-grid, .grid-2 { grid-template-columns: 1fr; }
       .chart-grid { grid-template-columns: 1fr; }
+      .manager-panel .panel-header { align-items: flex-start; flex-direction: column; gap: 10px; }
+      .trend-row { grid-template-columns: 64px minmax(0, 1fr); gap: 8px; }
+      .trend-values { grid-column: 2; }
+      .manager-table th, .manager-table td { padding: 8px; }
+      .toolbar input[type="month"] { min-width: 0; max-width: 100%; padding: 0 5px; font-size: 12px; }
       .form-grid { grid-template-columns: 1fr; }
       .form-grid .full { grid-column: auto; }
       .rubric-grid { grid-template-columns: 1fr; }
@@ -777,16 +819,37 @@
               <div class="field"><label for="statusFilter">Status</label><select id="statusFilter"><option value="">Todos</option></select></div>
               <div class="field"><label for="ownerFilter">Área responsable / equipo</label><select id="ownerFilter"><option value="">Todos</option></select></div>
               <div class="field"><label for="weekFilter">WK</label><select id="weekFilter"><option value="">Todas</option></select></div>
+              <div class="field"><label for="woFilter">Work Order</label><select id="woFilter"><option value="">Todas las WO</option></select></div>
+              <div class="field"><label for="periodFrom">Desde</label><input id="periodFrom" type="month" aria-label="Mes inicial del periodo" /></div>
+              <div class="field"><label for="periodTo">Hasta</label><input id="periodTo" type="month" aria-label="Mes final del periodo" /></div>
               <div class="toolbar-actions"><button id="clearFilters" class="text-button" type="button">Limpiar</button><button id="exportCsv" class="tonal-button" type="button"><span class="material-symbols-outlined">download</span>CSV</button><button id="exportExcel" class="filled-button" type="button"><span class="material-symbols-outlined">table_view</span>Exportar Excel</button></div>
             </div>
+            <p id="periodFilterHint" class="filter-hint" role="status" aria-live="polite"></p>
+          </section>
+
+          <section class="card panel manager-panel" aria-labelledby="woSummaryTitle">
+            <div class="panel-header"><div><h2 id="woSummaryTitle">Impacto por Work Order</h2><p>Eventos y seriales únicos afectados. Captura unidades procesadas para calcular el porcentaje por WO.</p></div><span class="count-chip" id="woSummaryCount">0 WO</span></div>
+            <div id="workorderSummary" class="table-wrap"></div>
+          </section>
+
+          <section class="card panel manager-panel" aria-labelledby="trendTitle">
+            <div class="panel-header"><div><h2 id="trendTitle">Tendencia de fallas</h2><p>Eventos y seriales afectados por mes dentro del periodo seleccionado.</p></div><span class="count-chip" id="trendCount">0 meses</span></div>
+            <div id="trendChart" class="trend-chart" role="img" aria-label="Tendencia mensual de eventos y seriales fallados"></div>
           </section>
 
           <div class="chart-grid">
-            <article class="card panel"><div class="panel-header"><div><h2><span class="chart-title-icon material-symbols-outlined" aria-hidden="true">error</span>Fallas por tipo</h2><p>Causa raíz, síntoma o ERROR DESC del archivo.</p></div><span class="count-chip" id="failureChartCount">0 tipos</span></div><div id="failureChart" class="bar-chart" role="img" aria-label="Barras de fallas por tipo"></div></article>
+            <article class="card panel"><div class="panel-header"><div><h2><span class="chart-title-icon material-symbols-outlined" aria-hidden="true">error</span>Pareto de fallas</h2><p>Eventos ordenados por frecuencia; porcentaje acumulado para priorizar.</p></div><span class="count-chip" id="failureChartCount">0 tipos</span></div><div id="failureChart" class="bar-chart" role="img" aria-label="Pareto de fallas con porcentaje acumulado"></div></article>
             <article class="card panel"><div class="panel-header"><div><h2><span class="chart-title-icon material-symbols-outlined" aria-hidden="true">groups</span>Eventos y seriales por área</h2><p id="assignmentChartSubtitle">Eventos asignados y seriales únicos por equipo.</p></div><span class="count-chip" id="ownerChartCount">0 áreas</span></div><div id="ownerChart" class="area-chart" role="img" aria-label="Eventos asignados y seriales únicos por área"></div></article>
             <article class="card panel"><div class="panel-header"><div><h2><span class="chart-title-icon material-symbols-outlined" aria-hidden="true">precision_manufacturing</span>Fallas por estación</h2><p>Conteo de eventos según STATION o TEST STATION.</p></div><span class="count-chip" id="stationChartCount">0 estaciones</span></div><div id="stationChart" class="bar-chart" role="img" aria-label="Barras de fallas por estación"></div></article>
             <article class="card panel"><div class="panel-header"><div><h2><span class="chart-title-icon material-symbols-outlined" aria-hidden="true">donut_large</span>Distribución de fallas</h2><p>Participación de cada tipo en el filtro actual.</p></div><span class="count-chip" id="pieChartCount">0 tipos</span></div><div class="donut-layout"><div id="failureDonut" class="donut" role="img" aria-label="Gráfica pastel de fallas"></div><div id="failureLegend" class="donut-legend"></div></div></article>
           </div>
+
+          <section class="card panel manager-panel" aria-labelledby="actionsTitle">
+            <div class="panel-header manager-panel-header"><div><h2 id="actionsTitle">Seguimiento de acciones</h2><p>Responsable, compromiso y verificación de efectividad. Cierre requiere resultado efectivo, fecha y evidencia.</p></div><label class="closed-toggle"><input id="showClosedActions" type="checkbox" /> Mostrar verificadas</label></div>
+            <div class="action-metrics" aria-label="Estado de acciones"><span><strong id="actionsPending">0</strong> abiertas</span><span class="overdue-pill"><strong id="actionsOverdue">0</strong> vencidas</span><span><strong id="actionsMissingDate">0</strong> sin fecha</span><span><strong id="actionsMissingEvidence">0</strong> sin evidencia de verificación</span></div>
+            <div id="managerActionsTable" class="table-wrap"></div>
+            <div id="managerActionsFooter" class="table-footer"></div>
+          </section>
 
           <section class="card panel"><div class="panel-header"><div><h2>Detalle de fallas</h2><p>Rubros del formato FQ-3264-INT-NVD. Los datos fuente se conservan; completa aquí los campos RCCA vacíos.</p></div><span class="count-chip" id="incidentCount">0 eventos</span></div><div id="rccaTableSaveStatus" class="table-save-status" role="status" aria-live="polite"></div><div id="incidentTable" class="table-wrap rcca-table-wrap" role="region" aria-label="Detalle completo de fallas; desplázate horizontalmente para revisar todos los rubros" tabindex="0"></div><div id="incidentFooter" class="table-footer"></div></section>
         </section>
@@ -829,13 +892,16 @@
 
   <script src="rcca-domain.js"></script>
   <script src="rcca-detail-table.js"></script>
+  <script src="rcca-manager.js"></script>
   <script>
     (() => {
       'use strict';
 
       const STORAGE_KEY = 'rcca-dashboard-local-records-v2';
       const RCCA_NOTES_KEY = 'rcca-dashboard-rcca-notes-v1';
-      const state = { sourceRows: [], sourceNames: [], localRows: loadLocalRows(), visibleRows: [], sourceName: '', currentView: 'dashboard', page: 1, pageSize: 15, batchId: 0 };
+      const MANAGER_STORAGE_KEY = 'rcca-dashboard-manager-followup-v1';
+      const managerData = loadManagerData();
+      const state = { sourceRows: [], sourceNames: [], localRows: loadLocalRows(), visibleRows: [], sourceName: '', currentView: 'dashboard', page: 1, managerPage: 1, pageSize: 15, batchId: 0 };
       const chartPalette = ['#c72808', '#006b7c', '#0b806b', '#e79b00', '#6558a5', '#2878b5', '#c44879', '#658b2c'];
       const fieldAliases = {
         wo: ['wo', 'wordorder', 'workorder'], week: ['wk', 'week', 'semana'], family: ['familia'], model: ['modelo'], serial: ['sn', 'serial', 'serialnumber', 'serialno'], station: ['station', 'estacion'], actualStation: ['actualstation'], testStation: ['teststation'], repairStation: ['repairstation'], repairer: ['repairer'], failureDate: ['failuredateddmm yy', 'failuredate'], registeredDate: ['fecha'], testTime: ['testtime'], repairTime: ['repairtime'], shift: ['shift', 'turno'], failureInfo: ['failinformationsfc', 'failureinformation', 'failinformation'], defect: ['defectsymptomrealdefect', 'defectsymptom', 'defect', 'sintomadefalla'], errorCode: ['errorcode'], errorDesc: ['errordesc', 'errordescription'], reasonCode: ['reasoncode'], reasonDesc: ['reasondesc2', 'reasondesc', 'reasondescription'], location: ['defectlocation', 'location', 'ubicacion'], dutyStation: ['dutystation'], remark: ['remark', 'remarks'], owner: ['owner', 'responsable', 'equipo'], evidence: ['evidence'], instrumental: ['instrumentalevidence'], rootCause: ['rootcausecategory', 'rootcause', 'causaraiz'], rcAnalysis: ['rcanalysis', 'analisisrc'], containment: ['containmentacion', 'containmentaction', 'acciondecontencion'], corrective: ['correctivepreventiveaction', 'correctiveaction', 'preventiveaction', 'accioncorrectivaypreventiva'], status: ['status', 'estado'], postStatus: ['statuspostrwk', 'statuspost', 'poststatus'], comments: ['comments', 'comentarios']
@@ -867,6 +933,14 @@
       function loadLocalRows() {
         try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
       }
+      function loadManagerData() {
+        try {
+          const stored = JSON.parse(localStorage.getItem(MANAGER_STORAGE_KEY) || '{}');
+          return { productionByWorkorder: stored.productionByWorkorder || {}, actions: stored.actions || {} };
+        }
+        catch { return { productionByWorkorder: {}, actions: {} }; }
+      }
+      function saveManagerData() { localStorage.setItem(MANAGER_STORAGE_KEY, JSON.stringify(managerData)); }
       function saveLocalRows() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state.localRows)); }
       function loadRccaEdits() { try { return JSON.parse(localStorage.getItem(RCCA_NOTES_KEY) || '{}'); } catch { return {}; } }
       function saveRccaEdit(row, field, value) {
@@ -980,10 +1054,11 @@
         render();
       }
 
-      function getFilters() { return { search: text($('#searchInput').value).toLowerCase(), status: upper($('#statusFilter').value), owner: upper($('#ownerFilter').value), week: text($('#weekFilter').value) }; }
+      function getFilters() { return { search: text($('#searchInput').value).toLowerCase(), status: upper($('#statusFilter').value), owner: upper($('#ownerFilter').value), week: text($('#weekFilter').value), workorder: text($('#woFilter').value), from: text($('#periodFrom').value), to: text($('#periodTo').value) }; }
       function filteredRows() {
         const filters = getFilters();
-        return allRows().filter(row => {
+        if (filters.from && filters.to && filters.from > filters.to) return [];
+        return RCCAManager.filterByPeriod(allRows(), filters).filter(row => {
           const haystack = Object.values(row).map(text).join(' ').toLowerCase();
           return (!filters.search || haystack.includes(filters.search)) && (!filters.status || upper(row.status) === filters.status) && (!filters.owner || upper(assignedArea(row)) === filters.owner) && (!filters.week || text(row.week) === filters.week);
         });
@@ -1023,6 +1098,73 @@
         const visible = entries.slice(0, 8);
         const max = Math.max(...visible.map(([, value]) => value), 1);
         target.innerHTML = visible.map(([label, value], index) => `<div class="bar-row"><div class="bar-label" title="${escapeHtml(label)}">${escapeHtml(label)}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.max(3, Math.round((value / max) * 100))}%;background:${chartPalette[index % chartPalette.length]}"></div></div><div class="bar-value">${value}</div></div>`).join('');
+      }
+      function renderParetoChart(target, entries) {
+        if (!entries.length) { target.innerHTML = '<div class="empty-chart">Carga un Excel para priorizar las fallas más frecuentes.</div>'; return; }
+        const visible = entries.slice(0, 7);
+        const maximum = Math.max(...visible.map(([, value]) => value), 1);
+        const pareto = RCCAManager.pareto(entries).slice(0, visible.length);
+        target.innerHTML = pareto.map((item, index) => `<div class="bar-row"><div class="bar-label" title="${escapeHtml(item.label)}">${escapeHtml(item.label)}</div><div class="bar-track" title="${item.value} evento(s)"><div class="bar-fill" style="width:${Math.max(3, Math.round(item.value / maximum * 100))}%;background:${chartPalette[index % chartPalette.length]}"></div></div><div class="bar-value">${item.value}</div><div class="bar-cumulative" title="Porcentaje acumulado">${Math.round(item.cumulativeRate * 100)}%</div></div>`).join('');
+        target.setAttribute('aria-label', 'Pareto de fallas: ' + pareto.map(item => `${item.label}: ${item.value}; acumulado ${Math.round(item.cumulativeRate * 100)}%`).join('; '));
+      }
+      function managerAction(row) { return managerData.actions[row.id] || {}; }
+      function actionClosed(row) { return RCCAManager.isActionClosed(managerAction(row)); }
+      function percent(value) { return value == null ? '—' : new Intl.NumberFormat('es-MX', { style: 'percent', maximumFractionDigits: 1 }).format(value); }
+      function formatMonthLabel(month) { return new Intl.DateTimeFormat('es-MX', { month: 'short', year: 'numeric' }).format(new Date(`${month}-01T12:00:00`)); }
+      function todayLocalInput() { const date = new Date(); return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`; }
+      function renderWorkorderSummary(rows) {
+        const orders = RCCAManager.summarizeWorkorders(rows, managerData.productionByWorkorder, managerData.actions);
+        $('#woSummaryCount').textContent = `${orders.length} WO`;
+        if (!orders.length) { $('#workorderSummary').innerHTML = '<div class="empty-state">No hay work orders con serial para resumir.</div>'; return; }
+        $('#workorderSummary').innerHTML = `<table class="manager-table"><thead><tr><th>Work Order</th><th>Eventos</th><th>SN fallados</th><th>SN con 2+ eventos</th><th>Unidades WO</th><th>% afectados</th><th>Acciones abiertas</th><th>Vencidas</th></tr></thead><tbody>${orders.map(order => {
+          const units = order.productionUnits == null ? '' : order.productionUnits;
+          const rate = order.failureRate == null
+            ? `<span class="manager-muted" title="${order.productionUnits == null ? 'Captura la producción total de la WO.' : 'El denominador no puede ser menor que los seriales únicos fallados.'}">${order.productionUnits == null ? 'Captura unidades' : 'Revisar unidades'}</span>`
+            : `<span class="manager-rate">${percent(order.failureRate)}</span>`;
+          return `<tr><td><button class="serial-link" type="button" data-wo-select="${escapeHtml(order.wo)}" aria-label="Filtrar dashboard por work order ${escapeHtml(order.wo)}">${escapeHtml(order.wo)}</button></td><td>${order.events}</td><td>${order.failedSerials}</td><td>${order.repeatedSerials || '—'}</td><td><input class="manager-input" type="number" min="0" step="1" value="${escapeHtml(units)}" data-production-wo="${escapeHtml(order.wo)}" aria-label="Unidades procesadas en work order ${escapeHtml(order.wo)}" /></td><td>${rate}</td><td>${order.openActions}</td><td class="${order.overdueActions ? 'manager-alert' : ''}">${order.overdueActions}</td></tr>`;
+        }).join('')}</tbody></table>`;
+      }
+      function renderTrend(rows) {
+        const trend = RCCAManager.summarizeTrend(rows);
+        $('#trendCount').textContent = `${trend.length} meses`;
+        if (!trend.length) { $('#trendChart').innerHTML = '<div class="empty-chart">No hay fechas válidas para graficar en este periodo.</div>'; return; }
+        const maximum = Math.max(1, ...trend.flatMap(item => [item.events, item.serials]));
+        $('#trendChart').innerHTML = `<div class="trend-legend"><span><i class="trend-swatch" style="background:${chartPalette[0]}"></i>Eventos</span><span><i class="trend-swatch" style="background:${chartPalette[1]}"></i>Seriales únicos</span></div>${trend.map(item => `<div class="trend-row"><span class="trend-month">${escapeHtml(formatMonthLabel(item.month))}</span><div class="trend-bars"><div class="trend-bar-track" title="${item.events} eventos"><div class="trend-bar-fill" style="width:${Math.max(2, item.events / maximum * 100)}%;background:${chartPalette[0]}"></div></div><div class="trend-bar-track" title="${item.serials} seriales"><div class="trend-bar-fill" style="width:${item.serials ? Math.max(2, item.serials / maximum * 100) : 0}%;background:${chartPalette[1]}"></div></div></div><div class="trend-values"><span>${item.events} eventos</span><span>${item.serials} SN</span></div></div>`).join('')}`;
+      }
+      function renderManagerActions(rows) {
+        const summary = RCCAManager.summarizeActions(rows, managerData.actions);
+        $('#actionsPending').textContent = summary.pending;
+        $('#actionsOverdue').textContent = summary.overdue;
+        $('#actionsMissingDate').textContent = summary.missingDueDate;
+        $('#actionsMissingEvidence').textContent = summary.missingEvidence;
+        const includeClosed = $('#showClosedActions').checked;
+        const queue = rows.filter(row => includeClosed || !actionClosed(row)).sort((a, b) => {
+          const aAction = managerAction(a); const bAction = managerAction(b);
+          const aLate = aAction.dueDate && aAction.dueDate < todayLocalInput() && !actionClosed(a);
+          const bLate = bAction.dueDate && bAction.dueDate < todayLocalInput() && !actionClosed(b);
+          return Number(bLate) - Number(aLate) || String(aAction.dueDate || '9999').localeCompare(String(bAction.dueDate || '9999')) || text(a.wo).localeCompare(text(b.wo));
+        });
+        const pageCount = Math.max(1, Math.ceil(queue.length / state.pageSize));
+        state.managerPage = Math.min(state.managerPage, pageCount);
+        const start = (state.managerPage - 1) * state.pageSize;
+        const visible = queue.slice(start, start + state.pageSize);
+        if (!visible.length) {
+          $('#managerActionsTable').innerHTML = rows.length
+            ? '<div class="empty-state">Todas las acciones filtradas están verificadas. Usa “Mostrar verificadas” para consultarlas.</div>'
+            : '<div class="empty-state">Carga un Excel para crear la lista de seguimiento de acciones.</div>';
+          $('#managerActionsFooter').innerHTML = '';
+          return;
+        }
+        const phases = ['PENDIENTE', 'EN PROCESO', 'EN VERIFICACIÓN', 'CERRADA'];
+        const effectiveness = ['PENDIENTE', 'EFECTIVA', 'NO EFECTIVA'];
+        $('#managerActionsTable').innerHTML = `<table class="manager-table"><thead><tr><th>WO</th><th>Serial</th><th>Área</th><th>Acción correctiva</th><th>Responsable</th><th>Compromiso</th><th>Fase</th><th>Efectividad</th><th>Verificada el</th><th>Evidencia de verificación</th></tr></thead><tbody>${visible.map(row => {
+          const action = managerAction(row); const isClosed = actionClosed(row);
+          const due = action.dueDate || '';
+          const overdue = due && due < todayLocalInput() && !isClosed;
+          const phase = action.phase || 'PENDIENTE'; const result = action.effectiveness || 'PENDIENTE';
+          return `<tr class="${overdue ? 'manager-row-overdue' : ''} ${isClosed ? 'manager-row-closed' : ''}"><td>${escapeHtml(row.wo || '—')}</td><td><button class="serial-link" type="button" data-serial="${escapeHtml(row.serial)}">${escapeHtml(row.serial)}</button></td><td>${escapeHtml(assignedArea(row))}</td><td title="${escapeHtml(row.corrective || '')}">${escapeHtml(row.corrective || 'Captura la acción en el detalle RCCA.')}</td><td><input class="manager-input" type="text" value="${escapeHtml(action.owner || '')}" placeholder="Responsable" data-manager-field="owner" data-row-id="${escapeHtml(row.id)}" aria-label="Responsable de acción para ${escapeHtml(row.serial)}" /></td><td><input class="manager-input" type="date" value="${escapeHtml(due)}" data-manager-field="dueDate" data-row-id="${escapeHtml(row.id)}" aria-label="Fecha compromiso para ${escapeHtml(row.serial)}" /></td><td><select class="manager-select" data-manager-field="phase" data-row-id="${escapeHtml(row.id)}" aria-label="Fase de acción para ${escapeHtml(row.serial)}">${phases.map(value => `<option ${phase === value ? 'selected' : ''}>${value}</option>`).join('')}</select></td><td><select class="manager-select" data-manager-field="effectiveness" data-row-id="${escapeHtml(row.id)}" aria-label="Efectividad para ${escapeHtml(row.serial)}">${effectiveness.map(value => `<option ${result === value ? 'selected' : ''}>${value}</option>`).join('')}</select></td><td><input class="manager-input" type="date" value="${escapeHtml(action.verificationDate || '')}" data-manager-field="verificationDate" data-row-id="${escapeHtml(row.id)}" aria-label="Fecha de verificación para ${escapeHtml(row.serial)}" /></td><td><input class="manager-input" type="text" value="${escapeHtml(action.verificationEvidence || '')}" placeholder="Folio o evidencia" data-manager-field="verificationEvidence" data-row-id="${escapeHtml(row.id)}" aria-label="Evidencia de verificación para ${escapeHtml(row.serial)}" /></td></tr>`;
+        }).join('')}</tbody></table>`;
+        $('#managerActionsFooter').innerHTML = `<span>Mostrando ${start + 1}–${Math.min(start + state.pageSize, queue.length)} de ${queue.length} acción(es) abiertas${includeClosed ? ' y verificadas' : ''}</span><div class="pagination"><button class="icon-button" type="button" data-manager-page="prev" aria-label="Acciones anteriores" ${state.managerPage <= 1 ? 'disabled' : ''}><span class="material-symbols-outlined">chevron_left</span></button><span>Página ${state.managerPage} de ${pageCount}</span><button class="icon-button" type="button" data-manager-page="next" aria-label="Más acciones" ${state.managerPage >= pageCount ? 'disabled' : ''}><span class="material-symbols-outlined">chevron_right</span></button></div>`;
       }
       function renderAreaChart(target, summaries) {
         if (!summaries.some(item => item.events || item.serials)) {
@@ -1069,6 +1211,7 @@
         update('#statusFilter', unique(rows.map(row => upper(row.status))).sort(), 'Todos');
         update('#ownerFilter', unique(rows.map(row => upper(assignedArea(row)))).sort(), 'Todos');
         update('#weekFilter', unique(rows.map(row => text(row.week))).sort((a, b) => Number(a) - Number(b)), 'Todas');
+        update('#woFilter', unique(rows.map(row => text(row.wo))).sort((a, b) => a.localeCompare(b, 'es', { numeric: true })), 'Todas las WO');
       }
       function updateSourceUi() {
         const chip = $('#sourceChip');
@@ -1095,6 +1238,8 @@
       }
       function render() {
         const rows = filteredRows();
+        const filters = getFilters();
+        $('#periodFilterHint').textContent = filters.from && filters.to && filters.from > filters.to ? 'El mes inicial debe ser anterior o igual al mes final.' : '';
         state.visibleRows = rows;
         const m = metrics(rows);
         $('#kpiTotal').textContent = m.total.toLocaleString('es-MX');
@@ -1107,10 +1252,13 @@
         const failureCounts = countBy(rows, row => row.failureType);
         const areaCounts = RCCADomain.summarizeAreas(rows, assignedArea);
         const stationCounts = countBy(rows, row => row.station || row.testStation || row.actualStation || 'Sin estación');
-        renderBarChart($('#failureChart'), failureCounts, 'Carga un Excel para ver las fallas.');
+        renderParetoChart($('#failureChart'), failureCounts);
         renderAreaChart($('#ownerChart'), areaCounts);
         renderStationChart($('#stationChart'), stationCounts);
         renderDonut(failureCounts);
+        renderWorkorderSummary(rows);
+        renderTrend(rows);
+        renderManagerActions(rows);
         $('#failureChartCount').textContent = `${failureCounts.length} tipos`;
         $('#ownerChartCount').textContent = `${areaCounts.filter(item => item.events).length} áreas`;
         $('#stationChartCount').textContent = `${stationCounts.length} estaciones`;
@@ -1179,6 +1327,7 @@
         const failureCounts = countBy(rows, row => row.failureType);
         const stationCounts = countBy(rows, row => row.station || row.testStation || row.actualStation || 'Sin estación');
         const areaCounts = RCCADomain.summarizeAreas(rows, assignedArea).filter(item => item.events || item.serials);
+        const workorderRows = RCCAManager.summarizeWorkorders(rows, managerData.productionByWorkorder, managerData.actions);
         const totalFailures = Math.max(1, rows.length);
         const theme = { navy: '003B49', teal: '005F73', orange: 'C72808', pale: 'EAF3F4', light: 'F5F8F9', line: 'C8D5D8', ink: '172427', muted: '59686B' };
         const styles = {
@@ -1188,14 +1337,17 @@
           cardLabel: excelStyle(theme.pale, theme.navy, true, 'center'), cardValue: excelStyle('FFFFFF', theme.navy, true, 'center', '#,##0'),
           bar: excelStyle('EAF3F4', theme.teal, true, 'left'), percent: excelStyle('FFFFFF', theme.ink, false, 'right', '0%')
         };
-        const summary = makeExcelSheet(60, 18); summary['!merges'] = [];
+        const summaryRowCount = 12 + Math.max(failureCounts.length, stationCounts.length, areaCounts.length) + workorderRows.length;
+        const summary = makeExcelSheet(Math.max(summaryRowCount, 12), 18); summary['!merges'] = [];
         const merge = (sheet, r1, c1, r2, c2) => sheet['!merges'].push({ s: { r: r1, c: c1 }, e: { r: r2, c: c2 } });
         setExcelCell(summary, 0, 0, 'INGRASYS · RCCA / YIELD NVD', styles.title); merge(summary, 0, 0, 0, 17);
         setExcelCell(summary, 1, 0, `Fuente: ${state.sourceName || 'Registros capturados localmente'} · Generado: ${new Date().toLocaleString('es-MX')}`, styles.subtitle); merge(summary, 1, 0, 1, 17);
         const filters = getFilters();
-        setExcelCell(summary, 2, 0, `Filtros: búsqueda ${filters.search || 'todas'} · status ${filters.status || 'todos'} · área ${filters.owner || 'todas'} · WK ${filters.week || 'todas'}`, styles.subtitle); merge(summary, 2, 0, 2, 17);
-        [['Eventos', dataMetrics.total], ['Seriales únicos', dataMetrics.serials], ['Wordorders', dataMetrics.wos], ['Seguimiento cerrado', dataMetrics.closed]].forEach(([label, value], index) => {
-          const start = index * 4; setExcelCell(summary, 4, start, label, styles.cardLabel); setExcelCell(summary, 5, start, value, styles.cardValue); merge(summary, 4, start, 4, start + 3); merge(summary, 5, start, 5, start + 3);
+        setExcelCell(summary, 2, 0, `Filtros: búsqueda ${filters.search || 'todas'} · WO ${filters.workorder || 'todas'} · periodo ${filters.from || 'inicio'} a ${filters.to || 'actualidad'} · status ${filters.status || 'todos'} · área ${filters.owner || 'todas'} · WK ${filters.week || 'todas'}`, styles.subtitle); merge(summary, 2, 0, 2, 17);
+        const actionSummary = RCCAManager.summarizeActions(rows, managerData.actions);
+        const repeatedSerialCount = workorderRows.reduce((sum, item) => sum + item.repeatedSerials, 0);
+        [['Eventos', dataMetrics.total], ['Seriales únicos', dataMetrics.serials], ['WO', dataMetrics.wos], ['Seguimiento cerrado', dataMetrics.closed], ['Grupos SN con 2+ eventos', repeatedSerialCount], ['Acciones vencidas', actionSummary.overdue]].forEach(([label, value], index) => {
+          const start = index * 3; setExcelCell(summary, 4, start, label, styles.cardLabel); setExcelCell(summary, 5, start, value, styles.cardValue); merge(summary, 4, start, 4, start + 2); merge(summary, 5, start, 5, start + 2);
         });
         const sections = [
           { title: 'Fallas por tipo', start: 0, headers: ['Tipo de falla', 'Eventos', 'Barra', '%'], values: failureCounts.map(([label, value]) => [label, value, excelBar(value, failureCounts[0]?.[1]), value / totalFailures]) },
@@ -1213,6 +1365,14 @@
             setExcelCell(summary, dataRow + rowIndex, section.start + offset, value, style);
           }));
         });
+        const orderHeaderRow = 10 + Math.max(0, ...sections.map(section => section.values.length));
+        const orderRows = workorderRows;
+        setExcelCell(summary, orderHeaderRow, 0, 'Impacto por Work Order', styles.group); merge(summary, orderHeaderRow, 0, orderHeaderRow, 7);
+        ['Work Order', 'Eventos', 'SN fallados', 'SN con 2+ eventos', 'Unidades WO', '% afectados', 'Acciones abiertas', 'Vencidas'].forEach((label, index) => setExcelCell(summary, orderHeaderRow + 1, index, label, styles.header));
+        orderRows.forEach((order, rowIndex) => {
+          const values = [order.wo, order.events, order.failedSerials, order.repeatedSerials, order.productionUnits ?? '', order.failureRate ?? '', order.openActions, order.overdueActions];
+          values.forEach((value, columnIndex) => setExcelCell(summary, orderHeaderRow + 2 + rowIndex, columnIndex, value, columnIndex === 5 ? excelStyle(rowIndex % 2 ? theme.light : 'FFFFFF', theme.ink, true, 'right', '0.0%') : rowIndex % 2 ? styles.alt : styles.body));
+        });
         summary['!cols'] = [{ wch: 28 }, { wch: 10 }, { wch: 24 }, { wch: 10 }, { wch: 3 }, { wch: 25 }, { wch: 10 }, { wch: 24 }, { wch: 10 }, { wch: 3 }, { wch: 20 }, { wch: 10 }, { wch: 10 }, { wch: 24 }, { wch: 3 }, { wch: 27 }, { wch: 10 }, { wch: 10 }];
         summary['!rows'] = [{ hpt: 27 }, { hpt: 20 }, { hpt: 20 }, {}, { hpt: 20 }, { hpt: 24 }, {}, { hpt: 22 }, { hpt: 22 }];
 
@@ -1228,7 +1388,34 @@
         detail['!rows'] = [{ hpt: 28 }, { hpt: 20 }, {}, { hpt: 22 }, { hpt: 34 }, ...rows.map(() => ({ hpt: 54 }))];
         detail['!autofilter'] = { ref: `A5:${XLSX.utils.encode_col(columns.length - 1)}${rows.length + 5}` };
         detail['!freeze'] = { xSplit: 0, ySplit: 5, topLeftCell: 'A6', activePane: 'bottomRight', state: 'frozen' };
-        const workbook = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(workbook, summary, 'Resumen'); XLSX.utils.book_append_sheet(workbook, detail, 'RCCA Registro');
+        const managerOrders = makeExcelSheet(orderRows.length + 21, 8); managerOrders['!merges'] = [];
+        setExcelCell(managerOrders, 0, 0, 'Control de producción y fallas por Work Order', styles.title); merge(managerOrders, 0, 0, 0, 7);
+        setExcelCell(managerOrders, 1, 0, 'La tasa usa seriales únicos fallados / unidades procesadas. No se calcula si falta el denominador o es menor al numerador.', styles.subtitle); merge(managerOrders, 1, 0, 1, 7);
+        ['Work Order', 'Eventos', 'SN fallados', 'SN con 2+ eventos', 'Unidades WO', '% afectados', 'Acciones abiertas', 'Vencidas'].forEach((label, index) => setExcelCell(managerOrders, 3, index, label, styles.header));
+        orderRows.forEach((order, rowIndex) => [order.wo, order.events, order.failedSerials, order.repeatedSerials, order.productionUnits ?? '', order.failureRate ?? '', order.openActions, order.overdueActions].forEach((value, columnIndex) => setExcelCell(managerOrders, rowIndex + 4, columnIndex, value, columnIndex === 5 ? excelStyle(rowIndex % 2 ? theme.light : 'FFFFFF', theme.ink, true, 'right', '0.0%') : rowIndex % 2 ? styles.alt : styles.body)));
+        managerOrders['!cols'] = [24, 12, 14, 16, 16, 16, 19, 12].map(wch => ({ wch }));
+        managerOrders['!autofilter'] = { ref: `A4:H${Math.max(4, orderRows.length + 4)}` };
+        managerOrders['!freeze'] = { xSplit: 0, ySplit: 4, topLeftCell: 'A5', activePane: 'bottomRight', state: 'frozen' };
+        const trend = RCCAManager.summarizeTrend(rows);
+        const trendTitleRow = orderRows.length + 7;
+        setExcelCell(managerOrders, trendTitleRow, 0, 'Tendencia mensual', styles.group); merge(managerOrders, trendTitleRow, 0, trendTitleRow, 4);
+        ['Mes', 'Eventos', 'Seriales únicos', 'Barra de eventos', 'Barra de seriales'].forEach((label, index) => setExcelCell(managerOrders, trendTitleRow + 1, index, label, styles.header));
+        const maxTrend = Math.max(1, ...trend.map(item => Math.max(item.events, item.serials)));
+        trend.forEach((item, rowIndex) => [formatMonthLabel(item.month), item.events, item.serials, excelBar(item.events, maxTrend), excelBar(item.serials, maxTrend)].forEach((value, columnIndex) => setExcelCell(managerOrders, trendTitleRow + 2 + rowIndex, columnIndex, value, columnIndex >= 3 ? styles.bar : rowIndex % 2 ? styles.alt : styles.body)));
+        const actionSheet = makeExcelSheet(rows.length + 6, 11); actionSheet['!merges'] = [];
+        setExcelCell(actionSheet, 0, 0, 'Seguimiento de acciones RCCA', styles.title); merge(actionSheet, 0, 0, 0, 10);
+        setExcelCell(actionSheet, 1, 0, 'Cierre efectivo requiere fase CERRADA, efectividad EFECTIVA, fecha y evidencia de verificación.', styles.subtitle); merge(actionSheet, 1, 0, 1, 10);
+        const actionHeaders = ['Work Order', 'SN', 'Área', 'Falla', 'Acción correctiva', 'Responsable', 'Fecha compromiso', 'Fase', 'Efectividad', 'Fecha verificación', 'Evidencia de verificación'];
+        actionHeaders.forEach((label, index) => setExcelCell(actionSheet, 3, index, label, styles.header));
+        rows.forEach((row, rowIndex) => {
+          const action = managerAction(row);
+          const values = [row.wo, row.serial, assignedArea(row), row.failureType, row.corrective, action.owner, action.dueDate, action.phase || 'PENDIENTE', action.effectiveness || 'PENDIENTE', action.verificationDate, action.verificationEvidence];
+          values.forEach((value, columnIndex) => setExcelCell(actionSheet, rowIndex + 4, columnIndex, value || '', rowIndex % 2 ? styles.alt : styles.body));
+        });
+        actionSheet['!cols'] = [20, 18, 18, 28, 42, 22, 18, 20, 20, 18, 36].map(wch => ({ wch }));
+        actionSheet['!autofilter'] = { ref: `A4:K${Math.max(4, rows.length + 4)}` };
+        actionSheet['!freeze'] = { xSplit: 0, ySplit: 4, topLeftCell: 'A5', activePane: 'bottomRight', state: 'frozen' };
+        const workbook = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(workbook, summary, 'Resumen'); XLSX.utils.book_append_sheet(workbook, managerOrders, 'Control WO'); XLSX.utils.book_append_sheet(workbook, actionSheet, 'Acciones'); XLSX.utils.book_append_sheet(workbook, detail, 'RCCA Registro');
         const baseName = (state.sourceName || 'rcca-seguimiento').replace(/\.[^.]+$/, '').replace(/[^\w-]+/g, '-').replace(/^-|-$/g, '').slice(0, 48) || 'rcca-seguimiento';
         XLSX.writeFile(workbook, `${baseName}-RCCA.xlsx`, { compression: true });
         toast(`Excel generado → ${rows.length} eventos y distribución FQ-3264 incluidos.`);
@@ -1244,27 +1431,61 @@
           state.sourceNames = files.map(file => file.name);
           state.sourceName = files.length === 1 ? files[0].name : files.length + ' archivos';
           state.page = 1;
-          $('#searchInput').value = ''; $('#statusFilter').value = ''; $('#ownerFilter').value = ''; $('#weekFilter').value = '';
+          $('#searchInput').value = ''; $('#statusFilter').value = ''; $('#ownerFilter').value = ''; $('#weekFilter').value = ''; $('#woFilter').value = ''; $('#periodFrom').value = ''; $('#periodTo').value = '';
           updateFilterOptions(allRows()); render(); setView('dashboard');
           classifySourceRows(state.sourceRows);
           toast('Lote cargado → ' + state.sourceRows.length + ' eventos de ' + files.length + ' archivo(s).');
         } catch (error) { toast(error.message || 'No se pudo leer el archivo.'); }
         finally { event.target.value = ''; }
       });
-      ['#searchInput', '#statusFilter', '#ownerFilter', '#weekFilter'].forEach(selector => $(selector).addEventListener('input', () => { state.page = 1; render(); }));
-      $('#clearFilters').addEventListener('click', () => { $('#searchInput').value = ''; $('#statusFilter').value = ''; $('#ownerFilter').value = ''; $('#weekFilter').value = ''; state.page = 1; render(); });
+      ['#searchInput', '#statusFilter', '#ownerFilter', '#weekFilter', '#woFilter', '#periodFrom', '#periodTo'].forEach(selector => $(selector).addEventListener('input', () => { state.page = 1; state.managerPage = 1; render(); }));
+      $('#clearFilters').addEventListener('click', () => { $('#searchInput').value = ''; $('#statusFilter').value = ''; $('#ownerFilter').value = ''; $('#weekFilter').value = ''; $('#woFilter').value = ''; $('#periodFrom').value = ''; $('#periodTo').value = ''; state.page = 1; state.managerPage = 1; render(); });
+      $('#showClosedActions').addEventListener('change', () => { state.managerPage = 1; renderManagerActions(state.visibleRows); });
       $('#exportCsv').addEventListener('click', exportCsv);
       $('#exportExcel').addEventListener('click', exportExcel);
       $('#rccaForm').addEventListener('submit', handleFormSubmit);
       document.addEventListener('click', event => {
         const nav = event.target.closest('[data-view-target]'); if (nav) setView(nav.dataset.viewTarget);
         const serial = event.target.closest('[data-serial]'); if (serial) openSerial(serial.dataset.serial);
+        const woSelect = event.target.closest('[data-wo-select]');
+        if (woSelect) { $('#woFilter').value = woSelect.dataset.woSelect; state.page = 1; state.managerPage = 1; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
         const woFilter = event.target.closest('[data-wo-filter]');
         if (woFilter) { $('#searchInput').value = woFilter.dataset.woFilter; $('#workorderDialog').close(); state.page = 1; render(); }
+        const managerPage = event.target.closest('[data-manager-page]');
+        if (managerPage && !managerPage.disabled) { state.managerPage += managerPage.dataset.managerPage === 'next' ? 1 : -1; renderManagerActions(state.visibleRows); }
         const pageButton = event.target.closest('[data-page]');
         if (pageButton && !pageButton.disabled) { state.page += pageButton.dataset.page === 'next' ? 1 : -1; render(); }
       });
       document.addEventListener('change', event => {
+        const productionInput = event.target.closest('[data-production-wo]');
+        if (productionInput) {
+          const wo = productionInput.dataset.productionWo;
+          const raw = text(productionInput.value);
+          if (!raw) delete managerData.productionByWorkorder[wo];
+          else {
+            const units = Number(raw);
+            if (!Number.isInteger(units) || units < 0) { toast('La cantidad de la WO debe ser un entero igual o mayor que cero.'); render(); return; }
+            managerData.productionByWorkorder[wo] = units;
+          }
+          saveManagerData(); render(); return;
+        }
+        const managerField = event.target.closest('[data-manager-field][data-row-id]');
+        if (managerField) {
+          const rowId = managerField.dataset.rowId;
+          const field = managerField.dataset.managerField;
+          const allowedFields = new Set(['owner', 'dueDate', 'phase', 'effectiveness', 'verificationDate', 'verificationEvidence']);
+          if (!allowedFields.has(field)) return;
+          const action = managerData.actions[rowId] || {};
+          action[field] = text(managerField.value);
+          if (action.phase === 'CERRADA' && !RCCAManager.isActionClosed(action)) {
+            action.phase = 'EN VERIFICACIÓN';
+            toast('Para cerrar, registra efectividad, fecha y evidencia de verificación.');
+          }
+          managerData.actions[rowId] = action;
+          saveManagerData();
+          $('#rccaTableSaveStatus').textContent = 'Seguimiento gerencial guardado en este navegador.';
+          render(); return;
+        }
         const templateControl = event.target.closest('[data-rcca-template-for][data-row-id]');
         if (templateControl) {
           const row = allRows().find(item => item.id === templateControl.dataset.rowId);
