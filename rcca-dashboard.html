@@ -222,7 +222,6 @@
     .toolbar-card { padding: 16px; margin-bottom: 20px; }
     .toolbar { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; }
     .field { display: grid; gap: 6px; min-width: 150px; flex: 1; }
-    .field.search { min-width: min(280px, 100%); flex: 2; }
     .field label { color: var(--md-on-surface-variant); font-size: 12px; font-weight: 600; }
     .field input, .field select, .field textarea {
       width: 100%;
@@ -665,25 +664,23 @@
       background: transparent;
       color: var(--md-on-surface);
     }
-    #view-dashboard #sourceChip { grid-column: 3; justify-self: end; }
     @media (max-width: 1100px) {
       .chart-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 760px) {
       #view-dashboard > .page-heading { display: flex; flex-direction: column; align-items: center; text-align: center; }
-      #view-dashboard #sourceChip { align-self: center; }
       .chart-grid { grid-template-columns: 1fr; }
     }
     .topbar {
-      background: #76b900;
-      border-bottom-color: #5f9600;
-      box-shadow: 0 3px 12px rgba(54, 91, 0, .18);
+      background: #172733;
+      border-bottom: 3px solid #c43e18;
+      box-shadow: 0 3px 12px rgba(23, 39, 51, .18);
     }
-    .topbar-title { color: #173400; font-weight: 700; }
-    .topbar .icon-button { border-color: rgba(23, 52, 0, .25); color: #173400; }
-    .topbar .icon-button:hover { background: rgba(23, 52, 0, .1); }
-    .topbar .filled-button { background: #173400; color: #f3ffd6; box-shadow: 0 2px 5px rgba(23, 52, 0, .2); }
-    .topbar .filled-button:hover { background: #234c00; filter: none; }
+    .topbar-title { color: #fff; font-weight: 800; }
+    .topbar .icon-button { border-color: rgba(255, 255, 255, .32); color: #fff; }
+    .topbar .icon-button:hover { background: rgba(255, 255, 255, .12); }
+    .topbar .filled-button { background: #c43e18; color: #fff; box-shadow: 0 2px 5px rgba(0, 0, 0, .2); }
+    .topbar .filled-button:hover { background: #a93212; filter: none; }
     .content { padding: 22px clamp(18px, 3vw, 48px) 32px; }
     .page-heading { gap: 12px; margin-bottom: 14px; }
     .hero { gap: 14px; padding: clamp(14px, 1.6vw, 20px); margin-bottom: 10px; }
@@ -758,6 +755,200 @@
     @media (max-width: 1100px) { .brand-logo { width: 190px; } }
     @media (max-width: 760px) { .brand-logo { width: 160px; } }
     @media (max-width: 480px) { .brand-logo { width: 140px; } }
+    /* Panel gerencial: jerarquía compacta, marca visible y controles filtrables. */
+    .sidebar { min-height: 68px; padding: 7px clamp(16px, 2.4vw, 36px); gap: 20px; }
+    .brand-logo { width: 252px; }
+    .brand { gap: 10px; }
+    .topbar { min-height: 40px; padding: 5px clamp(16px, 2.4vw, 36px); }
+    .content { width: 100%; max-width: 1760px; padding: 14px clamp(16px, 2.4vw, 36px) 30px; }
+    #view-dashboard .page-heading { margin-bottom: 10px; }
+    #view-dashboard .page-heading h1 { font-size: clamp(24px, 2.3vw, 32px); }
+    #view-dashboard .hero {
+      grid-template-columns: minmax(0, 1.6fr) minmax(280px, .8fr);
+      gap: 20px;
+      padding: 18px clamp(18px, 2vw, 28px);
+      margin-bottom: 12px;
+      border-color: #cbdba9;
+      background: #eaf3d9;
+      box-shadow: none;
+    }
+    #view-dashboard .hero::after { border-color: rgba(23, 52, 0, .08); }
+    #view-dashboard .hero h2 { font-size: clamp(21px, 1.9vw, 26px); }
+    #view-dashboard .hero-meta > div, #view-dashboard .hero-stat-button { min-height: 68px; background: rgba(255,255,255,.7); backdrop-filter: none; }
+    #view-dashboard .kpi-grid { gap: 10px; margin-bottom: 12px; }
+    #view-dashboard .kpi-card { min-height: 88px; padding: 12px 14px 10px 16px; }
+    #view-dashboard .kpi-card .value { margin-top: 7px; font-size: 25px; }
+    #view-dashboard .toolbar-card { padding: 12px; margin-bottom: 12px; }
+    #view-dashboard .toolbar { display: grid; grid-template-columns: repeat(6, minmax(110px, 1fr)); align-items: end; gap: 9px; }
+    #view-dashboard .toolbar .field { min-width: 0; flex: initial; }
+    #view-dashboard .toolbar .field input, #view-dashboard .toolbar .field select { min-height: 38px; padding: 0 9px; }
+    #view-dashboard .toolbar .field label { font-size: 11px; }
+    #view-dashboard .toolbar-actions { grid-column: 1 / -1; justify-content: flex-end; }
+    #view-dashboard .manager-panel { margin-bottom: 12px; }
+    #view-dashboard .manager-panel.panel { padding: 16px; }
+    #view-dashboard .chart-grid { gap: 12px; margin-bottom: 14px; }
+    #view-dashboard .chart-grid > .panel { height: 270px; min-height: 0; padding: 15px; }
+    #view-dashboard .chart-grid .panel-header { margin-bottom: 12px; }
+    #view-dashboard .chart-grid .bar-chart, #view-dashboard .chart-grid .area-chart { max-height: 182px; }
+    #view-dashboard .donut-layout { max-height: 182px; }
+    .chart-filter-button, .chart-filter-label, .chart-filter-month, .chart-filter-legend {
+      color: inherit; font: inherit; text-align: left; cursor: pointer;
+    }
+    .chart-filter-button { width: 100%; padding: 2px 5px; border: 0; border-radius: 8px; background: transparent; }
+    .chart-filter-button[data-filter-pareto] { grid-template-columns: minmax(70px, 1.2fr) minmax(50px, 2fr) 28px 34px; gap: 7px; }
+    .chart-filter-button:hover, .chart-filter-button:focus-visible,
+    .chart-filter-label:hover, .chart-filter-label:focus-visible,
+    .chart-filter-month:hover, .chart-filter-month:focus-visible,
+    .chart-filter-legend:hover, .chart-filter-legend:focus-visible { background: var(--md-secondary-container); }
+    .chart-filter-button:hover .bar-label, .chart-filter-label:hover, .chart-filter-month:hover { color: var(--md-primary); }
+    .chart-filter-label, .chart-filter-month { padding: 2px 5px; border: 0; border-radius: 7px; background: transparent; font-weight: 700; }
+    .chart-filter-legend { width: 100%; padding: 3px 5px; border: 0; border-radius: 7px; background: transparent; }
+    .chart-filter-hint { margin: -5px 0 12px; color: var(--md-on-surface-variant); font-size: 11px; }
+    .chart-filter-hint[data-active="true"] { color: var(--md-primary); font-weight: 600; }
+    @media (max-width: 1180px) {
+      .brand-logo { width: 218px; }
+      #view-dashboard .toolbar { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+      #view-dashboard .toolbar-actions { grid-column: span 4; }
+      #view-dashboard .hero { grid-template-columns: minmax(0, 1.4fr) minmax(250px, .8fr); }
+      #view-dashboard .chart-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 760px) {
+      .sidebar { gap: 8px; }
+      .brand-logo { width: 178px; }
+      #view-dashboard .hero { grid-template-columns: 1fr; gap: 12px; padding: 16px; }
+      #view-dashboard .hero-meta > div, #view-dashboard .hero-stat-button { min-height: 58px; }
+      #view-dashboard .toolbar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #view-dashboard .toolbar-actions { grid-column: 1 / -1; }
+      #view-dashboard .toolbar-actions { justify-content: stretch; }
+      #view-dashboard .toolbar-actions button { flex: 1; }
+      #view-dashboard .chart-grid { grid-template-columns: 1fr; }
+      #view-dashboard .chart-grid > .panel { height: auto; min-height: 240px; }
+      #view-dashboard .chart-grid .bar-chart, #view-dashboard .chart-grid .area-chart, #view-dashboard .donut-layout { max-height: 190px; }
+    }
+    @media (max-width: 480px) {
+      .brand-logo { width: 150px; }
+      #view-dashboard .kpi-card { min-height: 82px; }
+      #view-dashboard .chart-grid > .panel { min-height: 220px; }
+      #view-dashboard .toolbar-actions { flex-wrap: wrap; }
+    }
+    /* Rebalance ejecutivo: título y filtros primero, charts con más área útil. */
+    :root {
+      --md-primary: #c43e18;
+      --md-on-primary: #ffffff;
+      --md-primary-container: #ffe2d5;
+      --md-on-primary-container: #3c1205;
+      --md-secondary: #50616d;
+      --md-secondary-container: #e5ebef;
+      --md-background: #f4f6f8;
+      --md-surface: #ffffff;
+      --md-surface-container: #ffffff;
+      --md-surface-container-high: #edf1f4;
+      --md-outline: #73818a;
+      --md-outline-variant: #d4dce2;
+      --md-on-surface: #172733;
+      --md-on-surface-variant: #4c5c67;
+    }
+    [data-theme="dark"] {
+      --md-primary: #ffb59a;
+      --md-on-primary: #4d1800;
+      --md-primary-container: #702f13;
+      --md-on-primary-container: #ffdbcc;
+      --md-secondary-container: #34434b;
+      --md-background: #11191e;
+      --md-surface: #11191e;
+      --md-surface-container: #1a252b;
+      --md-surface-container-high: #26343b;
+      --md-outline: #92a1a9;
+      --md-outline-variant: #3d4b52;
+      --md-on-surface: #e2eaf0;
+      --md-on-surface-variant: #bdc9d0;
+    }
+    .sidebar { min-height: 64px; padding: 6px clamp(14px, 2vw, 30px); gap: 18px; }
+    .brand-logo { width: 238px; padding: 4px 6px; border-color: #e5e9ed; box-shadow: none; }
+    .brand small { font-size: 12px; }
+    .nav { gap: 4px; }
+    .nav button { min-height: 34px; padding: 0 10px; font-size: 12px; }
+    .topbar { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); min-height: 66px; padding: 8px clamp(14px, 2vw, 30px); gap: 12px; background: #172733; border-bottom: 3px solid #c43e18; box-shadow: 0 3px 12px rgba(23, 39, 51, .18); }
+    .topbar-start { display: flex; min-width: 0; align-items: center; gap: 8px; }
+    .topbar-title { display: block; justify-self: center; margin: 0; color: #fff; font-size: clamp(22px, 2.25vw, 30px); font-weight: 800; line-height: 1.1; letter-spacing: .025em; text-align: center; white-space: nowrap; text-shadow: 0 1px 2px rgba(0, 0, 0, .2); }
+    .topbar-start .hero-stat-button { display: inline-flex; min-width: 0; min-height: 36px; align-items: center; gap: 5px; padding: 4px 10px; border: 1px solid rgba(255, 255, 255, .32); border-radius: 10px; background: rgba(255, 255, 255, .08); color: #fff; line-height: 1; white-space: nowrap; }
+    .topbar-start .hero-stat-button strong { color: #ffb59a; font-size: 16px; }
+    .topbar-start .hero-stat-button span { color: #eef3f6; font-size: 10px; }
+    .topbar-actions { min-width: 0; justify-content: flex-end; }
+    .topbar .icon-button { border-color: rgba(255, 255, 255, .32); color: #fff; }
+    .topbar .icon-button:hover { background: rgba(255, 255, 255, .12); }
+    .topbar .filled-button, .filled-button { background: var(--md-primary); color: var(--md-on-primary); box-shadow: none; }
+    .topbar .filled-button { background: #c43e18; color: #fff; box-shadow: 0 2px 5px rgba(0, 0, 0, .2); }
+    .topbar .filled-button:hover, .filled-button:hover { background: color-mix(in srgb, var(--md-primary) 88%, #172733); color: var(--md-on-primary); box-shadow: var(--shadow-1); }
+    .topbar .filled-button:hover { background: #a93212; color: #fff; }
+    .content { max-width: 1840px; padding: 12px clamp(14px, 2vw, 30px) 28px; }
+    h1, h2, h3 { text-wrap: balance; }
+    p { text-wrap: pretty; }
+    #view-dashboard .hero { display: none; }
+    #view-dashboard .kpi-grid { gap: 8px; margin: 0 0 10px; }
+    #view-dashboard .kpi-card { min-height: 74px; padding: 9px 12px 8px 14px; border-radius: 14px; box-shadow: none; }
+    #view-dashboard .kpi-total { --kpi-accent: #c43e18; }
+    #view-dashboard .kpi-serials { --kpi-accent: #006b7c; }
+    #view-dashboard .kpi-open { --kpi-accent: #a65b00; }
+    #view-dashboard .kpi-closed { --kpi-accent: #23744f; }
+    #view-dashboard .kpi-card .label { font-size: 10px; }
+    #view-dashboard .kpi-card .label .material-symbols-outlined { font-size: 16px; }
+    #view-dashboard .kpi-card .value { margin-top: 5px; font-size: 22px; }
+    #view-dashboard .kpi-card .hint { margin-top: 3px; font-size: 9px; }
+    #view-dashboard .toolbar-card { padding: 10px; margin-bottom: 10px; box-shadow: none; }
+    #view-dashboard .toolbar { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+    #view-dashboard .toolbar .field input, #view-dashboard .toolbar .field select { min-height: 34px; }
+    #view-dashboard .toolbar-actions { grid-column: 1 / -1; justify-content: flex-end; gap: 6px; }
+    #view-dashboard .toolbar-actions button { min-height: 38px; flex: 0 0 auto; }
+    .icon-button, .text-button, .filled-button, .tonal-button { min-height: 38px; }
+    .icon-button { width: 38px; }
+    .nav button { min-height: 38px; }
+    .topbar .filled-button { min-height: 38px; }
+    #view-dashboard .manager-panel { margin-bottom: 10px; }
+    #view-dashboard .manager-panel.panel, #view-dashboard > .card.panel { padding: 14px; }
+    #view-dashboard .chart-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 18px 0 12px; }
+    #view-dashboard .chart-grid > .panel { height: 318px; min-height: 0; padding: 15px; border-top-width: 3px; box-shadow: none; }
+    #view-dashboard .chart-grid .panel-header { align-items: flex-start; min-height: 54px; margin-bottom: 14px; }
+    #view-dashboard .chart-grid .panel-header > div { text-align: left; }
+    #view-dashboard .chart-grid .panel-header h2 { font-size: 15px; line-height: 1.2; }
+    #view-dashboard .chart-grid .panel-header p { margin-top: 5px; font-size: 10px; }
+    #view-dashboard .chart-grid .bar-chart, #view-dashboard .chart-grid .area-chart { max-width: none; max-height: 225px; overflow: auto; }
+    #view-dashboard .chart-grid .bar-row { grid-template-columns: minmax(80px, 1.1fr) minmax(60px, 1.8fr) 28px; gap: 7px; }
+    #view-dashboard .chart-grid .bar-row[data-filter-pareto] { grid-template-columns: minmax(65px, 1.1fr) minmax(55px, 1.6fr) 24px 30px; gap: 5px; }
+    #view-dashboard .chart-grid .bar-label { font-size: 10px; }
+    #view-dashboard .chart-grid .donut-layout { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); max-height: 225px; gap: 8px; overflow: auto; }
+    #view-dashboard .chart-grid .donut { width: min(100%, 148px); }
+    #view-dashboard .chart-grid .legend-row { grid-template-columns: 8px minmax(0, 1fr) auto; gap: 5px; font-size: 10px; }
+    #view-dashboard .chart-filter-hint { margin: -3px 0 10px; font-size: 10px; }
+    @media (max-width: 1180px) {
+      .brand-logo { width: 210px; }
+      #view-dashboard .chart-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #view-dashboard .chart-grid > .panel { height: 300px; }
+    }
+    @media (max-width: 760px) {
+      .sidebar { min-height: 56px; gap: 8px; }
+      .brand-logo { width: 176px; }
+      .topbar { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "title title" "start actions"; min-height: 0; row-gap: 7px; }
+      .topbar-title { display: block; grid-area: title; justify-self: center; font-size: 23px; }
+      .topbar-start { grid-area: start; }
+      .topbar-actions { grid-area: actions; }
+      #view-dashboard .chart-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #view-dashboard .chart-grid > .panel { height: 300px; }
+    }
+    @media (max-width: 520px) {
+      .brand-logo { width: 148px; }
+      .brand small { font-size: 11px; }
+      .topbar { grid-template-columns: minmax(0, 1fr) auto; gap: 6px; padding: 7px 12px; }
+      .topbar-title { font-size: 19px; }
+      .topbar-start { gap: 4px; }
+      .topbar-start .hero-stat-button { padding: 4px 6px; }
+      .topbar-actions { gap: 5px; }
+      .topbar-actions .filled-button { padding: 0 8px; font-size: 10px; }
+      #view-dashboard .chart-grid { grid-template-columns: 1fr; }
+      #view-dashboard .chart-grid > .panel { height: 290px; }
+    }
+    @media (max-width: 360px) {
+    }
   </style>
 </head>
 <body>
@@ -777,10 +968,12 @@
 
     <main class="main">
       <header class="topbar">
-        <span class="topbar-title">QA · Seguimiento de fallas y acciones</span>
+        <div class="topbar-start" aria-label="Estado y órdenes">
+          <button id="heroWoButton" class="hero-stat-button" type="button" aria-label="Ver work orders registradas" disabled><strong id="heroWos">0</strong><span>WO</span></button>
+        </div>
+        <h1 id="pageTitle" class="topbar-title">RCCA / YIELD NVD</h1>
         <div class="topbar-actions">
           <button class="icon-button" id="themeToggle" type="button" aria-label="Cambiar tema"><span class="material-symbols-outlined">dark_mode</span></button>
-          <span id="aiStatusChip" class="count-chip" title="Clasificación local basada en REMARK y descripción de falla">Reglas locales</span>
           <label class="filled-button" for="fileInput"><span class="material-symbols-outlined">upload</span>Importar Excel</label>
           <input id="fileInput" class="file-input" type="file" accept=".xlsx,.xls,.csv" multiple />
         </div>
@@ -788,24 +981,6 @@
 
       <div class="content">
         <section id="view-dashboard" class="view" data-active="true" aria-labelledby="pageTitle">
-          <div class="page-heading">
-            <div><div class="eyebrow">Panel de calidad</div><h1 id="pageTitle">RCCA / Yield NVD</h1><p class="muted">Controla seriales, fallas repetidas, responsables y acciones correctivas.</p></div>
-            <span id="sourceChip" class="source-chip" data-loaded="false"><span class="material-symbols-outlined">description</span>Sin archivo cargado</span>
-          </div>
-
-          <div class="hero">
-            <div>
-              <div class="eyebrow">Regla de seguimiento</div>
-              <h2>Detecta a tiempo un serial con 3 fallas distintas.</h2>
-              <p>El panel agrupa los registros por serial, compara tipos de falla y concentra los tres rubros RCCA: análisis de causa, contención y acción correctiva/preventiva.</p>
-              <div class="hero-actions"><label class="filled-button hero-import-button" for="fileInput"><span class="material-symbols-outlined" aria-hidden="true">upload_file</span>Cargar reporte Excel</label><span class="hero-note"><span class="material-symbols-outlined" aria-hidden="true">lock</span>Se procesa localmente</span></div>
-            </div>
-            <div class="hero-meta" aria-label="Resumen de fuente">
-              <div><strong id="heroRows">0</strong><span>registros</span></div>
-              <button id="heroWoButton" class="hero-stat-button" type="button" aria-label="Ver work orders registradas" disabled><strong id="heroWos">0</strong><span>WO registradas · ver detalle</span></button>
-            </div>
-          </div>
-
           <div class="kpi-grid" aria-label="Indicadores principales">
             <article class="card kpi-card kpi-total"><div class="label">Registros de falla <span class="material-symbols-outlined">dataset</span></div><div id="kpiTotal" class="value">0</div><div class="hint">Filas con serial válido</div></article>
             <article class="card kpi-card kpi-serials"><div class="label">Seriales únicos <span class="material-symbols-outlined">qr_code_2</span></div><div id="kpiSerials" class="value">0</div><div class="hint">Agrupados por SN</div></article>
@@ -815,34 +990,25 @@
 
           <section class="card toolbar-card" aria-label="Filtros del dashboard">
             <div class="toolbar">
-              <div class="field search"><label for="searchInput">Buscar WO, serial, estación o falla</label><input id="searchInput" type="search" placeholder="Ej. 1933526000053" autocomplete="off" /></div>
               <div class="field"><label for="statusFilter">Status</label><select id="statusFilter"><option value="">Todos</option></select></div>
               <div class="field"><label for="ownerFilter">Área responsable / equipo</label><select id="ownerFilter"><option value="">Todos</option></select></div>
               <div class="field"><label for="weekFilter">WK</label><select id="weekFilter"><option value="">Todas</option></select></div>
               <div class="field"><label for="woFilter">Work Order</label><select id="woFilter"><option value="">Todas las WO</option></select></div>
               <div class="field"><label for="periodFrom">Desde</label><input id="periodFrom" type="month" aria-label="Mes inicial del periodo" /></div>
               <div class="field"><label for="periodTo">Hasta</label><input id="periodTo" type="month" aria-label="Mes final del periodo" /></div>
-              <div class="toolbar-actions"><button id="clearFilters" class="text-button" type="button">Limpiar</button><button id="exportCsv" class="tonal-button" type="button"><span class="material-symbols-outlined">download</span>CSV</button><button id="exportExcel" class="filled-button" type="button"><span class="material-symbols-outlined">table_view</span>Exportar Excel</button></div>
+              <div class="toolbar-actions"><button id="exportExcel" class="filled-button" type="button"><span class="material-symbols-outlined" aria-hidden="true">table_view</span>Exportar Excel</button></div>
             </div>
+            <input id="chartSearchFilter" type="hidden" />
             <p id="periodFilterHint" class="filter-hint" role="status" aria-live="polite"></p>
           </section>
 
-          <section class="card panel manager-panel" aria-labelledby="woSummaryTitle">
-            <div class="panel-header"><div><h2 id="woSummaryTitle">Impacto por Work Order</h2><p>Eventos y seriales únicos afectados. Captura unidades procesadas para calcular el porcentaje por WO.</p></div><span class="count-chip" id="woSummaryCount">0 WO</span></div>
-            <div id="workorderSummary" class="table-wrap"></div>
-          </section>
-
-          <section class="card panel manager-panel" aria-labelledby="trendTitle">
-            <div class="panel-header"><div><h2 id="trendTitle">Tendencia de fallas</h2><p>Eventos y seriales afectados por mes dentro del periodo seleccionado.</p></div><span class="count-chip" id="trendCount">0 meses</span></div>
-            <div id="trendChart" class="trend-chart" role="img" aria-label="Tendencia mensual de eventos y seriales fallados"></div>
-          </section>
-
           <div class="chart-grid">
-            <article class="card panel"><div class="panel-header"><div><h2><span class="chart-title-icon material-symbols-outlined" aria-hidden="true">error</span>Pareto de fallas</h2><p>Eventos ordenados por frecuencia; porcentaje acumulado para priorizar.</p></div><span class="count-chip" id="failureChartCount">0 tipos</span></div><div id="failureChart" class="bar-chart" role="img" aria-label="Pareto de fallas con porcentaje acumulado"></div></article>
-            <article class="card panel"><div class="panel-header"><div><h2><span class="chart-title-icon material-symbols-outlined" aria-hidden="true">groups</span>Eventos y seriales por área</h2><p id="assignmentChartSubtitle">Eventos asignados y seriales únicos por equipo.</p></div><span class="count-chip" id="ownerChartCount">0 áreas</span></div><div id="ownerChart" class="area-chart" role="img" aria-label="Eventos asignados y seriales únicos por área"></div></article>
-            <article class="card panel"><div class="panel-header"><div><h2><span class="chart-title-icon material-symbols-outlined" aria-hidden="true">precision_manufacturing</span>Fallas por estación</h2><p>Conteo de eventos según STATION o TEST STATION.</p></div><span class="count-chip" id="stationChartCount">0 estaciones</span></div><div id="stationChart" class="bar-chart" role="img" aria-label="Barras de fallas por estación"></div></article>
-            <article class="card panel"><div class="panel-header"><div><h2><span class="chart-title-icon material-symbols-outlined" aria-hidden="true">donut_large</span>Distribución de fallas</h2><p>Participación de cada tipo en el filtro actual.</p></div><span class="count-chip" id="pieChartCount">0 tipos</span></div><div class="donut-layout"><div id="failureDonut" class="donut" role="img" aria-label="Gráfica pastel de fallas"></div><div id="failureLegend" class="donut-legend"></div></div></article>
+            <article class="card panel"><div class="panel-header"><div><h2><span class="chart-title-icon material-symbols-outlined" aria-hidden="true">error</span>Pareto de fallas</h2><p>Selecciona una causa para filtrar el tablero.</p></div><span class="count-chip" id="failureChartCount">0 tipos</span></div><div id="failureChart" class="bar-chart" role="group" aria-label="Pareto de fallas con porcentaje acumulado"></div></article>
+            <article class="card panel"><div class="panel-header"><div><h2><span class="chart-title-icon material-symbols-outlined" aria-hidden="true">groups</span>Eventos y seriales por área</h2><p id="assignmentChartSubtitle">Selecciona un área para ver sus registros.</p></div><span class="count-chip" id="ownerChartCount">0 áreas</span></div><div id="ownerChart" class="area-chart" role="group" aria-label="Eventos asignados y seriales únicos por área"></div></article>
+            <article class="card panel"><div class="panel-header"><div><h2><span class="chart-title-icon material-symbols-outlined" aria-hidden="true">precision_manufacturing</span>Fallas por estación</h2><p>Selecciona una estación para filtrar.</p></div><span class="count-chip" id="stationChartCount">0 estaciones</span></div><div id="stationChart" class="bar-chart" role="group" aria-label="Barras de fallas por estación"></div></article>
+            <article class="card panel"><div class="panel-header"><div><h2><span class="chart-title-icon material-symbols-outlined" aria-hidden="true">donut_large</span>Distribución de fallas</h2><p>Elige un tipo de falla en la leyenda.</p></div><span class="count-chip" id="pieChartCount">0 tipos</span></div><div class="donut-layout"><div id="failureDonut" class="donut" role="img" aria-label="Gráfica pastel de fallas"></div><div id="failureLegend" class="donut-legend"></div></div></article>
           </div>
+          <p id="chartFilterHint" class="chart-filter-hint" role="status" aria-live="polite">Tip: selecciona una barra, área o causa para filtrar los indicadores y el detalle.</p>
 
           <section class="card panel manager-panel" aria-labelledby="actionsTitle">
             <div class="panel-header manager-panel-header"><div><h2 id="actionsTitle">Seguimiento de acciones</h2><p>Responsable, compromiso y verificación de efectividad. Cierre requiere resultado efectivo, fecha y evidencia.</p></div><label class="closed-toggle"><input id="showClosedActions" type="checkbox" /> Mostrar verificadas</label></div>
@@ -893,6 +1059,7 @@
   <script src="rcca-domain.js"></script>
   <script src="rcca-detail-table.js"></script>
   <script src="rcca-manager.js"></script>
+  <script src="rcca-dashboard-ui.js"></script>
   <script>
     (() => {
       'use strict';
@@ -921,7 +1088,6 @@
       const cleanValue = (value) => text(value).replace(/^#(N\/A|VALUE!|REF!|DIV\/0!)$/i, '').trim();
       const displayValue = (value, fallback = 'Pendiente de captura') => cleanValue(value) || fallback;
       const escapeHtml = (value) => text(value).replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
-      const csvCell = (value) => `"${text(value).replace(/"/g, '""')}"`;
       const assignedArea = (row) => row.areaOverride || row.autoArea || RCCADomain.normalizeArea(row.owner || row.assignment) || 'POR REVISAR';
       const areaChip = (row) => `<span class="area-chip" data-area="${escapeHtml(assignedArea(row))}">${escapeHtml(assignedArea(row))}</span>`;
       const classificationNote = (row) => row.areaOverride && row.areaOverrideOrigin === 'manual'
@@ -1054,13 +1220,13 @@
         render();
       }
 
-      function getFilters() { return { search: text($('#searchInput').value).toLowerCase(), status: upper($('#statusFilter').value), owner: upper($('#ownerFilter').value), week: text($('#weekFilter').value), workorder: text($('#woFilter').value), from: text($('#periodFrom').value), to: text($('#periodTo').value) }; }
+      function getFilters() { return { search: text($('#chartSearchFilter').value).toLowerCase(), status: upper($('#statusFilter').value), owner: upper($('#ownerFilter').value), week: text($('#weekFilter').value), workorder: text($('#woFilter').value), from: text($('#periodFrom').value), to: text($('#periodTo').value) }; }
       function filteredRows() {
         const filters = getFilters();
         if (filters.from && filters.to && filters.from > filters.to) return [];
         return RCCAManager.filterByPeriod(allRows(), filters).filter(row => {
           const haystack = Object.values(row).map(text).join(' ').toLowerCase();
-          return (!filters.search || haystack.includes(filters.search)) && (!filters.status || upper(row.status) === filters.status) && (!filters.owner || upper(assignedArea(row)) === filters.owner) && (!filters.week || text(row.week) === filters.week);
+          return (!filters.search || haystack.includes(filters.search)) && (!filters.status || upper(row.status) === filters.status) && (!filters.owner || upper(assignedArea(row)) === filters.owner) && (!filters.week || text(row.week) === filters.week) && (!filters.workorder || text(row.wo) === filters.workorder);
         });
       }
       function unique(values) { return [...new Set(values.filter(Boolean))]; }
@@ -1097,40 +1263,20 @@
         if (!entries.length) { target.innerHTML = `<div class="empty-chart">${escapeHtml(emptyText)}</div>`; return; }
         const visible = entries.slice(0, 8);
         const max = Math.max(...visible.map(([, value]) => value), 1);
-        target.innerHTML = visible.map(([label, value], index) => `<div class="bar-row"><div class="bar-label" title="${escapeHtml(label)}">${escapeHtml(label)}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.max(3, Math.round((value / max) * 100))}%;background:${chartPalette[index % chartPalette.length]}"></div></div><div class="bar-value">${value}</div></div>`).join('');
+        target.innerHTML = visible.map(([label, value], index) => `<button class="bar-row chart-filter-button" type="button" data-dashboard-filter="search" data-filter-value="${escapeHtml(label)}" aria-label="Filtrar por ${escapeHtml(label)}: ${value} eventos"><span class="bar-label" title="${escapeHtml(label)}">${escapeHtml(label)}</span><span class="bar-track"><span class="bar-fill" style="width:${Math.max(3, Math.round((value / max) * 100))}%;background:${chartPalette[index % chartPalette.length]}"></span></span><span class="bar-value">${value}</span></button>`).join('');
       }
       function renderParetoChart(target, entries) {
         if (!entries.length) { target.innerHTML = '<div class="empty-chart">Carga un Excel para priorizar las fallas más frecuentes.</div>'; return; }
         const visible = entries.slice(0, 7);
         const maximum = Math.max(...visible.map(([, value]) => value), 1);
         const pareto = RCCAManager.pareto(entries).slice(0, visible.length);
-        target.innerHTML = pareto.map((item, index) => `<div class="bar-row"><div class="bar-label" title="${escapeHtml(item.label)}">${escapeHtml(item.label)}</div><div class="bar-track" title="${item.value} evento(s)"><div class="bar-fill" style="width:${Math.max(3, Math.round(item.value / maximum * 100))}%;background:${chartPalette[index % chartPalette.length]}"></div></div><div class="bar-value">${item.value}</div><div class="bar-cumulative" title="Porcentaje acumulado">${Math.round(item.cumulativeRate * 100)}%</div></div>`).join('');
+        target.innerHTML = pareto.map((item, index) => `<button class="bar-row chart-filter-button" type="button" data-dashboard-filter="search" data-filter-pareto="true" data-filter-value="${escapeHtml(item.label)}" aria-label="Filtrar por ${escapeHtml(item.label)}: ${item.value} eventos, ${Math.round(item.cumulativeRate * 100)} por ciento acumulado"><span class="bar-label" title="${escapeHtml(item.label)}">${escapeHtml(item.label)}</span><span class="bar-track" title="${item.value} evento(s)"><span class="bar-fill" style="width:${Math.max(3, Math.round(item.value / maximum * 100))}%;background:${chartPalette[index % chartPalette.length]}"></span></span><span class="bar-value">${item.value}</span><span class="bar-cumulative" title="Porcentaje acumulado">${Math.round(item.cumulativeRate * 100)}%</span></button>`).join('');
         target.setAttribute('aria-label', 'Pareto de fallas: ' + pareto.map(item => `${item.label}: ${item.value}; acumulado ${Math.round(item.cumulativeRate * 100)}%`).join('; '));
       }
       function managerAction(row) { return managerData.actions[row.id] || {}; }
       function actionClosed(row) { return RCCAManager.isActionClosed(managerAction(row)); }
-      function percent(value) { return value == null ? '—' : new Intl.NumberFormat('es-MX', { style: 'percent', maximumFractionDigits: 1 }).format(value); }
       function formatMonthLabel(month) { return new Intl.DateTimeFormat('es-MX', { month: 'short', year: 'numeric' }).format(new Date(`${month}-01T12:00:00`)); }
       function todayLocalInput() { const date = new Date(); return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`; }
-      function renderWorkorderSummary(rows) {
-        const orders = RCCAManager.summarizeWorkorders(rows, managerData.productionByWorkorder, managerData.actions);
-        $('#woSummaryCount').textContent = `${orders.length} WO`;
-        if (!orders.length) { $('#workorderSummary').innerHTML = '<div class="empty-state">No hay work orders con serial para resumir.</div>'; return; }
-        $('#workorderSummary').innerHTML = `<table class="manager-table"><thead><tr><th>Work Order</th><th>Eventos</th><th>SN fallados</th><th>SN con 2+ eventos</th><th>Unidades WO</th><th>% afectados</th><th>Acciones abiertas</th><th>Vencidas</th></tr></thead><tbody>${orders.map(order => {
-          const units = order.productionUnits == null ? '' : order.productionUnits;
-          const rate = order.failureRate == null
-            ? `<span class="manager-muted" title="${order.productionUnits == null ? 'Captura la producción total de la WO.' : 'El denominador no puede ser menor que los seriales únicos fallados.'}">${order.productionUnits == null ? 'Captura unidades' : 'Revisar unidades'}</span>`
-            : `<span class="manager-rate">${percent(order.failureRate)}</span>`;
-          return `<tr><td><button class="serial-link" type="button" data-wo-select="${escapeHtml(order.wo)}" aria-label="Filtrar dashboard por work order ${escapeHtml(order.wo)}">${escapeHtml(order.wo)}</button></td><td>${order.events}</td><td>${order.failedSerials}</td><td>${order.repeatedSerials || '—'}</td><td><input class="manager-input" type="number" min="0" step="1" value="${escapeHtml(units)}" data-production-wo="${escapeHtml(order.wo)}" aria-label="Unidades procesadas en work order ${escapeHtml(order.wo)}" /></td><td>${rate}</td><td>${order.openActions}</td><td class="${order.overdueActions ? 'manager-alert' : ''}">${order.overdueActions}</td></tr>`;
-        }).join('')}</tbody></table>`;
-      }
-      function renderTrend(rows) {
-        const trend = RCCAManager.summarizeTrend(rows);
-        $('#trendCount').textContent = `${trend.length} meses`;
-        if (!trend.length) { $('#trendChart').innerHTML = '<div class="empty-chart">No hay fechas válidas para graficar en este periodo.</div>'; return; }
-        const maximum = Math.max(1, ...trend.flatMap(item => [item.events, item.serials]));
-        $('#trendChart').innerHTML = `<div class="trend-legend"><span><i class="trend-swatch" style="background:${chartPalette[0]}"></i>Eventos</span><span><i class="trend-swatch" style="background:${chartPalette[1]}"></i>Seriales únicos</span></div>${trend.map(item => `<div class="trend-row"><span class="trend-month">${escapeHtml(formatMonthLabel(item.month))}</span><div class="trend-bars"><div class="trend-bar-track" title="${item.events} eventos"><div class="trend-bar-fill" style="width:${Math.max(2, item.events / maximum * 100)}%;background:${chartPalette[0]}"></div></div><div class="trend-bar-track" title="${item.serials} seriales"><div class="trend-bar-fill" style="width:${item.serials ? Math.max(2, item.serials / maximum * 100) : 0}%;background:${chartPalette[1]}"></div></div></div><div class="trend-values"><span>${item.events} eventos</span><span>${item.serials} SN</span></div></div>`).join('')}`;
-      }
       function renderManagerActions(rows) {
         const summary = RCCAManager.summarizeActions(rows, managerData.actions);
         $('#actionsPending').textContent = summary.pending;
@@ -1174,7 +1320,7 @@
         const maximum = Math.max(1, ...summaries.flatMap(item => [item.events, item.serials]));
         const colorEvents = chartPalette[0];
         const colorSerials = chartPalette[1];
-        target.innerHTML = `<div class="area-chart-legend"><span><i class="area-chart-swatch" style="background:${colorEvents}"></i>Eventos</span><span><i class="area-chart-swatch" style="background:${colorSerials}"></i>Seriales únicos</span></div>${summaries.map(item => `<div class="area-chart-row"><div class="area-chart-label">${escapeHtml(item.area)}</div><div class="area-chart-series"><div class="area-chart-line"><span>Eventos</span><div class="area-chart-track"><div class="area-chart-fill" style="width:${item.events ? Math.max(3, Math.round(item.events / maximum * 100)) : 0}%;background:${colorEvents}"></div></div><span class="area-chart-value">${item.events}</span></div><div class="area-chart-line"><span>Seriales</span><div class="area-chart-track"><div class="area-chart-fill" style="width:${item.serials ? Math.max(3, Math.round(item.serials / maximum * 100)) : 0}%;background:${colorSerials}"></div></div><span class="area-chart-value">${item.serials}</span></div></div></div>`).join('')}`;
+        target.innerHTML = `<div class="area-chart-legend"><span><i class="area-chart-swatch" style="background:${colorEvents}"></i>Eventos</span><span><i class="area-chart-swatch" style="background:${colorSerials}"></i>Seriales únicos</span></div>${summaries.map(item => `<div class="area-chart-row"><button class="area-chart-label chart-filter-label" type="button" data-dashboard-filter="owner" data-filter-value="${escapeHtml(item.area)}" aria-label="Filtrar área ${escapeHtml(item.area)}">${escapeHtml(item.area)}</button><div class="area-chart-series"><div class="area-chart-line"><span>Eventos</span><div class="area-chart-track"><div class="area-chart-fill" style="width:${item.events ? Math.max(3, Math.round(item.events / maximum * 100)) : 0}%;background:${colorEvents}"></div></div><span class="area-chart-value">${item.events}</span></div><div class="area-chart-line"><span>Seriales</span><div class="area-chart-track"><div class="area-chart-fill" style="width:${item.serials ? Math.max(3, Math.round(item.serials / maximum * 100)) : 0}%;background:${colorSerials}"></div></div><span class="area-chart-value">${item.serials}</span></div></div></div>`).join('')}`;
         target.setAttribute('aria-label', 'Eventos asignados y seriales únicos por área: ' + summaries.map(item => `${item.area}: ${item.events} eventos, ${item.serials} seriales`).join('; '));
       }
       function renderStationChart(target, entries) {
@@ -1199,7 +1345,7 @@
         });
         donut.style.background = `conic-gradient(${slices.join(',')})`;
         donut.setAttribute('aria-label', `Distribución de fallas: ${data.map(([label, value]) => `${label}: ${value}`).join(', ')}`);
-        legend.innerHTML = data.map(([label, value], index) => `<div class="legend-row"><span class="legend-swatch" style="background:${chartPalette[index % chartPalette.length]}"></span><span class="legend-label" title="${escapeHtml(label)}">${escapeHtml(label)}</span><strong>${Math.round(value / total * 100)}%</strong></div>`).join('');
+        legend.innerHTML = data.map(([label, value], index) => `<button class="legend-row chart-filter-legend" type="button" data-dashboard-filter="search" data-filter-value="${escapeHtml(label)}" aria-label="Filtrar por ${escapeHtml(label)}: ${Math.round(value / total * 100)} por ciento"><span class="legend-swatch" style="background:${chartPalette[index % chartPalette.length]}"></span><span class="legend-label" title="${escapeHtml(label)}">${escapeHtml(label)}</span><strong>${Math.round(value / total * 100)}%</strong></button>`).join('');
       }
       function statusChip(status) { const normalized = upper(status) || 'SIN STATUS'; return `<span class="status-chip" data-status="${escapeHtml(normalized)}">${escapeHtml(normalized)}</span>`; }
       function historyRows(groups) {
@@ -1214,10 +1360,6 @@
         update('#woFilter', unique(rows.map(row => text(row.wo))).sort((a, b) => a.localeCompare(b, 'es', { numeric: true })), 'Todas las WO');
       }
       function updateSourceUi() {
-        const chip = $('#sourceChip');
-        chip.dataset.loaded = state.sourceRows.length ? 'true' : 'false';
-        chip.title = state.sourceNames.join(', ');
-        chip.innerHTML = '<span class="material-symbols-outlined">description</span>' + (state.sourceName ? escapeHtml(state.sourceName) : 'Sin archivo cargado');
         $('#importStatus').textContent = state.sourceName ? state.sourceRows.length + ' eventos · ' + state.sourceNames.length + ' archivo(s)' : 'Esperando archivo';
         $('#importStatus').title = state.sourceNames.join(', ');
         $('#assignmentChartSubtitle').textContent = 'Eventos = filas de falla; seriales = números únicos dentro de cada área.';
@@ -1246,7 +1388,6 @@
         $('#kpiSerials').textContent = m.serials.toLocaleString('es-MX');
         $('#kpiOpen').textContent = m.open.toLocaleString('es-MX');
         $('#kpiClosed').textContent = m.closed.toLocaleString('es-MX');
-        $('#heroRows').textContent = m.total.toLocaleString('es-MX');
         $('#heroWos').textContent = m.wos.toLocaleString('es-MX');
         $('#heroWoButton').disabled = m.wos === 0;
         const failureCounts = countBy(rows, row => row.failureType);
@@ -1256,8 +1397,6 @@
         renderAreaChart($('#ownerChart'), areaCounts);
         renderStationChart($('#stationChart'), stationCounts);
         renderDonut(failureCounts);
-        renderWorkorderSummary(rows);
-        renderTrend(rows);
         renderManagerActions(rows);
         $('#failureChartCount').textContent = `${failureCounts.length} tipos`;
         $('#ownerChartCount').textContent = `${areaCounts.filter(item => item.events).length} áreas`;
@@ -1295,14 +1434,6 @@
         const row = { id: `local-${Date.now()}`, origin: 'local', wo: text(form.get('wo')), serial: text(form.get('serial')), owner: upper(form.get('owner')), station: text(form.get('station')), failureType: text(form.get('failureType')) || 'Sin clasificar', defect: text(form.get('failureType')), rootCause: text(form.get('failureType')), failureInfo: text(form.get('failureInfo')), rcAnalysis: text(form.get('rcAnalysis')), containment: text(form.get('containment')), corrective: text(form.get('corrective')), status: upper(form.get('status')), week: weekFromDate(new Date()) };
         state.localRows.push(row); saveLocalRows(); updateFilterOptions(allRows()); render(); event.currentTarget.reset(); toast(groupBySerial(allRows()).find(group => group.serial === row.serial)?.requiresRcca ? `Registro guardado → ${row.serial} ahora requiere RCCA.` : 'Registro local guardado.');
       }
-      function exportCsv() {
-        if (!state.visibleRows.length) { toast('No hay registros filtrados para exportar.'); return; }
-        const columns = RCCADetailTable.exportColumns({ assignedArea, classificationNote, formatDate });
-        const csv = [[...columns.map(column => column.label)], ...state.visibleRows.map(row => columns.map(column => column.value(row)))].map(row => row.map(csvCell).join(',')).join('\r\n');
-        const blob = new Blob([`\ufeff${csv}`], { type: 'text/csv;charset=utf-8' });
-        const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = 'rcca-seguimiento.csv'; link.click(); URL.revokeObjectURL(url); toast('CSV exportado con los filtros actuales.');
-      }
-
       function excelStyle(fill, color = '172427', bold = false, align = 'left', numFmt = '') {
         const style = { font: { name: 'Arial', sz: 10, bold, color: { rgb: color } }, alignment: { vertical: 'center', horizontal: align, wrapText: true }, border: { bottom: { style: 'thin', color: { rgb: 'c8d5d8' } } } };
         if (fill) style.fill = { patternType: 'solid', fgColor: { rgb: fill } };
@@ -1431,17 +1562,15 @@
           state.sourceNames = files.map(file => file.name);
           state.sourceName = files.length === 1 ? files[0].name : files.length + ' archivos';
           state.page = 1;
-          $('#searchInput').value = ''; $('#statusFilter').value = ''; $('#ownerFilter').value = ''; $('#weekFilter').value = ''; $('#woFilter').value = ''; $('#periodFrom').value = ''; $('#periodTo').value = '';
+          $('#chartSearchFilter').value = ''; $('#statusFilter').value = ''; $('#ownerFilter').value = ''; $('#weekFilter').value = ''; $('#woFilter').value = ''; $('#periodFrom').value = ''; $('#periodTo').value = '';
           updateFilterOptions(allRows()); render(); setView('dashboard');
           classifySourceRows(state.sourceRows);
           toast('Lote cargado → ' + state.sourceRows.length + ' eventos de ' + files.length + ' archivo(s).');
         } catch (error) { toast(error.message || 'No se pudo leer el archivo.'); }
         finally { event.target.value = ''; }
       });
-      ['#searchInput', '#statusFilter', '#ownerFilter', '#weekFilter', '#woFilter', '#periodFrom', '#periodTo'].forEach(selector => $(selector).addEventListener('input', () => { state.page = 1; state.managerPage = 1; render(); }));
-      $('#clearFilters').addEventListener('click', () => { $('#searchInput').value = ''; $('#statusFilter').value = ''; $('#ownerFilter').value = ''; $('#weekFilter').value = ''; $('#woFilter').value = ''; $('#periodFrom').value = ''; $('#periodTo').value = ''; state.page = 1; state.managerPage = 1; render(); });
+      ['#chartSearchFilter', '#statusFilter', '#ownerFilter', '#weekFilter', '#woFilter', '#periodFrom', '#periodTo'].forEach(selector => $(selector).addEventListener('input', () => { state.page = 1; state.managerPage = 1; render(); }));
       $('#showClosedActions').addEventListener('change', () => { state.managerPage = 1; renderManagerActions(state.visibleRows); });
-      $('#exportCsv').addEventListener('click', exportCsv);
       $('#exportExcel').addEventListener('click', exportExcel);
       $('#rccaForm').addEventListener('submit', handleFormSubmit);
       document.addEventListener('click', event => {
@@ -1450,7 +1579,7 @@
         const woSelect = event.target.closest('[data-wo-select]');
         if (woSelect) { $('#woFilter').value = woSelect.dataset.woSelect; state.page = 1; state.managerPage = 1; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
         const woFilter = event.target.closest('[data-wo-filter]');
-        if (woFilter) { $('#searchInput').value = woFilter.dataset.woFilter; $('#workorderDialog').close(); state.page = 1; render(); }
+        if (woFilter) { $('#woFilter').value = woFilter.dataset.woFilter; $('#workorderDialog').close(); state.page = 1; render(); }
         const managerPage = event.target.closest('[data-manager-page]');
         if (managerPage && !managerPage.disabled) { state.managerPage += managerPage.dataset.managerPage === 'next' ? 1 : -1; renderManagerActions(state.visibleRows); }
         const pageButton = event.target.closest('[data-page]');
@@ -1537,7 +1666,6 @@
       $('#themeToggle').addEventListener('click', () => { const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = next; localStorage.setItem('rcca-theme', next); $('#themeToggle .material-symbols-outlined').textContent = next === 'dark' ? 'light_mode' : 'dark_mode'; });
 
       const savedTheme = localStorage.getItem('rcca-theme'); if (savedTheme) { document.documentElement.dataset.theme = savedTheme; $('#themeToggle .material-symbols-outlined').textContent = savedTheme === 'dark' ? 'light_mode' : 'dark_mode'; }
-      $('#aiStatusChip').textContent = 'Reglas locales';
       updateFilterOptions(allRows()); render();
     })();
   </script>
