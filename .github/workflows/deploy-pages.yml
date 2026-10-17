@@ -1,8 +1,7 @@
 name: Deploy GitHub Pages
 
+# Se ejecuta solo bajo autorización explícita para publicar.
 on:
-  push:
-    branches: [develop]
   workflow_dispatch:
 
 permissions:
